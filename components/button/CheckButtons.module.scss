@@ -1,0 +1,16 @@
+.btn{
+    all:unset;
+    cursor: pointer;
+    width: auto;
+    padding-inline: 10px;
+    padding-top:4px;
+    padding-bottom: 4px;
+    color: var(--text-btn);
+    background-color: var(--black);
+    border-radius: 8px;
+}
+
+.selected{
+    background-color: var(--purple-400);
+    border-color: var(--purple-100);
+}
