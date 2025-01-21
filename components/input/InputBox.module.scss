@@ -1,0 +1,18 @@
+.InputBox{
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 32px;
+    justify-content: space-between;
+    height: 60px;
+    span{
+        @include mixin.textLabel();
+    }
+
+    input{
+        all: unset;
+        height: 25px;
+        border-bottom: 1px solid var(--border);
+        padding-bottom: 2px;
+        @include mixin.SB();
+    }
+}
