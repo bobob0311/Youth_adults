@@ -1,0 +1,41 @@
+.btn{
+    all:unset;
+    cursor: pointer;
+    padding-inline: 30px;
+    height: 36px;
+    color: var(--text-btn);
+    background-color: var(--selection);
+    border-radius: 22px;
+    border: 1px solid var(--border); 
+}
+
+.wrapper{
+    height: 100px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    @include mixin.textLabel();
+}
+
+.btnContainer{
+
+}
+
+.selected{
+    background-color: var(--purple-400);
+    border-color: var(--purple-100);
+}
+
+.locationImg{
+    width: 180px;
+    height: 180px;
+    border-radius: 15px;
+}
+
+.imgSelected{
+    border: 2px solid var(--purple-400);
+}
+
+.imgBtn{
+    all : unset;
+}
