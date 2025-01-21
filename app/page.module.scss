@@ -1,0 +1,31 @@
+.backGround{
+    width: 100%;
+    background-image: url("/start.png");
+    height: 100vh;
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    margin: auto;
+    display: flex;
+    flex-direction: column;
+}
+
+.mainImg{
+    display: flex;
+    justify-content: center;
+    
+    img{
+        width: 175px;
+        height: 62px;
+    }
+}
+
+.mainP{
+    margin-bottom: 16px;
+    text-align: center;
+    font-size: 14px;
+}
+
+.content{
+    margin-top: 36vh;
+}

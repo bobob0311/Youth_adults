@@ -1,12 +1,15 @@
 import CheckButton from "@/components/button/CheckButtons";
 import NavigationButton from "@/components/button/NavigationButton";
+import styles from "./page.module.scss"
 
 export default function Home() {
   return (
-    <div>
-      <h1>청춘상회</h1>
-      <div>다시 돌아오지 않을 청춘을 후회없이 즐기세요!!</div>
+    <div className={styles.backGround}>
+      <div className={styles.content}>
+      <h1 className={styles.mainImg}><img src="/mainImg.png" alt="청춘 상회"/></h1>
+      <p className={styles.mainP}>다시 돌아오지 않을 청춘을 후회없이 즐기세요!!</p>
       <NavigationButton title="시작하기" url="/step1" />
+      </div>
     </div>
   );
 }

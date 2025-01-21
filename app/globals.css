@@ -8,6 +8,11 @@ body {
   background: var(--background);
 }
 
+.box {
+  max-width: 406px;
+  margin: auto;
+}
+
 body {
   font-family: Arial, Helvetica, sans-serif;
   -webkit-font-smoothing: antialiased;
