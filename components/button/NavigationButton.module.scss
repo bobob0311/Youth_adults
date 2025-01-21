@@ -1,4 +1,9 @@
 .navBtn {
+    position: fixed;
+    bottom: 20px;
+    left:50%;
+    transform: translateX(-50%);
+
     all: unset;
     display: block;
     width: 370px;
