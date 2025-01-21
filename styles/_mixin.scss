@@ -1,0 +1,20 @@
+@use "./variables";
+
+@mixin mainTitle(){
+    font-size: 20px;
+    color: var(--text-heading);
+    text-align: center;
+    margin-bottom: 20px;
+    margin-top: 20px;
+    font-weight: 700;
+}
+
+@mixin textLabel(){
+    font-size: 14px;
+    color: var(--text-sub-heading)
+}
+
+@mixin SB(){
+    font-size: 18px;
+    font-weight: 500;
+}
