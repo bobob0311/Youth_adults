@@ -3,6 +3,9 @@
 import CheckButton from "@/components/button/CheckButtons";
 import NavigationButton from "@/components/button/NavigationButton";
 import styles from "./LocationPage.module.scss";
+
+import { useDispatch, useSelector } from "react-redux";
+import { changeLocation } from "../userSlice";
 import { useState } from "react";
 
 let DUMMY_INFO = [
@@ -14,18 +17,26 @@ let DUMMY_INFO = [
 
 
 export default function LocationPage() {
+
+    const [clicked, setClicked] = useState<string>('');
+    const dispatch = useDispatch();
+    const handleStore = () => {
+        dispatch(changeLocation(clicked));
+    }
     const [isBtnValid, setIsBtnValid] = useState<boolean>(false);
     const handleValid = (chk:boolean) => {
         setIsBtnValid(chk);
+
     }
 
     return (
         <div className={styles.container}>
             <section className={styles.location}>
                 <h2 className={styles.title}>현재 위치를 선택해주세요</h2>
-                <CheckButton info={{ type: "location", checkList: DUMMY_INFO }} onValid={(chk) => handleValid(chk) } />
+
+                <CheckButton onChangeState={(input)=> setClicked(input) } info= {{type: "location", checkList : DUMMY_INFO}} onValid={(chk) => handleValid(chk)/>
             </section>
-            <NavigationButton isValid={isBtnValid}  title="다음으로" url="/step2"/>
+            <NavigationButton isValid={isBtnValid} onStore={() => handleStore()} title="다음으로" url="/step2"/>
         </div>
     )
 }
