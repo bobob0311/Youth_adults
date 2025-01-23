@@ -4,7 +4,7 @@ import styles from "./CheckButtons.module.scss"
 
 interface PropsState {
     info: LabelInfo | LocationInfo;
-    onValid: (isValid: boolean) => void;
+    onValid?: (isValid: boolean) => void;
 }
 
 interface LabelInfo {
@@ -36,10 +36,12 @@ export default function CheckButton(props: PropsState) {
     }
 
     useEffect(() => {
-        if (selectedIndex === -1) {
-            onValid(false);
-        } else {
-            onValid(true);
+        if (onValid) {
+            if (selectedIndex === -1) {
+                onValid(false);
+            } else {
+                onValid(true);
+            }    
         }
     },[selectedIndex])
 
