@@ -14,7 +14,7 @@ export default function Page() {
                 <InputBox label="대표자 번호" inputType="text" placeholder="01012345678"/>
                 <InputBox label="인증 번호" inputType="text" placeholder="12345"/>
             </section>
-            <NavigationButton title="다음으로" url="step5" />
+            <NavigationButton isValid={true} title="다음으로" url="step5" />
         </div>
     )
 }
