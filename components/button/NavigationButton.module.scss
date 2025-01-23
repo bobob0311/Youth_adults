@@ -19,3 +19,11 @@
         background-color: var(--purple-400);
     }
 }
+
+.disable{
+    background-color: #A7A7A7;
+    &:hover{
+        cursor: not-allowed;
+        background-color: #A7A7A7;
+    }
+}
