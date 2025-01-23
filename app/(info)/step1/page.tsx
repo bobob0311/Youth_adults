@@ -3,6 +3,9 @@
 import CheckButton from "@/components/button/CheckButtons";
 import NavigationButton from "@/components/button/NavigationButton";
 import styles from "./LocationPage.module.scss";
+import { useDispatch, useSelector } from "react-redux";
+import { changeLocation } from "../userSlice";
+import { useState } from "react";
 
 let DUMMY_INFO = [
     { title: "강남/신논현", url: "location1.png" },
@@ -13,13 +16,19 @@ let DUMMY_INFO = [
 
 
 export default function LocationPage() {
+    const [clicked, setClicked] = useState<string>('');
+    const dispatch = useDispatch();
+    const handleStore = () => {
+        dispatch(changeLocation(clicked));
+    }
+
     return (
         <div className={styles.container}>
             <section className={styles.location}>
                 <h2 className={styles.title}>현재 위치를 선택해주세요</h2>
-                <CheckButton info= {{type: "location", checkList : DUMMY_INFO}}/>
+                <CheckButton onChangeState={(input)=> setClicked(input) } info= {{type: "location", checkList : DUMMY_INFO}}/>
             </section>
-            <NavigationButton title="다음으로" url="/step2"/>
+            <NavigationButton onStore={() => handleStore()} title="다음으로" url="/step2"/>
         </div>
     )
 }
