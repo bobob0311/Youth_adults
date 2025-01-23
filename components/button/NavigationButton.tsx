@@ -20,7 +20,7 @@ export default function NavigationButton(props: PropsState) {
             router.push(url);    
         }
     }
-    console.log(isValid);
+
     return (
         <button
             className={`${styles.navBtn} ${isValid? '': styles.disable}`}
