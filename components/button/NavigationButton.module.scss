@@ -1,18 +1,21 @@
 .navBtn {
-    position: fixed;
-    bottom: 20px;
-    left:50%;
-    transform: translateX(-50%);
-
     all: unset;
+
     display: block;
     width: 370px;
     height: 56px;
+
     text-align: center;
+    font-size: 18px;
+
     background-color: var(--purple-500);
     border-radius: 30px;
-    color: inherit;
-    cursor: pointer;
-    font-size: 1.2rem;
-    margin: auto;
+    color: var(--text-button);
+
+    margin-inline: auto;
+    margin-bottom: 24px;
+    &:hover{
+        cursor: pointer;
+        background-color: var(--purple-400);
+    }
 }
