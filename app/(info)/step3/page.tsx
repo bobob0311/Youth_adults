@@ -6,11 +6,15 @@ import styles from "./page.module.scss"
 import { useState } from "react";
 import { isEmpty } from "@/utils/valid";
 import { checkNumberLength, checkSpecialCharacters } from "@/utils/regex";
+import { useDispatch } from "react-redux";
+import { changeGroupInfo } from "../userSlice";
 
 export default function Page() {
+    const [text, setText] = useState<string[]>(['', '']);
     const [isBtnValid, setIsBtnValid] = useState<boolean>(false);
     const [validArr, setValidArr] = useState<boolean[]>([false, false]);
-    
+    const dispatch = useDispatch();
+
     const handleValid = (idx:number, isChecked:boolean) => {
         const updateValidArr = [...validArr];
         updateValidArr[idx] = isChecked;
@@ -19,6 +23,18 @@ export default function Page() {
         const allValid = updateValidArr.every((value) => value === true);
         setIsBtnValid(allValid);
     }
+
+    const handleText = (item: string, idx: number) => {
+        const newValue = [...text];
+        newValue[idx] = item;
+        setText(newValue);
+    }
+
+    const handleStore = () => {
+        dispatch(changeGroupInfo([...text]));
+    }
+
+
 
     const groupNameValid = {
         onCondition : (input:string) => {
@@ -39,7 +55,6 @@ export default function Page() {
         },
         onValid: (chk:boolean) => handleValid(1, chk)
     }
-    
 
     return (
         <div className={styles.container}>
@@ -49,16 +64,18 @@ export default function Page() {
                     label="그룹명"
                     inputType="text"
                     placeholder="서초구 에스파"
-                    valid= {groupNameValid}
+                    valid={groupNameValid}
+                    onText ={(item) => handleText(item,0)}
                 />
                 <InputBox
                     label="그룹소개"
                     inputType="text"
                     placeholder="ENFP, ESFJ 신입생이에요"
                     valid={groupSummaryValid}
+                    onText ={(item) => handleText(item,1)}
                 />
             </section>
-            <NavigationButton isValid={isBtnValid} title="다음으로" url="step4" />
+            <NavigationButton onStore={handleStore} isValid={isBtnValid} title="다음으로" url="step4" />
         </div>
     )
 }

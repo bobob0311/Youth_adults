@@ -11,10 +11,11 @@ interface PropsState{
         onValidCondition: (text: string) => boolean;
         onValid: (isValid: boolean) => void;
     }
+    onText: (item:string) => void
 }
 
 export default function InputBox(props: PropsState) {
-    const { inputType, label, placeholder, valid } = props;
+    const { inputType, label, placeholder, valid,onText } = props;
     const [text, setText] = useState<string>("");
 
     
@@ -24,12 +25,14 @@ export default function InputBox(props: PropsState) {
             const { onCondition, onValidCondition, onValid } = valid;
             if (onCondition(newValue)) {
                 setText(newValue);
+                onText(newValue);
             }
 
             const isValid = onValidCondition(newValue);
             onValid(isValid);    
         } else {
             setText(newValue);
+            onText(newValue);
         }
     }
     
