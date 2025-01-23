@@ -1,9 +1,10 @@
 'use client'
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import styles from "./CheckButtons.module.scss"
 
 interface PropsState {
     info: LabelInfo | LocationInfo;
+    onValid: (isValid: boolean) => void;
 }
 
 interface LabelInfo {
@@ -23,7 +24,7 @@ interface Location{
 }
 
 export default function CheckButton(props: PropsState) {
-    const { info } = props;
+    const { info, onValid} = props;
     const [selectedIndex, setSelectedIndex] = useState<number>(-1);
 
     const handleClick = (event: React.MouseEvent<HTMLElement>, index: number) => {
@@ -32,8 +33,15 @@ export default function CheckButton(props: PropsState) {
         } else {
             setSelectedIndex(index);    
         }
-        
     }
+
+    useEffect(() => {
+        if (selectedIndex === -1) {
+            onValid(false);
+        } else {
+            onValid(true);
+        }
+    },[selectedIndex])
 
     let content;
 
