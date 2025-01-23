@@ -1,0 +1,20 @@
+.bar{
+    appearance: none;
+    margin-left: 50%;
+    transform: translateX(-50%);
+    width: 180px;
+    margin-top: 40px;
+    margin-bottom: 20px;
+    height: 5px;
+}
+
+.bar::-webkit-progress-bar{
+    background: var(--selection);
+    border-radius: 12px;
+    height: 5px;
+}
+
+.bar::-webkit-progress-value {
+    background: var(--purple-300);
+    border-radius: 12px;
+ }
