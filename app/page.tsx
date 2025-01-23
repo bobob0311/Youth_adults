@@ -8,7 +8,7 @@ export default function Home() {
       <div className={styles.content}>
       <h1 className={styles.mainImg}><img src="/mainImg.png" alt="청춘 상회"/></h1>
       <p className={styles.mainP}>다시 돌아오지 않을 청춘을 후회없이 즐기세요!!</p>
-      <NavigationButton title="시작하기" url="/step1" />
+      <NavigationButton isValid={true} title="시작하기" url="/step1" />
       </div>
     </div>
   );
