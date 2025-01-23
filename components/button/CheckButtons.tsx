@@ -26,9 +26,7 @@ export default function CheckButton(props: PropsState) {
     const { info } = props;
     const [selectedIndex, setSelectedIndex] = useState<number>(-1);
 
-    // selectedIndex가 -1이 아니면 true를 위로 넘길 수 있게 로직설정
-
-    const handleClick = (index: number) => {
+    const handleClick = (event: React.MouseEvent<HTMLElement>, index: number) => {
         if (selectedIndex == index) {
             setSelectedIndex(-1);
         } else {
@@ -43,40 +41,44 @@ export default function CheckButton(props: PropsState) {
         const { label, checkList } = info;
         
         content = 
-            <label className={styles.wrapper}>
+            <section className={styles.wrapper}>
                 {label}
                 <div className={styles.btnContainer}>
                     {checkList.map((item, idx) => (
                         <button
+                            type="button"
+                            role="radio"
+                            aria-checked={idx === selectedIndex ? "true" : "false"}
                             key={idx}
-                            onClick={() => handleClick(idx)}
+                            onClick={(e) => handleClick(e,idx)}
                             className={`${styles.btn} ${idx === selectedIndex ? styles.selected : ""}`}
                         >
                             {item}
                         </button>
                     ))}
                 </div>
-            </label>
+            </section>
         
     } else {
         const { checkList } = info;
 
-        content = <div>
-            {
-                checkList.map((item, idx) => (
-                    <button className={styles.imgBtn}
-                        key={item.title}
-                        onClick={() => handleClick(idx)}
-                    >
-                        <img
-                            className={`${styles.locationImg} ${idx === selectedIndex ? styles.imgSelected :""}`}
-                            src={item.url}
-                            alt={item.title}
-                        />
-                    </button>
-                ))
-            }
-        </div>
+        content =
+            <div className={styles.locationContainer}>
+                {
+                    checkList.map((item, idx) => (
+                        <button className={styles.imgBtn}
+                            key={item.title}
+                            onClick={(e) => handleClick(e,idx)}
+                        >
+                            <img
+                                className={`${styles.locationImg} ${idx === selectedIndex ? styles.imgSelected :""}`}
+                                src={item.url}
+                                alt={item.title}
+                            />
+                        </button>
+                    ))
+                }
+            </div>
     }
 
 
