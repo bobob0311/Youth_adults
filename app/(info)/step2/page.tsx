@@ -30,8 +30,6 @@ export default function SelectionPage() {
         setIsBtnValid(allValid);
     }
 
-    }
-
     return (
         <div className={styles.container}>
             <section>

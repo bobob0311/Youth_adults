@@ -34,7 +34,7 @@ export default function LocationPage() {
             <section className={styles.location}>
                 <h2 className={styles.title}>현재 위치를 선택해주세요</h2>
 
-                <CheckButton onChangeState={(input)=> setClicked(input) } info= {{type: "location", checkList : DUMMY_INFO}} onValid={(chk) => handleValid(chk)/>
+                <CheckButton onChangeState={(input) => setClicked(input)} info={{ type: "location", checkList: DUMMY_INFO }} onValid={(chk) => handleValid(chk)} />
             </section>
             <NavigationButton isValid={isBtnValid} onStore={() => handleStore()} title="다음으로" url="/step2"/>
         </div>
