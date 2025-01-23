@@ -1,3 +1,6 @@
 .title{
     @include mixin.mainTitle();
 }
+.container{
+    @include mixin.topBottom();
+}

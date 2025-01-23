@@ -14,13 +14,12 @@ let DUMMY_INFO = [
 
 export default function LocationPage() {
     return (
-        <>
-            <h2 className={styles.title}>현재 위치를 선택해주세요</h2>
+        <div className={styles.container}>
             <section className={styles.location}>
-            
-            <CheckButton info= {{type: "location", checkList : DUMMY_INFO}}/>
-            <NavigationButton title="다음으로" url="/step2"/>
+                <h2 className={styles.title}>현재 위치를 선택해주세요</h2>
+                <CheckButton info= {{type: "location", checkList : DUMMY_INFO}}/>
             </section>
-        </>
+            <NavigationButton title="다음으로" url="/step2"/>
+        </div>
     )
 }
