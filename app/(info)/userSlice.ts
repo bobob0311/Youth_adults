@@ -24,12 +24,10 @@ const userSlice = createSlice({
             state.location = action.payload;
         },
         changeGroupInfo: (state, action) => {
-            console.log(action.payload);
             state.groupName = action.payload[0];
             state.groupSummary = action.payload[1];
         },
         changeCheck: (state, action) => {
-            console.log(action.payload);
             state.check.cnt = action.payload[0];
             state.check.sex = action.payload[1];
             state.check.old = action.payload[2];
