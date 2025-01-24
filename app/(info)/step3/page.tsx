@@ -65,7 +65,8 @@ export default function Page() {
                     inputType="text"
                     placeholder="서초구 에스파"
                     valid={groupNameValid}
-                    onText ={(item) => handleText(item,0)}
+                    onText={(item) => handleText(item, 0)}
+                    limit={10}
                 />
                 <InputBox
                     label="그룹소개"
@@ -73,6 +74,7 @@ export default function Page() {
                     placeholder="ENFP, ESFJ 신입생이에요"
                     valid={groupSummaryValid}
                     onText ={(item) => handleText(item,1)}
+                    limit={20}
                 />
             </section>
             <NavigationButton onStore={handleStore} isValid={isBtnValid} title="다음으로" url="step4" />

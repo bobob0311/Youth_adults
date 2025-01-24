@@ -11,14 +11,15 @@ interface PropsState{
         onValidCondition: (text: string) => boolean;
         onValid: (isValid: boolean) => void;
     }
-    onText: (item:string) => void
+    onText: (item: string) => void
+    limit?: number;
 }
 
 export default function InputBox(props: PropsState) {
-    const { inputType, label, placeholder, valid,onText } = props;
+    const { inputType, label, placeholder, valid,onText, limit} = props;
     const [text, setText] = useState<string>("");
 
-    
+
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const newValue = e.target.value;
         if (valid) {
@@ -40,6 +41,7 @@ export default function InputBox(props: PropsState) {
         <label className={styles.InputBox}>
             <span>{label}</span>
             <input value={text} onChange={(e) => handleChange(e)} type={inputType} placeholder={placeholder} />
+            {limit && <span className={`${styles.count} ${text.length >= limit ? styles.limit : ''}`}>{`${text.length}/${limit}`}</span>}
         </label>
     )
 }

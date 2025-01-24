@@ -1,10 +1,11 @@
 .InputBox{
     display: flex;
+    position: relative;
     flex-direction: column;
     margin-bottom: 45px;
     justify-content: space-between;
     height: 60px;
-    span{
+    span:first-child{
         @include mixin.textLabel();
     }
 
@@ -15,4 +16,15 @@
         padding-bottom: 2px;
         @include mixin.SB();
     }
+}
+
+.count{
+    position: absolute;
+    right: 5px;
+    bottom: 10px;
+}
+
+
+.limit{
+    color:red;
 }
