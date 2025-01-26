@@ -1,7 +1,9 @@
 .navBtn {
     all: unset;
 
-    display: block;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
     width: 370px;
     height: 56px;
 
@@ -10,8 +12,9 @@
 
     background-color: var(--purple-500);
     border-radius: 30px;
-    color: var(--text-button);
-
+    span:first-of-type{
+        color: var(--text-button);
+    }
     margin-inline: auto;
     margin-bottom: 24px;
     &:hover{
@@ -26,4 +29,14 @@
         cursor: not-allowed;
         background-color: #A7A7A7;
     }
+}
+
+.smallTitle{
+    font-size: 14px;
+    margin-bottom: 6px;
+}
+
+.subtitle{
+    color: var(--purple-300);
+    font-size:12px;
 }

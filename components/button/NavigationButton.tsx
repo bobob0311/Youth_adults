@@ -3,13 +3,14 @@ import { useRouter } from "next/navigation";
 import styles from "./NavigationButton.module.scss"
 interface PropsState{
     title: string;
+    subtitle?: string;
     url: string;
     onStore?: () => void;
     isValid: boolean;
 }
 
 export default function NavigationButton(props: PropsState) {
-    const { title, url, onStore, isValid } = props;
+    const { subtitle,title, url, onStore, isValid } = props;
     const router = useRouter();
 
     const handleClick = () => {
@@ -27,7 +28,8 @@ export default function NavigationButton(props: PropsState) {
             onClick={handleClick}
             aria-label="다음으로 이동"
         >
-            {title}
+            <span className={subtitle? styles.smallTitle:''}>{title}</span>
+            {subtitle ?<span className={styles.subtitle}> {subtitle}</span>:''}
         </button>
     )    
 }
