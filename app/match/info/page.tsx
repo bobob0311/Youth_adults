@@ -24,12 +24,14 @@ const IMGINFO = [
 ]
 
 export default function Page() {
-    const [content, setContent] = useState<string>("매칭그룹 소개");
+    const [content, setContent] = useState<number>(0);
     
     const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
-        const buttonText = (event.target as HTMLButtonElement).innerText;
-        setContent(buttonText);
-        console.log(buttonText);
+        if (event.currentTarget.dataset.id){
+        const buttonId = parseInt(event.currentTarget.dataset.id);
+            setContent(buttonId);
+            console.log(buttonId);
+        }
     }
 
     return (
@@ -38,15 +40,16 @@ export default function Page() {
                 {IMGINFO.map((item) => (
                     <button 
                         key={item.title}
+                        data-id={item.id}
                         onClick={handleClick} 
-                        className={`${styles.btn} ${content === item.title ? styles.selected : ""}`}
+                        className={`${styles.btn} ${content === item.id ? styles.selected : ""}`}
                     >
                         {item.title}
                     </button>
                 ))}
             </div>
             <div className={styles.content}>
-                <ImgSlider imgInfo={IMGINFO}/>
+                <ImgSlider navIdx={content} onChangeIdx={(idx)=> setContent(idx)} imgInfo={IMGINFO}/>
             </div>
             <NavigationButton url="/" subtitle="결제금액: 2,200원" isValid={true} title="결제 후 매칭룸 입장하기"/>
             <div className={styles.linkWrapper}><Link href="/">매칭 포기하기</Link></div>
