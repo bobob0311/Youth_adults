@@ -5,6 +5,7 @@
     margin-bottom: 45px;
     justify-content: space-between;
     height: 60px;
+
     span:first-child{
         @include mixin.textLabel();
     }
@@ -14,6 +15,7 @@
         height: 25px;
         border-bottom: 1px solid var(--border);
         padding-bottom: 2px;
+        padding-right: 50px;
         @include mixin.SB();
     }
 }
