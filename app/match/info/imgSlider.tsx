@@ -19,6 +19,7 @@ export default function ImgSlider(props: PropsState) {
   const [startX, setStartX] = useState(0);
   const [translateX, setTranslateX] = useState(0);
   const [imgWidth, setImgWidth] = useState(0);
+  const [isDragging, setIsDragging] = useState(false);
 
   const containerRef = useRef<HTMLDivElement | null>(null);
   const imgRef = useRef<HTMLImageElement | null>(null);
@@ -32,22 +33,24 @@ export default function ImgSlider(props: PropsState) {
   const handleStart = (e: React.MouseEvent | React.TouchEvent) => {
     const clientX = "touches" in e ? e.touches[0].clientX : e.clientX;
     setStartX(clientX);
+    setIsDragging(true);
     if (containerRef.current) {
       containerRef.current.style.transition = "none";
     }
   };
 
   const handleMove = (e: React.MouseEvent | React.TouchEvent) => {
-    if (startX === 0) return;
+    if (!isDragging) return;
     const clientX = "touches" in e ? e.touches[0].clientX : e.clientX;
     const offsetX = clientX - startX;
     if (containerRef.current) {
       containerRef.current.style.transform = `translateX(${translateX + offsetX}px)`;
     }
+   
   };
 
   const handleEnd = (e: React.MouseEvent | React.TouchEvent) => {
-    if (!containerRef.current) return;
+    if (!containerRef.current || !isDragging) return;
 
     const clientX = "changedTouches" in e ? e.changedTouches[0].clientX : e.clientX;
     const offsetX = clientX - startX;
@@ -57,6 +60,7 @@ export default function ImgSlider(props: PropsState) {
 
     setNow(nextIndex);
     setTranslateX(newTranslateX);
+    setIsDragging(false);
 
     containerRef.current.style.transition = "transform 0.5s ease";
     containerRef.current.style.transform = `translateX(${newTranslateX}px)`;
