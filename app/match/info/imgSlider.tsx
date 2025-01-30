@@ -15,11 +15,14 @@ interface ImgInfo {
 
 export default function ImgSlider(props: PropsState) {
   const { imgInfo, onChangeIdx,navIdx } = props;
+  
   const [now, setNow] = useState(navIdx);
+  
   const [startX, setStartX] = useState(0);
   const [translateX, setTranslateX] = useState(0);
-  const [imgWidth, setImgWidth] = useState(0);
   const [isDragging, setIsDragging] = useState(false);
+
+  const [imgWidth, setImgWidth] = useState(0);
 
   const containerRef = useRef<HTMLDivElement | null>(null);
   const imgRef = useRef<HTMLImageElement | null>(null);
@@ -31,6 +34,7 @@ export default function ImgSlider(props: PropsState) {
   }, [imgInfo]);
 
   const handleStart = (e: React.MouseEvent | React.TouchEvent) => {
+    e.preventDefault();
     const clientX = "touches" in e ? e.touches[0].clientX : e.clientX;
     setStartX(clientX);
     setIsDragging(true);
@@ -46,7 +50,6 @@ export default function ImgSlider(props: PropsState) {
     if (containerRef.current) {
       containerRef.current.style.transform = `translateX(${translateX + offsetX}px)`;
     }
-   
   };
 
   const handleEnd = (e: React.MouseEvent | React.TouchEvent) => {
@@ -55,7 +58,15 @@ export default function ImgSlider(props: PropsState) {
     const clientX = "changedTouches" in e ? e.changedTouches[0].clientX : e.clientX;
     const offsetX = clientX - startX;
     const direction = offsetX > 0 ? -1 : 1;
-    const nextIndex = Math.max(0, Math.min(imgInfo.length - 1, now + direction));
+    const imgLength = imgInfo.length - 1;
+    
+    let nextIndex = now + direction;
+    if (nextIndex > imgLength) {
+      nextIndex = 0;
+    } else if (nextIndex < 0) {
+      nextIndex = imgLength;
+    }
+    
     const newTranslateX = -nextIndex * imgWidth;
 
     setNow(nextIndex);
@@ -72,10 +83,10 @@ export default function ImgSlider(props: PropsState) {
     onChangeIdx(now);
   }, [now])
   
-    useEffect(() => {
+  useEffect(() => {
     if (navIdx !== now) {
-      setNow(navIdx); // 내부 상태 업데이트
-      const newTranslateX = -navIdx * imgWidth; // 이동할 위치 계산
+      setNow(navIdx); 
+      const newTranslateX = -navIdx * imgWidth;
       setTranslateX(newTranslateX);
 
       if (containerRef.current) {
