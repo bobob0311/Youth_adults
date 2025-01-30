@@ -69,7 +69,7 @@ export default function Page() {
                     limit={10}
                 />
                 <InputBox
-                    label="그룹소개"
+                    label="한줄소개"
                     inputType="text"
                     placeholder="ENFP, ESFJ 신입생이에요"
                     valid={groupSummaryValid}
