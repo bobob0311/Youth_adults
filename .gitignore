@@ -16,6 +16,9 @@
 # next.js
 /.next/
 /out/
+// temp
+/utils/api.ts
+*/api
 
 # production
 /build
