@@ -56,9 +56,11 @@ export default function Home() {
 
 
   return (
+    <>
     <div className={styles.chatContainer}>
       <MessageContainer messages={messages} />
-      <div className={styles.inputContainer}>
+    </div>
+    <div className={styles.inputContainer}>
         <input
           value={input}
           onChange={(e) => setInput(e.target.value)}
@@ -66,6 +68,6 @@ export default function Home() {
         />
         <button onClick={sendMessage} >전송</button>
       </div>
-    </div>
+      </>
   );
 }
