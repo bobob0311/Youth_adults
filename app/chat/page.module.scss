@@ -1,0 +1,6 @@
+.chatContainer{
+    display: flex;
+    flex-direction: column;
+    max-height: calc(100vh - 54px);
+    overflow: scroll;
+}
