@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { io,Socket } from "socket.io-client";
 import MessageContainer from "./MessageContainer";
 import styles from "./page.module.scss"
+import InputBox from "./InputBox";
 
 interface Messages{
     user : "another" | "system" | "me",
@@ -13,7 +14,6 @@ interface Messages{
 export default function Home() {
   const [socket, setSocket] = useState<Socket|null>(null);
   const [messages, setMessages] = useState<Messages[]>([]);
-  const [input, setInput] = useState<string>("");
   const [myId, setMyId] = useState<string | undefined>(undefined);
 
   useEffect(() => {
@@ -41,33 +41,21 @@ export default function Home() {
     return () => { newSocket.disconnect() };
   }, []);
 
-  const sendMessage = () => {
-    if (socket && input.trim()) {
-      socket.emit("message", input, myId)
-      setInput("");
+  const sendMessage = (message:string) => {
+    if (socket && message.trim()) {
+      socket.emit("message", message, myId)
     }
   };
 
-    const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
-    if (event.key === "Enter") {
-      sendMessage();
-    }
-  };
+
 
 
   return (
     <>
-    <div className={styles.chatContainer}>
-      <MessageContainer messages={messages} />
-    </div>
-    <div className={styles.inputContainer}>
-        <input
-          value={input}
-          onChange={(e) => setInput(e.target.value)}
-          onKeyDown={handleKeyDown}
-        />
-        <button onClick={sendMessage} >전송</button>
+      <div className={styles.chatContainer}>
+        <MessageContainer messages={messages} />
       </div>
-      </>
+      <InputBox onSend={(message) => sendMessage(message)}/>
+    </>
   );
 }
