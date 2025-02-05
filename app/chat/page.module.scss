@@ -1,4 +1,7 @@
 .chatContainer{
+    padding: 40px 0 40px 0;
+    height: calc(100vh - 54px);
     display: flex;
     flex-direction: column;
+    justify-content: space-between;
 }
