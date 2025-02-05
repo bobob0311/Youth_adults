@@ -14,10 +14,22 @@
     display: flex;
     flex-direction: column;
     // 아래 인풋박스 크기에 따라 조정하면 될듯
-    max-height: calc(100vh - 54px - 200px);
+    max-height: calc(100vh - 54px);
     overflow: auto;
+    padding-inline: 5px;
 }
 
+.container::-webkit-scrollbar {
+    width: 1px;
+}
+
+
+.container::-webkit-scrollbar-thumb {
+    background: #888;
+    /* 스크롤바 색상 */
+    border-radius: 10px;
+    /* 둥글게 */
+}
 .anothername{
     align-self: flex-start;
     margin-bottom: 6px;
