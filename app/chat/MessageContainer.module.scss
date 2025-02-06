@@ -7,14 +7,17 @@
     background-color: $color;
     font-size: 14px;
     margin-bottom: 5px;
-    color: var(--text-button)
+    color: var(--text-button);
+    line-height: 140%;
+    overflow-wrap: break-word;
+    white-space: pre-wrap;
 }
 
 .container{
     display: flex;
     flex-direction: column;
     // 아래 인풋박스 크기에 따라 조정하면 될듯
-    max-height: calc(100vh - 54px);
+    height: calc(100vh - 54px - 71px);
     overflow: auto;
     padding-inline: 5px;
 }

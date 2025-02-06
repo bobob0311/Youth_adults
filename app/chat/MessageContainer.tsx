@@ -14,7 +14,9 @@ type User = "another" | "system" | "me";
 export default function MessageContainer(props: PropsState) {
     const { messages } = props;
     const containerRef = useRef<HTMLDivElement>(null);
+
     let prevUser = "";
+    
     useEffect(() => {
         const now = containerRef.current;
         if (now) {
@@ -27,6 +29,7 @@ export default function MessageContainer(props: PropsState) {
             }
         }
     },[messages])
+
     return (
         <div ref={containerRef} className={styles.container}>
             {messages.map((item, idx) => {

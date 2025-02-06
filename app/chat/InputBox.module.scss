@@ -4,12 +4,14 @@
         display: block;
         background-color: var(--selection);
         width: 90%;
-        border-radius: 10px;
-        padding: 7px 10px 7px 10px;
+        border-radius: 15px;
+        padding: 12px 13px;
         box-sizing: border-box;
         font-size: 15px;
         scrollbar-width: none;
+        overflow-wrap: break-word;
     }
+    
     textarea::-webkit-scrollbar{
         display: none;
     }
@@ -18,13 +20,23 @@
 .box{
     display: flex;
     position: relative;
+    padding: 8px 0px;
 }
 
 .sendBtn{
+    all:unset;
     position: absolute;
-    bottom: 0;
-    right: 0;
-    width: 40px;
-    height: 40px;
-    
+    bottom: 12;
+    right: -5;
+
+    border-radius: 100%;
+    background-color: var(--selection);
+    width: 32px;
+    height: 32px;
+    display:flex;
+    justify-content: center;
+}
+
+.active{
+    background-color : var(--purple-500);
 }

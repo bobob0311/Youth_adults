@@ -48,13 +48,15 @@ export default function Home() {
   };
 
 
-
-
   return (
     <>
       <div className={styles.chatContainer}>
-        <MessageContainer messages={messages} />
-        <InputBox onSend={(message) => sendMessage(message)}/>
+        <MessageContainer 
+          messages={messages}
+        />
+        <InputBox 
+          onSend={(message) => sendMessage(message)}
+        />
       </div>
     </>
   );
