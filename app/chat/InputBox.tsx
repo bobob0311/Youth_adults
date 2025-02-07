@@ -11,7 +11,7 @@ const MAX_LINE = 8;
 const LINE_HEIGHT = 14;
 
 export default function InputBox(props: PropsState) {
-    const { onSend } = props;
+    const { onSend} = props;
     const textareaRef = useRef<HTMLTextAreaElement>(null);
     const [isActive, setIsActive] = useState(false);
 
@@ -20,7 +20,7 @@ export default function InputBox(props: PropsState) {
             onSend(textareaRef.current.value);
             textareaRef.current.value = '';
         }
-        handleChange();
+        setIsActive(false);
     }
 
     const handleKeyDown = (event: React.KeyboardEvent<HTMLTextAreaElement>) => {
@@ -48,7 +48,8 @@ export default function InputBox(props: PropsState) {
             }
         }
     }
-    const handleChange = () => {
+
+    const handleActiveChange = () => {
         if(textareaRef.current){
             setIsActive(textareaRef.current.value.length > 0);
         }
@@ -64,7 +65,7 @@ export default function InputBox(props: PropsState) {
                     ref = {textareaRef}
                     onKeyDown={handleKeyDown}
                     onInput={handleResizeHeight}
-                    onChange={handleChange}
+                    onChange={handleActiveChange}
                 />
             <button 
                 className={`${styles.sendBtn} ${isActive ? styles.active : ''}`}
