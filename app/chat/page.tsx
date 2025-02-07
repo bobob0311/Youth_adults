@@ -32,7 +32,6 @@ export default function Home() {
       } else {
         user = "another";
       }
-      console.log(user);
       setMessages((prev) => [...prev, { msg, user}]);
     });
 
@@ -45,7 +44,16 @@ export default function Home() {
     if (socket && message.trim()) {
       socket.emit("message", message, myId)
     }
+    scrollToBottom();
   };
+
+  const scrollToBottom = () => {
+    const container = document.getElementById("messageContainer");
+    if (container) {
+      container.scrollTop = container.scrollHeight;
+      console.log("이거 제일 마지막에 실행되어야함");
+    }
+  }
 
 
   return (
