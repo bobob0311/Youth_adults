@@ -14,9 +14,36 @@ type User = "another" | "system" | "me";
 export default function MessageContainer(props: PropsState) {
     const { messages } = props;
     const containerRef = useRef<HTMLDivElement>(null);
+    const containerHeightRef = useRef<number|null>(null);
 
+
+        
     let prevUser = "";
     
+    useEffect(() => {
+        const container = containerRef.current;
+        if (container) {
+
+            if (containerHeightRef.current === null) {
+                containerHeightRef.current = container.clientHeight;
+            }
+
+            const resizeObserver = new ResizeObserver(() => {
+                if (containerHeightRef.current !== null) {
+                    const diff = containerHeightRef.current - container.clientHeight;  
+                    containerHeightRef.current = container.clientHeight;
+
+                    container.scrollTop += diff;
+                    console.log(diff);
+                }
+                
+            })
+            resizeObserver.observe(container);
+
+            return () => resizeObserver.disconnect();
+        }
+    },[])
+
     useEffect(() => {
         const now = containerRef.current;
         if (now) {
@@ -31,7 +58,7 @@ export default function MessageContainer(props: PropsState) {
     },[messages])
 
     return (
-        <div ref={containerRef} className={styles.container}>
+        <div id="messageContainer" ref={containerRef} className={styles.container}>
             {messages.map((item, idx) => {
                 const isDifferentUser = prevUser !== item.user;
                 prevUser = item.user;
