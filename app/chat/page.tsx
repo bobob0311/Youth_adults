@@ -49,8 +49,8 @@ export default function Home() {
   const sendMessage = (message:string) => {
     if (socket && message.trim()) {
       socket.emit("message", message, myId)
+      scrollToBottom();
     }
-    scrollToBottom();
   };
 
   const sendConnectMessage = (sk:Socket,name: string) => {
@@ -60,7 +60,9 @@ export default function Home() {
   const scrollToBottom = () => {
     const container = document.getElementById("messageContainer");
     if (container) {
+      
       container.scrollTop = container.scrollHeight;
+      console.log("scrollTop:",container.scrollTop, "    ;;",container.scrollHeight)
       console.log("이거 제일 마지막에 실행되어야함");
     }
   }
