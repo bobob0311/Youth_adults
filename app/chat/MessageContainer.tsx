@@ -61,6 +61,9 @@ export default function MessageContainer(props: PropsState) {
     return (
         <div id="messageContainer" ref={containerRef} className={styles.container}>
             {messages.map((item, idx) => {
+                if(item.user === "system"){
+                    return (<div className={styles.system}>{item.msg}</div>)
+                }
                 const isDifferentUser = prevUser !== item.user;
                 prevUser = item.user;
 

@@ -22,6 +22,8 @@ export default function Home() {
     newSocket.on("connect", () => {
       console.log("✅ 서버에 WebSocket 연결됨:", newSocket.id);
       setMyId(newSocket.id);
+      // 이름 전달 받아야함
+      sendConnectMessage(newSocket,"이름");
     });
 
     newSocket.on("message", (msg, senderId) => {
@@ -35,6 +37,10 @@ export default function Home() {
       setMessages((prev) => [...prev, { msg, user}]);
     });
 
+    newSocket.on("sendFromSystem", (msg)=> {
+      setMessages((prev) => [...prev, { msg, user: "system" }]);
+    })
+
     setSocket(newSocket);
 
     return () => { newSocket.disconnect() };
@@ -46,6 +52,10 @@ export default function Home() {
     }
     scrollToBottom();
   };
+
+  const sendConnectMessage = (sk:Socket,name: string) => {
+    sk.emit("sendFromSystem", `${name}님이 입장하였습니다.`);
+  }
 
   const scrollToBottom = () => {
     const container = document.getElementById("messageContainer");

@@ -29,9 +29,9 @@ app.prepare().then(() => {
       console.log("클라이언트 연결 종료:", socket.id);
     });
 
-    socket.on("start", (startMessage) => {
-      console.log("start", startMessage);
-      io.emit("start", startMessage);
+    socket.on("sendFromSystem", (message) => {
+      console.log("serverSystem");
+      io.emit("sendFromSystem", message);
     })
   });
 
