@@ -30,6 +30,7 @@ export default function MessageContainer(props: PropsState) {
 
             const resizeObserver = new ResizeObserver(() => {
                 if (containerHeightRef.current !== null) {
+                    console.log(Math.abs(container.scrollTop - (container.scrollHeight - container.clientHeight)));
                     if (Math.abs(container.scrollTop - (container.scrollHeight - container.clientHeight)) > 1) {
                         const diff = containerHeightRef.current - container.clientHeight;  
                         container.scrollTop += diff;
@@ -55,6 +56,12 @@ export default function MessageContainer(props: PropsState) {
                 // 밑에 toast가 제일 괜찮은듯?
             }
         }
+        // 내가 보낼경우 맨밑으로 스크롤 이동
+        if (messages.length > 0 && messages[messages.length - 1].user == "me") {
+            if (containerRef.current) {
+                containerRef.current.scrollTop = containerRef.current.scrollHeight;    
+            }
+        }
     },[messages])
 
     return (
@@ -65,7 +72,7 @@ export default function MessageContainer(props: PropsState) {
                 }
                 const isDifferentUser = prevUser !== item.user;
                 prevUser = item.user;
-
+                
                 return (
                     <>
                         {isDifferentUser && <span key={`user-${idx}`} className={styles[item.user+"name"]}>{item.user}</span>}
