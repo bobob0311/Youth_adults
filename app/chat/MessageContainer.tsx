@@ -57,6 +57,7 @@ export default function MessageContainer(props: PropsState) {
             }
         }
         // 내가 보낼경우 맨밑으로 스크롤 이동
+        // 근데 만약 위로 쭉올려서 보느라고 messages가 변하면...? true false로 조절하자 ㅇㅇㅇㅇㅇ
         if (messages.length > 0 && messages[messages.length - 1].user == "me") {
             if (containerRef.current) {
                 containerRef.current.scrollTop = containerRef.current.scrollHeight;    
