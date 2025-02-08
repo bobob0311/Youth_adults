@@ -30,10 +30,9 @@ export default function MessageContainer(props: PropsState) {
 
             const resizeObserver = new ResizeObserver(() => {
                 if (containerHeightRef.current !== null) {
-                    if (container.scrollTop !== container.scrollHeight - container.clientHeight) {
+                    if (Math.abs(container.scrollTop - (container.scrollHeight - container.clientHeight)) > 1) {
                         const diff = containerHeightRef.current - container.clientHeight;  
                         container.scrollTop += diff;
-                        console.log(diff,"이건 그 이전에 실행 되어야하는데..");
                     }
                     containerHeightRef.current = container.clientHeight;
                 }
