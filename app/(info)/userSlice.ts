@@ -1,7 +1,15 @@
 import { createSlice,PayloadAction } from "@reduxjs/toolkit";
 
+interface Location{
+    name: string,
+    idx: number,
+}
+
 const initialState = {
-    location: '',
+    location: {
+        name: '',
+        idx: -1,
+    },
     groupName: '',
     groupSummary: '',
     check: {
@@ -20,7 +28,7 @@ const userSlice = createSlice({
     name: "users",
     initialState,
     reducers: {
-        changeLocation: (state, action) => {
+        changeLocation: (state, action: PayloadAction<Location>) => {
             state.location = action.payload;
         },
         changeGroupInfo: (state, action) => {
