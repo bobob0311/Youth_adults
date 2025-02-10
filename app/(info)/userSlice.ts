@@ -1,26 +1,44 @@
 import { createSlice,PayloadAction } from "@reduxjs/toolkit";
 
-interface Location{
-    name: string,
-    idx: number,
+interface Location {
+    name: string;
+    idx: number;
+}
+interface UserInfo {
+    cnt: string;
+    sex: string;
+    old: string;
+    [key: string]: string;
+}
+interface Want {
+    cnt: number;
+    sex: string;
+    old: string;
+}
+interface InitialState {
+    location: Location;
+    userInfo: UserInfo;
+    groupName: string;
+    groupSummary: string;
+    want: Want;
 }
 
-const initialState = {
+const initialState: InitialState = {
     location: {
         name: '',
         idx: -1,
     },
+    userInfo: {
+        cnt: '',
+        sex: '',
+        old: '',
+    },
     groupName: '',
     groupSummary: '',
-    check: {
-        cnt: 0,
-        sex: '',
-        old:'',
-    },
     want: {
         cnt: 0,
         sex: '',
-        old:'',
+        old: '',
     }
 }
 
@@ -35,10 +53,10 @@ const userSlice = createSlice({
             state.groupName = action.payload[0];
             state.groupSummary = action.payload[1];
         },
-        changeCheck: (state, action) => {
-            state.check.cnt = action.payload[0];
-            state.check.sex = action.payload[1];
-            state.check.old = action.payload[2];
+        changeUserInfo: (state, action: PayloadAction<UserInfo>) => {
+            state.userInfo.cnt = action.payload.cnt;
+            state.userInfo.sex = action.payload.sex;
+            state.userInfo.old = action.payload.old;
         },
         changeWant: (state, action) => {
             state.want.cnt = action.payload[0];
@@ -49,5 +67,5 @@ const userSlice = createSlice({
     },
 })
 
-export const { changeLocation,changeGroupInfo,changeCheck,changeWant } = userSlice.actions;
+export const { changeLocation,changeGroupInfo,changeUserInfo,changeWant } = userSlice.actions;
 export default userSlice.reducer;
