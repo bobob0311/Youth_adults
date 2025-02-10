@@ -38,6 +38,7 @@ export default function LocationCheckButton(props: PropsState) {
                     <button className={styles.imgBtn}
                         key={item.locationName}
                         onClick={(e) => handleClick(e,idx)}
+                        aria-checked={idx === selectedIdx ? "true" : "false"}
                     >
                         <img
                             className={`${styles.locationImg} ${idx === selectedIdx ? styles.selected :""}`}
