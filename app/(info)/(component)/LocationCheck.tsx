@@ -3,7 +3,7 @@ import { useState } from "react";
 import styles from "./LocationCheck.module.scss";
 
 interface PropsState{
-    locationinfo: Location[];
+    locationInfo: Location[];
     storedIdx: number;
     onValid: (isValid: boolean) => void;
     onLocationChange: (idx: number) => void;
@@ -15,7 +15,7 @@ interface Location{
 }
 
 export default function LocationCheckButton(props: PropsState) {
-    const { locationinfo,storedIdx, onValid, onLocationChange } = props;
+    const { locationInfo,storedIdx, onValid, onLocationChange } = props;
     const [selectedIdx, setSelectedIdx] = useState<number>(storedIdx);
 
 
@@ -34,7 +34,7 @@ export default function LocationCheckButton(props: PropsState) {
     return (
         <div className={styles.locationContainer}>
             {
-                locationinfo.map((item, idx) => (
+                locationInfo.map((item, idx) => (
                     <button className={styles.imgBtn}
                         key={item.locationName}
                         onClick={(e) => handleClick(e,idx)}

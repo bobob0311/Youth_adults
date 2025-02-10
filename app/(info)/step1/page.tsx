@@ -45,7 +45,7 @@ export default function LocationPage() {
             <section className={styles.location}>
                 <h2 className={styles.title}>현재 위치를 선택해주세요</h2>
                 <LocationCheckButton
-                    locationinfo={DUMMY_INFO}
+                    locationInfo={DUMMY_INFO}
                     onValid={(chk) => handleBtnValid(chk)}
                     storedIdx={location.idx}
                     onLocationChange={handleLocationChange}
