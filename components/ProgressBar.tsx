@@ -9,7 +9,7 @@ export default function ProgressBar(props: PropsState) {
     const { range } = props; 
     return (
         <div>
-            <progress className={styles.bar} value={range} max="5"></progress>
+            <progress className={styles.bar} value={range} max="4"></progress>
         </div>
     )
 }
