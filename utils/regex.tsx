@@ -12,3 +12,13 @@ export function checkPhone(input: string) {
     const regex = /^01([0|1|6|7|8|9]?)-?([0-9]{3,4})-?([0-9]{4})$/;
     return regex.test(input);
 }
+
+export function checkNumber(input: string) {
+    const regex = /^[0-9]*$/
+    return regex.test(input);
+}
+
+export function checkPhoneNumber(input: string) {
+    const regex = /^\d{11}$/;
+    return regex.test(input);
+}

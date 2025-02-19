@@ -18,6 +18,7 @@ interface InitialState {
     location: Location;
     userInfo: UserInfo;
     groupInfo: GroupInfo;
+    phoneNumber: number | undefined;
 }
 
 const initialState: InitialState = {
@@ -34,6 +35,7 @@ const initialState: InitialState = {
         name: '',
         summary: '',    
     },
+    phoneNumber: undefined,
 }
 
 const userSlice = createSlice({
@@ -43,7 +45,7 @@ const userSlice = createSlice({
         changeLocation: (state, action: PayloadAction<Location>) => {
             state.location = action.payload;
         },
-        changeGroupInfo: (state, action) => {
+        changeGroupInfo: (state, action: PayloadAction<GroupInfo>) => {
             state.groupInfo.name = action.payload.name;
             state.groupInfo.summary = action.payload.summary;
         },
@@ -52,8 +54,11 @@ const userSlice = createSlice({
             state.userInfo.sex = action.payload.sex;
             state.userInfo.old = action.payload.old;
         },
+        changePhoneNumber: (state, action: PayloadAction<number>) => {
+            state.phoneNumber = action.payload;
+        }
     },
 })
 
-export const { changeLocation,changeGroupInfo,changeUserInfo } = userSlice.actions;
+export const { changeLocation,changeGroupInfo,changeUserInfo,changePhoneNumber } = userSlice.actions;
 export default userSlice.reducer;
