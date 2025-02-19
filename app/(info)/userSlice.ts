@@ -10,17 +10,14 @@ interface UserInfo {
     old: string;
     [key: string]: string;
 }
-interface Want {
-    cnt: number;
-    sex: string;
-    old: string;
+interface GroupInfo{
+    name: string;
+    summary: string;
 }
 interface InitialState {
     location: Location;
     userInfo: UserInfo;
-    groupName: string;
-    groupSummary: string;
-    want: Want;
+    groupInfo: GroupInfo;
 }
 
 const initialState: InitialState = {
@@ -33,13 +30,10 @@ const initialState: InitialState = {
         sex: '',
         old: '',
     },
-    groupName: '',
-    groupSummary: '',
-    want: {
-        cnt: 0,
-        sex: '',
-        old: '',
-    }
+    groupInfo: {
+        name: '',
+        summary: '',    
+    },
 }
 
 const userSlice = createSlice({
@@ -50,22 +44,16 @@ const userSlice = createSlice({
             state.location = action.payload;
         },
         changeGroupInfo: (state, action) => {
-            state.groupName = action.payload[0];
-            state.groupSummary = action.payload[1];
+            state.groupInfo.name = action.payload.name;
+            state.groupInfo.summary = action.payload.summary;
         },
         changeUserInfo: (state, action: PayloadAction<UserInfo>) => {
             state.userInfo.cnt = action.payload.cnt;
             state.userInfo.sex = action.payload.sex;
             state.userInfo.old = action.payload.old;
         },
-        changeWant: (state, action) => {
-            state.want.cnt = action.payload[0];
-            state.want.sex = action.payload[1];
-            state.want.old = action.payload[2];
-        }
-
     },
 })
 
-export const { changeLocation,changeGroupInfo,changeUserInfo,changeWant } = userSlice.actions;
+export const { changeLocation,changeGroupInfo,changeUserInfo } = userSlice.actions;
 export default userSlice.reducer;
