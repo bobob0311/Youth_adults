@@ -4,9 +4,8 @@ import { v4 as uuidv4 } from "uuid";
 import InputBox from "@/components/input/InputBox";
 import NavigationButton from "@/components/button/NavigationButton";
 import styles from "./page.module.scss"
-import { useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { RootState } from "@/redux/store";
+import { useRef, useState } from "react";
+import { useDispatch } from "react-redux";
 import { changePhoneNumber } from "../userSlice";
 import { checkNumber, checkNumberLength, checkPhoneNumber } from "@/utils/regex";
 
@@ -45,25 +44,37 @@ const phoneData = [
 ]
 
 export default function Page() {
-    const [verificationCode, setVerificationCode] = useState<string>('');
+    const verificationCodeRef = useRef<string>('');
+    const myCodeRef = useRef<string>('');
+    const phoneNumberRef = useRef<string>('');
     const [isBtnValid, setIsBtnValid] = useState<boolean>(false);
-    const phoneNumber = useSelector((state:RootState) => state.user.phoneNumber)
+
     const dispatch = useDispatch();
     
-    const handlePhoneNumber = (newValue: string) => {
-        const number = Number(newValue);
-        dispatch(changePhoneNumber(number));
+    const handleInput = (newValue: string,selectedId: string) => {
+        if (selectedId === "phoneNumber") {
+            phoneNumberRef.current = newValue;    
+        } else if (selectedId === "authNumber") {
+            myCodeRef.current = newValue
+        }
     }
 
     const handleSendMessage = () => {
+        setIsBtnValid(false);
+        const number = Number(phoneNumberRef.current);
+        dispatch(changePhoneNumber(number));
         const code = uuidv4();
         console.log(code);
-        setVerificationCode(code);
+        verificationCodeRef.current = code;
         // 메세지 보내는 code생성
     }
 
     const handleCheckNumber = () => {
-        // 맞는 번호인지 확인 후 맞으면 Btn 활성화 
+        if (myCodeRef.current === verificationCodeRef.current) {
+            setIsBtnValid(true);
+        } else {
+            setIsBtnValid(false);
+        }
     }
 
     const phoneNumberValidCondition = {
@@ -74,8 +85,12 @@ export default function Page() {
             return checkPhoneNumber(input);
         },
     }
+
+
     phoneData[0].valid = phoneNumberValidCondition;
     phoneData[0].button.onClick = handleSendMessage;
+
+    phoneData[1].button.onClick = handleCheckNumber;
 
     return (
         <div className={styles.container}>
@@ -87,7 +102,7 @@ export default function Page() {
                             <InputBox
                                 inputInfo={item.inputInfo}
                                 valid={item.valid}
-                                onText={(newValue) => handlePhoneNumber(newValue)}
+                                onText={(newValue, selectedId) => handleInput(newValue,selectedId)}
                             />
                             <button
                                 onClick={item.button.onClick}
@@ -98,7 +113,7 @@ export default function Page() {
                     ))
                 }
             </section>
-            <NavigationButton isValid={isBtnValid} title="다음으로" url="step5" />
+            <NavigationButton isValid={isBtnValid} title="다음으로" url="done" />
         </div>
     )
 }
