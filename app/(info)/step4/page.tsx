@@ -48,12 +48,14 @@ export default function Page() {
     const myCodeRef = useRef<string>('');
     const phoneNumberRef = useRef<string>('');
     const [isBtnValid, setIsBtnValid] = useState<boolean>(false);
-
+    const [isPhoneNumberValid, setIsPhoneNumberValid] = useState<boolean>(false);
     const dispatch = useDispatch();
     
-    const handleInput = (newValue: string,selectedId: string) => {
+    const handleInput = (newValue: string, selectedId: string, valid:boolean) => {
         if (selectedId === "phoneNumber") {
-            phoneNumberRef.current = newValue;    
+            phoneNumberRef.current = newValue;
+            setIsPhoneNumberValid(valid);
+
         } else if (selectedId === "authNumber") {
             myCodeRef.current = newValue
         }
@@ -61,12 +63,17 @@ export default function Page() {
 
     const handleSendMessage = () => {
         setIsBtnValid(false);
-        const number = Number(phoneNumberRef.current);
-        dispatch(changePhoneNumber(number));
-        const code = uuidv4();
-        console.log(code);
-        verificationCodeRef.current = code;
-        // 메세지 보내는 code생성
+        if (isPhoneNumberValid) {
+            const number = Number(phoneNumberRef.current);
+            dispatch(changePhoneNumber(number));
+            const code = uuidv4();
+            console.log(code);
+            verificationCodeRef.current = code;
+            // 메세지 보내는 code생성    
+        } else {
+            alert("핸드폰 번호 제대로 입력해라 ;;")
+        }
+        
     }
 
     const handleCheckNumber = () => {
@@ -102,7 +109,7 @@ export default function Page() {
                             <InputBox
                                 inputInfo={item.inputInfo}
                                 valid={item.valid}
-                                onText={(newValue, selectedId) => handleInput(newValue,selectedId)}
+                                onText={(newValue, selectedId,valid) => handleInput(newValue,selectedId,valid)}
                             />
                             <button
                                 onClick={item.button.onClick}
