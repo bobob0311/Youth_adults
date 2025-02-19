@@ -115,6 +115,7 @@ export default function Page() {
                             key={item.inputInfo.label}
                             inputInfo={item.inputInfo}
                             valid={item.valid}
+                            storedText = {groupInfo[item.inputInfo.id]}
                             onText={(newValue, selectedId,check) => handleInput(newValue, selectedId,check)}
                         />
                     ))

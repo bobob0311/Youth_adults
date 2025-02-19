@@ -13,6 +13,7 @@ interface UserInfo {
 interface GroupInfo{
     name: string;
     summary: string;
+    [key: string]: string;
 }
 interface InitialState {
     location: Location;

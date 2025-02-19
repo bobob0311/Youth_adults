@@ -15,12 +15,12 @@ interface PropsState{
         onValidCondition: (text: string) => boolean;
     }
     onText: (newValue: string, selectedId: string, check:boolean) => void
-    
+    storedText?: string;
 }
 
 export default function InputBox(props: PropsState) {
-    const { inputInfo, valid,onText} = props;
-    const [text, setText] = useState<string>("");
+    const { inputInfo, valid,onText,storedText} = props;
+    const [text, setText] = useState<string>(storedText? storedText : '');
 
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>, selectedId:string) => {
