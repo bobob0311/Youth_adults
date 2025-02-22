@@ -48,15 +48,21 @@
 }
 
 .content{
+    padding-top: 50px;
     height: calc(100vh - 240px);
 }
 
-.linkWrapper{
+.btnContainer{
     display: flex;
     justify-content: center;
-    overflow: hidden;
-    a{
-        font-size: 14px;
-        color: #9C9C9C;
+}
+
+.linkWrapper{
+    all:unset;
+    font-size: 14px;
+    color: #9C9C9C;
+    margin : auto;
+    &:hover{
+        cursor: pointer;
     }
 }
