@@ -112,6 +112,7 @@ export default function ImgSlider(props: PropsState) {
       <div ref={containerRef} className={styles.imgBox}>
         {imgInfo.map((item, index) => (
           <img
+            width={370}
             key={item.id}
             ref={index === 0 ? imgRef : null}
             src={item.imgSrc}
