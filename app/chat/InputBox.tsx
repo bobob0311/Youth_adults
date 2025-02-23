@@ -1,4 +1,5 @@
 'use client'
+import ImgUpload from "./ImgUpload";
 import styles from "./InputBox.module.scss";
 
 import { useRef, useState } from "react"
@@ -13,7 +14,8 @@ const LINE_HEIGHT = 14;
 export default function InputBox(props: PropsState) {
     const { onSend} = props;
     const textareaRef = useRef<HTMLTextAreaElement>(null);
-    const [isActive, setIsActive] = useState(false);
+    const [isActive, setIsActive] = useState<boolean>(false);
+    const [isImgActvie, setIsImgActive] = useState<boolean>(false);
 
     const sendMessage = () => {
         if (textareaRef.current) {
@@ -56,7 +58,7 @@ export default function InputBox(props: PropsState) {
     }
 
     const sendImg = () => {
-        console.log("사진 보내기 로직 실행");
+        setIsImgActive(true);
     }
 
     
@@ -71,6 +73,8 @@ export default function InputBox(props: PropsState) {
                     onInput={handleResizeHeight}
                     onChange={handleActiveChange}
                 />
+                
+                {isImgActvie && <ImgUpload/>}
                 <button 
                     className={styles.sendBtn}
                     onClick={isActive? sendMessage : sendImg}
