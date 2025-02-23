@@ -55,6 +55,10 @@ export default function InputBox(props: PropsState) {
         }
     }
 
+    const sendImg = () => {
+        console.log("사진 보내기 로직 실행");
+    }
+
     
     return (
         <div className={styles.InputContainer}>
@@ -67,12 +71,14 @@ export default function InputBox(props: PropsState) {
                     onInput={handleResizeHeight}
                     onChange={handleActiveChange}
                 />
-            <button 
-                className={`${styles.sendBtn} ${isActive ? styles.active : ''}`}
-                onClick={sendMessage}
-                disabled={!isActive}
-                > 
-                    <img width="20" src="/sent.svg"/> 
+                <button 
+                    className={styles.sendBtn}
+                    onClick={isActive? sendMessage : sendImg}
+                    > 
+                        {isActive? 
+                            <img width="20" src="/sent.svg"/>:
+                            <img width="20" src="/camera.svg"/> 
+                        }
                 </button>        
             </div>
         </div>
