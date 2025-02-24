@@ -1,9 +1,5 @@
 import { createSlice,PayloadAction } from "@reduxjs/toolkit";
 
-interface Location {
-    name: string;
-    idx: number;
-}
 interface UserInfo {
     cnt: string;
     sex: string;
@@ -16,17 +12,14 @@ interface GroupInfo{
     [key: string]: string;
 }
 interface InitialState {
-    location: Location;
+    location: string;
     userInfo: UserInfo;
     groupInfo: GroupInfo;
     phoneNumber: number | undefined;
 }
 
 const initialState: InitialState = {
-    location: {
-        name: '',
-        idx: -1,
-    },
+    location: '',
     userInfo: {
         cnt: '',
         sex: '',
@@ -43,7 +36,7 @@ const userSlice = createSlice({
     name: "users",
     initialState,
     reducers: {
-        changeLocation: (state, action: PayloadAction<Location>) => {
+        changeLocation: (state, action: PayloadAction<string>) => {
             state.location = action.payload;
         },
         changeGroupInfo: (state, action: PayloadAction<GroupInfo>) => {

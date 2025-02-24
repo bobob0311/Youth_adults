@@ -10,10 +10,10 @@ import { changeLocation } from "../userSlice";
 import { useEffect, useState } from "react";
 
 let DUMMY_INFO = [
-    { locationName: "강남/신논현", imgUrl: "location1.png" },
-    { locationName: "홍대/합정", imgUrl: "location2.png" },
-    { locationName: "이태원", imgUrl: "location3.png" },
-    { locationName: "건대입구", imgUrl: "location4.png" },
+    { locationName: "강남/신논현", imgUrl: "gangnam.png" },
+    { locationName: "홍대/합정", imgUrl: "hongdae.png" },
+    { locationName: "이태원", imgUrl: "itaewon.png" },
+    { locationName: "건대입구", imgUrl: "konkuk.png" },
 ]
 
 export default function LocationPage() {
@@ -23,20 +23,18 @@ export default function LocationPage() {
     const location = useSelector((state:RootState) => state.user.location);
     
     useEffect(() => {
-        if (location.idx !== -1) {
+        if (location !== '') {
             setIsBtnValid(true);
-        }
-    }, [])
-    
-    const handleBtnValid = (chk: boolean) => {
-        setIsBtnValid(chk);
-    }
-
-    const handleLocationChange = (idx: number) => {
-        if (idx !== -1) {
-            dispatch(changeLocation({name: DUMMY_INFO[idx].locationName, idx}))
         } else {
-            dispatch(changeLocation({name:'',idx:-1}));
+            setIsBtnValid(false);
+        }
+    }, [location])
+
+    const handleLocationChange = (location: string) => {
+        if (location !== '') {
+            dispatch(changeLocation(location));
+        } else {
+            dispatch(changeLocation(''));
         }
     }
 
@@ -46,8 +44,7 @@ export default function LocationPage() {
                 <h2 className={styles.title}>현재 위치를 선택해주세요</h2>
                 <LocationCheckButton
                     locationInfo={DUMMY_INFO}
-                    onValid={(chk) => handleBtnValid(chk)}
-                    storedIdx={location.idx}
+                    storedLocation={location}
                     onLocationChange={handleLocationChange}
                 />
             </section>

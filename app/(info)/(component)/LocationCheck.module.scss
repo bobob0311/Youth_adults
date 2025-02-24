@@ -9,6 +9,7 @@
     all: unset;
     display: flex;
     justify-content: center;
+    position: relative;
 }
 
 .locationImg {
@@ -19,4 +20,11 @@
 
 .selected{
     border: 2px solid var(--purple-400);
+}
+
+.locationName{
+    position: absolute;
+    top:25;
+    font-size: 16px;
+    font-weight: 600;
 }

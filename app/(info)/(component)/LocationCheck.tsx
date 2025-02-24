@@ -4,9 +4,8 @@ import styles from "./LocationCheck.module.scss";
 
 interface PropsState{
     locationInfo: Location[];
-    storedIdx: number;
-    onValid: (isValid: boolean) => void;
-    onLocationChange: (idx: number) => void;
+    storedLocation: string;
+    onLocationChange: (location: string) => void;
 }
 
 interface Location{
@@ -15,33 +14,32 @@ interface Location{
 }
 
 export default function LocationCheckButton(props: PropsState) {
-    const { locationInfo,storedIdx, onValid, onLocationChange } = props;
-    const [selectedIdx, setSelectedIdx] = useState<number>(storedIdx);
+    const { locationInfo, storedLocation, onLocationChange } = props;
+    const [selectedLocation, setSelectedLocation] = useState<string>(storedLocation);
 
 
-    const handleClick = (event: React.MouseEvent<HTMLElement>, clickedIdx: number) => {
-        if (selectedIdx == clickedIdx) {
-            setSelectedIdx(-1);
-            onValid(false);
-            onLocationChange(-1);
+    const handleClick = (event: React.MouseEvent<HTMLElement>, clickedLocation: string) => {
+        if (selectedLocation == clickedLocation) {
+            setSelectedLocation('');
+            onLocationChange('');
         } else {
-            setSelectedIdx(clickedIdx);
-            onValid(true)
-            onLocationChange(clickedIdx);
+            setSelectedLocation(clickedLocation);
+            onLocationChange(clickedLocation);
         }
     }
 
     return (
         <div className={styles.locationContainer}>
             {
-                locationInfo.map((item, idx) => (
+                locationInfo.map((item) => (
                     <button className={styles.imgBtn}
                         key={item.locationName}
-                        onClick={(e) => handleClick(e,idx)}
-                        aria-checked={idx === selectedIdx ? "true" : "false"}
+                        onClick={(e) => handleClick(e,item.locationName)}
+                        aria-checked={item.locationName === selectedLocation ? "true" : "false"}
                     >
+                        <span className={styles.locationName}>{item.locationName}</span>
                         <img
-                            className={`${styles.locationImg} ${idx === selectedIdx ? styles.selected :""}`}
+                            className={`${styles.locationImg} ${item.locationName === selectedLocation ? styles.selected :""}`}
                             src={item.imgUrl}
                             alt={item.locationName}
                         />
