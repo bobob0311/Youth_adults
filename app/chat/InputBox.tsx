@@ -58,7 +58,7 @@ export default function InputBox(props: PropsState) {
     }
 
     const sendImg = () => {
-        setIsImgActive(true);
+        setIsImgActive((prev) => !prev);
     }
 
     
@@ -74,7 +74,7 @@ export default function InputBox(props: PropsState) {
                     onChange={handleActiveChange}
                 />
                 
-                {isImgActvie && <ImgUpload/>}
+                {isImgActvie && <ImgUpload onClose={() => setIsImgActive(false)} />}
                 <button 
                     className={styles.sendBtn}
                     onClick={isActive? sendMessage : sendImg}
