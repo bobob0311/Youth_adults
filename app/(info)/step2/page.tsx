@@ -54,7 +54,6 @@ export default function SelectionPage() {
 
     const checkBtnValid = (nowValidArr: Check[]) => {
         const allValid = nowValidArr.every((value) => value.isChecked === true);
-        console.log(allValid);
         setIsBtnValid(allValid); 
     }
 
