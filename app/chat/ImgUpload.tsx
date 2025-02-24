@@ -25,7 +25,12 @@ export default function ImgUpload(props: PropsState) {
                 URL.revokeObjectURL(img);
             }
         }
-    },[img])
+    }, [img])
+    
+    const handleClose = () => {
+        setImg('');
+        onClose();
+    }
 
 
     return (
@@ -37,6 +42,7 @@ export default function ImgUpload(props: PropsState) {
                 <div className={img ? styles.wrapper:""}>
                     {img &&
                         <>
+                            <button className={styles.closeBtn} onClick={handleClose}>closes</button>
                             <h2>이 사진으로 공유할까요?</h2>
                             <button>공유하기</button>
                         </>
