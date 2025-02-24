@@ -1,45 +1,65 @@
 import { createSlice,PayloadAction } from "@reduxjs/toolkit";
 
-const initialState = {
-    location: '',
-    groupName: '',
-    groupSummary: '',
-    check: {
-        cnt: 0,
-        sex: '',
-        old:'',
+interface Location {
+    name: string;
+    idx: number;
+}
+interface UserInfo {
+    cnt: string;
+    sex: string;
+    old: string;
+    [key: string]: string;
+}
+interface GroupInfo{
+    name: string;
+    summary: string;
+    [key: string]: string;
+}
+interface InitialState {
+    location: Location;
+    userInfo: UserInfo;
+    groupInfo: GroupInfo;
+    phoneNumber: number | undefined;
+}
+
+const initialState: InitialState = {
+    location: {
+        name: '',
+        idx: -1,
     },
-    want: {
-        cnt: 0,
+    userInfo: {
+        cnt: '',
         sex: '',
-        old:'',
-    }
+        old: '',
+    },
+    groupInfo: {
+        name: '',
+        summary: '',    
+    },
+    phoneNumber: undefined,
 }
 
 const userSlice = createSlice({
     name: "users",
     initialState,
     reducers: {
-        changeLocation: (state, action) => {
+        changeLocation: (state, action: PayloadAction<Location>) => {
             state.location = action.payload;
         },
-        changeGroupInfo: (state, action) => {
-            state.groupName = action.payload[0];
-            state.groupSummary = action.payload[1];
+        changeGroupInfo: (state, action: PayloadAction<GroupInfo>) => {
+            state.groupInfo.name = action.payload.name;
+            state.groupInfo.summary = action.payload.summary;
         },
-        changeCheck: (state, action) => {
-            state.check.cnt = action.payload[0];
-            state.check.sex = action.payload[1];
-            state.check.old = action.payload[2];
+        changeUserInfo: (state, action: PayloadAction<UserInfo>) => {
+            state.userInfo.cnt = action.payload.cnt;
+            state.userInfo.sex = action.payload.sex;
+            state.userInfo.old = action.payload.old;
         },
-        changeWant: (state, action) => {
-            state.want.cnt = action.payload[0];
-            state.want.sex = action.payload[1];
-            state.want.old = action.payload[2];
+        changePhoneNumber: (state, action: PayloadAction<number>) => {
+            state.phoneNumber = action.payload;
         }
-
     },
 })
 
-export const { changeLocation,changeGroupInfo,changeCheck,changeWant } = userSlice.actions;
+export const { changeLocation,changeGroupInfo,changeUserInfo,changePhoneNumber } = userSlice.actions;
 export default userSlice.reducer;

@@ -1,0 +1,31 @@
+.container {
+    height: 80px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    margin-bottom: 20px;
+    @include mixin.textLabel();
+}
+
+.btn {
+    all: unset;
+    display: inline-block;
+    min-width: 25px;
+    text-align: center;
+    padding-inline: 20px;
+    margin-right: 8px;
+    height: 36px;
+    color: var(--text-button);
+    background-color: var(--selection);
+    border-radius: 20px;
+    border: 1px solid var(--border);
+    font-size: 12px;
+    &:hover{
+        cursor: pointer;
+    }
+}
+
+.selected {
+    background-color: var(--purple-400);
+    border-color: var(--purple-100);
+}

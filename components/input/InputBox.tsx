@@ -3,45 +3,52 @@ import { useState } from "react";
 import styles from "./InputBox.module.scss"
 
 interface PropsState{
-    label: string;
-    inputType: string;
-    placeholder: string;
-    valid?:{
-        onCondition: (text: string) => boolean; 
-        onValidCondition: (text: string) => boolean;
-        onValid: (isValid: boolean) => void;
+    inputInfo: {
+        id: string;
+        label: string;
+        inputType: string;
+        placeholder: string;
+        limit?: number;
     }
-    onText: (item: string) => void
-    limit?: number;
+    valid?:{
+        onInputCondition: (text: string) => boolean; 
+        onValidCondition: (text: string) => boolean;
+    }
+    onText: (newValue: string, selectedId: string, check:boolean) => void
+    storedText?: string;
 }
 
 export default function InputBox(props: PropsState) {
-    const { inputType, label, placeholder, valid,onText, limit} = props;
-    const [text, setText] = useState<string>("");
+    const { inputInfo, valid,onText,storedText} = props;
+    const [text, setText] = useState<string>(storedText? storedText : '');
 
 
-    const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const handleChange = (e: React.ChangeEvent<HTMLInputElement>, selectedId:string) => {
         const newValue = e.target.value;
         if (valid) {
-            const { onCondition, onValidCondition, onValid } = valid;
-            if (onCondition(newValue)) {
+            const { onInputCondition, onValidCondition } = valid;
+            if (onInputCondition(newValue)) {
+                const isValid = onValidCondition(newValue);
+                
                 setText(newValue);
-                onText(newValue);
+                onText(newValue, selectedId,isValid);
             }
-
-            const isValid = onValidCondition(newValue);
-            onValid(isValid);    
         } else {
             setText(newValue);
-            onText(newValue);
+            onText(newValue, selectedId, true);
         }
     }
     
     return (
         <label className={styles.InputBox}>
-            <span>{label}</span>
-            <input value={text} onChange={(e) => handleChange(e)} type={inputType} placeholder={placeholder} />
-            {limit && <span className={`${styles.count} ${text.length >= limit ? styles.limit : ''}`}>{`${text.length}/${limit}`}</span>}
+            <span>{inputInfo.label}</span>
+            <input
+                value={text}
+                onChange={(e) => handleChange(e,inputInfo.id)}
+                type={inputInfo.inputType}
+                placeholder={inputInfo.placeholder}
+            />
+            {inputInfo.limit && <span className={`${styles.count} ${text.length >= inputInfo.limit ? styles.limit : ''}`}>{`${text.length}/${inputInfo.limit}`}</span>}
         </label>
     )
 }

@@ -28,6 +28,7 @@ export default function RootLayout({
       <body className={`${geistSans.variable} ${geistMono.variable}`}>
         <div className="box">
           <ReduxProvider>{children}</ReduxProvider>
+          <div id="modal-root"></div>
         </div>
       </body>
     </html>
