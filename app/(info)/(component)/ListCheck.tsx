@@ -5,32 +5,32 @@ import styles from "./ListCheck.module.scss"
 
 interface PropsState{
     listInfo: ListInfo;
-    storedIdx: number;
-    onValid: (selectedId: string, isValid: boolean) => void;
-    onSeletedChange: (id: string, selected: string) => void;
+    storedItem: string;
+    onValid: (selectedCategory: string, isValid: boolean) => void;
+    onSeletedChange: (category: string, selected: string) => void;
 }
 
 interface ListInfo{
     label: string;
     checkList: string[]
-    id: string;
+    category: string;
 }
 
 
 
 export default function ListCheckButton(props: PropsState) {
-    const { listInfo, storedIdx,onValid,onSeletedChange } = props;
-    const [selectedIdx, setSelectedIdx] = useState<number>(storedIdx);
+    const { listInfo, storedItem,onValid,onSeletedChange } = props;
+    const [selectedItem, setSelectedItem] = useState<string>(storedItem);
     
-    const handleClick = (clickedIdx: number, clickedItem: string,id: string = listInfo.id) => {
-        if (selectedIdx == clickedIdx) {
-            setSelectedIdx(-1);
-            onValid(id,false);
-            onSeletedChange(id, clickedItem);
+    const handleClick = (clickedItem: string, category: string = listInfo.category) => {
+        if (selectedItem == clickedItem) {
+            setSelectedItem('');
+            onValid(category,false);
+            onSeletedChange(category, clickedItem);
         } else {
-            setSelectedIdx(clickedIdx);
-            onValid(id,true)
-            onSeletedChange(id, clickedItem);
+            setSelectedItem(clickedItem);
+            onValid(category,true)
+            onSeletedChange(category, clickedItem);
         }
     }
 
@@ -38,14 +38,14 @@ export default function ListCheckButton(props: PropsState) {
         <section className={styles.container}>
             {listInfo.label}
             <div>
-                {listInfo.checkList.map((item, idx) => (
+                {listInfo.checkList.map((item) => (
                     <button
-                        className={`${styles.btn} ${idx === selectedIdx ? styles.selected : ""}`}
+                        className={`${styles.btn} ${item === selectedItem ? styles.selected : ""}`}
                         key={item}
                         type="button"
                         role="radio"
-                        aria-checked={idx === selectedIdx ? "true" : "false"}
-                        onClick={(e) => handleClick(idx,item)}
+                        aria-checked={item === selectedItem ? "true" : "false"}
+                        onClick={(e) => handleClick(item)}
                     >
                         {item}
                     </button>

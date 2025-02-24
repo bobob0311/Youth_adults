@@ -9,14 +9,14 @@ import ListCheckButton from "../(component)/ListCheck";
 import { RootState } from "@/redux/store";
 
 interface Check{
-    id: string,
-    chk: boolean,
+    category: string,
+    isChecked: boolean,
 }
 
 const DUMMY_INFO = [
-    { id: "cnt", label: "인원 수", checkList: ["2명", "3명", "4명", "5명"] },
-    { id: "sex",label: "그룹 성별", checkList: ['여성', '남성', '혼성'] },
-    { id: "old", label: "평균 연령",checkList : ['20대 초','20대 중','20대 말']},
+    { category: "cnt", label: "인원 수", checkList: ["2명", "3명", "4명", "5명","그 이상"] },
+    { category: "sex",label: "그룹 성별", checkList: ['여성', '남성', '혼성'] },
+    { category: "old", label: "평균 연령",checkList : ['20대 초','20대 중','20대 말']},
 ]
 
 export default function SelectionPage() {
@@ -26,34 +26,35 @@ export default function SelectionPage() {
     const userInfo = useSelector((state: RootState) => state.user.userInfo);
     const dispatch = useDispatch();
 
-    const handleStore = (id:string,selected: string) => {
-        dispatch(changeUserInfo({...userInfo, [id]:selected}));
+    const handleStore = (category:string,selected: string) => {
+        dispatch(changeUserInfo({...userInfo, [category]:selected}));
     }
     useEffect(() => {
         const newArr: Check[] = []
         Object.entries(userInfo).forEach(([key, value]) => {
             if (value) {
-                newArr.push({ id: key, chk:true});
+                newArr.push({ category: key, isChecked:true});
             } else {
-                newArr.push({ id: key, chk:false});
+                newArr.push({ category: key, isChecked:false});
             }
         })
         setValidArr(newArr);
         checkBtnValid(newArr);
     },[])
 
-    const handleValid = (selectedId:string, isChecked:boolean) => {
-        const updateValidArr = [...validArr];
-        const foundItem = updateValidArr.find(item => item.id === selectedId);
-        if (foundItem) {
-            foundItem.chk = isChecked;
-        }
-        setValidArr(updateValidArr);
-        checkBtnValid(updateValidArr);
+    const handleValid = (category:string, isChecked:boolean) => {
+        setValidArr(prevArr => {
+        const updatedArr = prevArr.map(item =>
+            item.category === category ? { ...item, isChecked } : item
+        );
+        checkBtnValid(updatedArr);
+        return updatedArr;
+    });
     }
 
     const checkBtnValid = (nowValidArr: Check[]) => {
-        const allValid = nowValidArr.every((value) => value.chk === true);
+        const allValid = nowValidArr.every((value) => value.isChecked === true);
+        console.log(allValid);
         setIsBtnValid(allValid); 
     }
 
@@ -66,9 +67,9 @@ export default function SelectionPage() {
                         <ListCheckButton
                             key={item.label}
                             listInfo={item}
-                            storedIdx={userInfo[item.id]? item.checkList.indexOf(userInfo[item.id]): -1}
-                            onValid={(selectedId, chk) => handleValid(selectedId, chk)}
-                            onSeletedChange={(id,selected) => handleStore(id,selected)}
+                            storedItem={userInfo[item.category]? userInfo[item.category]: ''}
+                            onValid={(category, chk) => handleValid(category, chk)}
+                            onSeletedChange={(category,selectedItem) => handleStore(category,selectedItem)}
                         />
                     ))
                 }
