@@ -4,11 +4,22 @@ import styles from "./page.module.scss"
 
 export default function Home() {
   return (
-    <div className={styles.backGround}>
+    <div className={styles.backGroundImg}>
       <div className={styles.content}>
-      <h1 className={styles.mainImg}><img src="/mainImg.png" alt="청춘 상회"/></h1>
-      <p className={styles.mainP}>다시 돌아오지 않을 청춘을 후회없이 즐기세요!!</p>
-      <NavigationButton isValid={true} title="시작하기" url="/step1" />
+
+        <h1 className={styles.mainImg}>
+          <img src="/mainImg.png" alt="청춘 상회 이미지" />
+          <span className={styles.srOnly}>청춘 상회</span>
+        </h1>
+        <h2 className={styles.subtitle}>내 친구가 되어라. 청춘을 후회없이 즐기세요!</h2>
+        
+        <NavigationButton
+          isValid={true}
+          width="220px"
+          title="시작하기!"
+          url="/step1"
+        />
+
       </div>
     </div>
   );

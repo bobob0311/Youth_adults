@@ -7,10 +7,11 @@ interface PropsState{
     url: string;
     onStore?: () => void;
     isValid: boolean;
+    width?: string;
 }
 
 export default function NavigationButton(props: PropsState) {
-    const { subtitle,title, url, onStore, isValid } = props;
+    const { subtitle,title, url, onStore, isValid,width } = props;
     const router = useRouter();
 
     const handleClick = () => {
@@ -27,6 +28,7 @@ export default function NavigationButton(props: PropsState) {
             className={`${styles.navBtn} ${isValid? '': styles.disable}`}
             onClick={handleClick}
             aria-label="다음으로 이동"
+            style={width? {width} : {width:"370px"}}
         >
             <span className={subtitle? styles.smallTitle:''}>{title}</span>
             {subtitle ?<span className={styles.subtitle}> {subtitle}</span>:''}
