@@ -4,7 +4,7 @@ import styles from "./InputBox.module.scss"
 
 interface PropsState{
     inputInfo: {
-        id: string;
+        category: string;
         label: string;
         inputType: string;
         placeholder: string;
@@ -14,7 +14,7 @@ interface PropsState{
         onInputCondition: (text: string) => boolean; 
         onValidCondition: (text: string) => boolean;
     }
-    onText: (newValue: string, selectedId: string, check:boolean) => void
+    onText: (newValue: string, category: string, check:boolean) => void
     storedText?: string;
 }
 
@@ -23,7 +23,7 @@ export default function InputBox(props: PropsState) {
     const [text, setText] = useState<string>(storedText? storedText : '');
 
 
-    const handleChange = (e: React.ChangeEvent<HTMLInputElement>, selectedId:string) => {
+    const handleChange = (e: React.ChangeEvent<HTMLInputElement>, category:string) => {
         const newValue = e.target.value;
         if (valid) {
             const { onInputCondition, onValidCondition } = valid;
@@ -31,11 +31,11 @@ export default function InputBox(props: PropsState) {
                 const isValid = onValidCondition(newValue);
                 
                 setText(newValue);
-                onText(newValue, selectedId,isValid);
+                onText(newValue, category,isValid);
             }
         } else {
             setText(newValue);
-            onText(newValue, selectedId, true);
+            onText(newValue, category, true);
         }
     }
     
@@ -44,7 +44,7 @@ export default function InputBox(props: PropsState) {
             <span>{inputInfo.label}</span>
             <input
                 value={text}
-                onChange={(e) => handleChange(e,inputInfo.id)}
+                onChange={(e) => handleChange(e,inputInfo.category)}
                 type={inputInfo.inputType}
                 placeholder={inputInfo.placeholder}
             />

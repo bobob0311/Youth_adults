@@ -11,14 +11,14 @@ import { RootState } from "@/redux/store";
 import { changeGroupInfo } from "../userSlice";
 
 interface Check{
-    id: string;
-    chk: boolean;
+    category: string;
+    isChecked: boolean;
 }
 
 const DUMMY_INFO = [
     {
         inputInfo:{
-            id: "name",
+            category: "name",
             label: "그룹명",
             inputType: "text",
             placeholder: "서초구 에스파",
@@ -28,7 +28,7 @@ const DUMMY_INFO = [
     },
     {
         inputInfo: {
-            id: "summary",
+            category: "summary",
             label:"한줄소개",
             inputType:"text",
             placeholder: "ENFP, ESFJ 신입생이에요",
@@ -55,32 +55,32 @@ export default function Page() {
         const newArr: Check[] = []
         Object.entries(groupInfo).forEach(([key, value]) => {
             if (value) {
-                newArr.push({ id: key, chk:true});
+                newArr.push({ category: key, isChecked:true});
             } else {
-                newArr.push({ id: key, chk:false});
+                newArr.push({ category: key, isChecked:false});
             }
         })
         setValidArr(newArr);
         checkBtnValid(newArr);
     },[])
 
-    const handleValid = (selectedId: string,isChecked:boolean) => {
-        const updateValidArr = [...validArr];
-        const foundItem = updateValidArr.find(item => item.id === selectedId);
-        if (foundItem) {
-            foundItem.chk = isChecked;
-        }
-        setValidArr(updateValidArr);
-        checkBtnValid(updateValidArr);
+    const handleValid = (category: string,isChecked:boolean) => {
+        setValidArr(prevArr => {
+            const updatedArr = prevArr.map(item =>
+                item.category === category ? { ...item, isChecked } : item
+            );
+            checkBtnValid(updatedArr);
+            return updatedArr;
+        });
     }
 
-    const handleInput = (newValue:string, selectedId:string, check:boolean) => {
-        dispatch(changeGroupInfo({ ...groupInfo, [selectedId]: newValue }))
-        handleValid(selectedId, check);
+    const handleInput = (newValue:string, category:string, check:boolean) => {
+        dispatch(changeGroupInfo({ ...groupInfo, [category]: newValue }))
+        handleValid(category, check);
     }
 
     const checkBtnValid = (nowValidArr: Check[]) => {
-        const allValid = nowValidArr.every((value) => value.chk === true);
+        const allValid = nowValidArr.every((value) => value.isChecked === true);
         setIsBtnValid(allValid);
     }
 
@@ -115,7 +115,7 @@ export default function Page() {
                             key={item.inputInfo.label}
                             inputInfo={item.inputInfo}
                             valid={item.valid}
-                            storedText = {groupInfo[item.inputInfo.id]}
+                            storedText = {groupInfo[item.inputInfo.category]}
                             onText={(newValue, selectedId,check) => handleInput(newValue, selectedId,check)}
                         />
                     ))
