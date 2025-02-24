@@ -1,0 +1,65 @@
+@mixin talkBox($color) {
+    max-width: 80%;
+    padding-inline: 13px;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    border-radius: 18px;
+    background-color: $color;
+    font-size: 14px;
+    margin-bottom: 5px;
+    color: var(--text-button);
+    line-height: 140%;
+    overflow-wrap: break-word;
+    white-space: pre-wrap;
+}
+
+.container{
+    display: flex;
+    flex-direction: column;
+    // 아래 인풋박스 크기에 따라 조정하면 될듯
+    height: calc(100vh - 54px - 71px);
+    overflow: auto;
+    padding-inline: 5px;
+}
+
+.container::-webkit-scrollbar {
+    width: 1px;
+}
+
+
+.container::-webkit-scrollbar-thumb {
+    background: #888;
+    /* 스크롤바 색상 */
+    border-radius: 10px;
+    /* 둥글게 */
+}
+.anothername{
+    align-self: flex-start;
+    margin-bottom: 6px;
+    margin-left: 5px;
+    font-size:12px;
+}
+.another{
+    @include talkBox(#2B2B2B);
+    align-self: flex-start;
+}
+
+.mename{
+    align-self: flex-end;
+    margin-bottom: 6px;
+    margin-right: 5px;
+    font-size: 12px;
+}
+.me{
+    @include talkBox(var(--purple-500));
+    align-self: flex-end;
+}
+
+.system{
+    text-align: center;
+    font-size: 12px;
+    color: var(--purple-400);
+    background-color: none;
+    margin: 18px 0;
+}
+
