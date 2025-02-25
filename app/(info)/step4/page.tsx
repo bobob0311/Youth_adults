@@ -5,9 +5,12 @@ import InputBox from "@/components/input/InputBox";
 import NavigationButton from "@/components/button/NavigationButton";
 import styles from "./page.module.scss"
 import { useRef, useState } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { changePhoneNumber } from "../userSlice";
 import { checkNumber, checkNumberLength, checkPhoneNumber } from "@/utils/regex";
+import { insertUserData } from "@/utils/api";
+import { RootState } from "@/redux/store";
+import { changeUserFormat } from "@/utils/dataFomat";
 
 interface Valid {
     onInputCondition: (text: string) => boolean; 
@@ -50,6 +53,8 @@ export default function Page() {
     const [isBtnValid, setIsBtnValid] = useState<boolean>(false);
     const [isPhoneNumberValid, setIsPhoneNumberValid] = useState<boolean>(false);
     const dispatch = useDispatch();
+
+    const userInfo = useSelector((state: RootState) => state.user);
     
     const handleInput = (newValue: string, category: string, isValid:boolean) => {
         if (category === "phoneNumber") {
@@ -99,6 +104,14 @@ export default function Page() {
 
     phoneData[1].button.onClick = handleCheckNumber;
 
+    const userData = changeUserFormat(userInfo)
+    
+    async function insertData(userData) {
+        insertUserData(userData);
+    }
+
+    
+
     return (
         <div className={styles.container}>
             <section>
@@ -120,7 +133,7 @@ export default function Page() {
                     ))
                 }
             </section>
-            <NavigationButton isValid={isBtnValid} title="다음으로" url="done" />
+            <NavigationButton onStore={() => {insertData(userData)}} isValid={true} title="다음으로" url="done" />
         </div>
     )
 }
