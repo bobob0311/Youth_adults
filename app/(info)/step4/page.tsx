@@ -17,7 +17,7 @@ interface Valid {
 const phoneData = [
     {
         inputInfo:{
-            id: "phoneNumber",
+            category: "phoneNumber",
             label: "대표자 번호",
             inputType: "text",
             placeholder: "01012345678",
@@ -30,7 +30,7 @@ const phoneData = [
     },
     {
         inputInfo: {
-            id: "authNumber",
+            category: "authNumber",
             label : "인증 번호",
             inputType : "text",
             placeholder : "12345"
@@ -51,12 +51,12 @@ export default function Page() {
     const [isPhoneNumberValid, setIsPhoneNumberValid] = useState<boolean>(false);
     const dispatch = useDispatch();
     
-    const handleInput = (newValue: string, selectedId: string, valid:boolean) => {
-        if (selectedId === "phoneNumber") {
+    const handleInput = (newValue: string, category: string, isValid:boolean) => {
+        if (category === "phoneNumber") {
             phoneNumberRef.current = newValue;
-            setIsPhoneNumberValid(valid);
+            setIsPhoneNumberValid(isValid);
 
-        } else if (selectedId === "authNumber") {
+        } else if (category === "authNumber") {
             myCodeRef.current = newValue
         }
     }
@@ -109,7 +109,7 @@ export default function Page() {
                             <InputBox
                                 inputInfo={item.inputInfo}
                                 valid={item.valid}
-                                onText={(newValue, selectedId,valid) => handleInput(newValue,selectedId,valid)}
+                                onText={(newValue, category,isValid) => handleInput(newValue,category,isValid)}
                             />
                             <button
                                 onClick={item.button.onClick}
