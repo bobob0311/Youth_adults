@@ -9,6 +9,7 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@supabase/ssr": "^0.5.2",
     "express": "^4.21.2",
     "http": "^0.0.1-security",
     "next": "15.1.5",
