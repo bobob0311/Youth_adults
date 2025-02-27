@@ -7,6 +7,7 @@ export function changeUserFormat(data){
         group_name: data.groupInfo.name,
         group_description: data.groupInfo.summary,
         phone_number: String(data.phoneNumber),
+        payment: false,
     }
     return userData
 }
