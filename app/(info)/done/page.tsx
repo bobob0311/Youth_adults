@@ -17,4 +17,4 @@ export default function DonePage() {
             <p>매칭이 되면 연락드릴게요</p>
         </div>
     )
-}``
+}
