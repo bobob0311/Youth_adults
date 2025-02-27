@@ -6,6 +6,7 @@ import ImgSlider from "./imgSlider";
 import { Modal } from "./Modal";
 import { useParams } from "next/navigation";
 import { getUserDataById } from "@/utils/api";
+import { userInfo } from "os";
 
 const IMGINFO = [
     {
@@ -78,7 +79,7 @@ export default function Page() {
                     <ImgSlider navIdx={content} onChangeIdx={(idx) => setContent(idx)} imgInfo={IMGINFO} userInfo={matchedUserInfo} />
                     
                 </div>
-                <NavigationButton url="/" subtitle="결제금액: 2,200원" isValid={true} title="결제 후 매칭룸 입장하기"/>
+                <NavigationButton url={`/match/payment?id=${matchedUserInfo.matchedId}`} subtitle="결제금액: 2,200원" isValid={true} title="결제 후 매칭룸 입장하기"/>
                 <div className={styles.btnContainer}>
                     <button className={styles.linkWrapper}
                         onClick={()=> setModal(true)}
