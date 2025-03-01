@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react"
 import styles from "./ImgUpload.module.scss"
+import { uploadImg } from "@/utils/api";
 
 interface PropsState{
     onClose: () => void;
@@ -32,6 +33,23 @@ export default function ImgUpload(props: PropsState) {
         onClose();
     }
 
+    const handleUploadImg = () => {
+        const input = document.getElementById("galleryInput") as HTMLInputElement;
+        if (input?.files?.length) {
+            const file = input.files[0];
+            const formData = new FormData();
+            formData.append("file", file);
+            formData.append("fileName", file.name);
+            uploadImgToStorage(formData);
+        }
+        
+        
+    }
+
+    async function uploadImgToStorage(formData) {
+       await uploadImg(formData);
+    }
+
 
     return (
         <>
@@ -44,7 +62,7 @@ export default function ImgUpload(props: PropsState) {
                         <>
                             <button className={styles.closeBtn} onClick={handleClose}>closes</button>
                             <h2>이 사진으로 공유할까요?</h2>
-                            <button>공유하기</button>
+                            <button onClick={handleUploadImg}>공유하기</button>
                         </>
                     }
                     
