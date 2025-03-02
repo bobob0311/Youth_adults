@@ -4,12 +4,12 @@ import styles from "./MessageContainer.module.scss";
 
 interface PropsState {
     messages: Messages[]
-    roomInfo: RoomInfo;
+    roomInfo: RoomInfo | null;
 }
 interface Messages{
     user : string,
-    msg?: string,
-    img?: string,
+    msg: string | null,
+    img: string | null,
 }
 
 interface RoomInfo{
@@ -64,7 +64,7 @@ export default function MessageContainer(props: PropsState) {
         }
         // 내가 보낼경우 맨밑으로 스크롤 이동
         // 근데 만약 위로 쭉올려서 보느라고 messages가 변하면...? true false로 조절하자 ㅇㅇㅇㅇㅇ
-        if (messages.length > 0 && messages[messages.length - 1].user == roomInfo.myGroupId) {
+        if (messages.length > 0 && messages[messages.length - 1].user == roomInfo?.myGroupId) {
             if (containerRef.current) {
                 containerRef.current.scrollTop = containerRef.current.scrollHeight;    
             }
@@ -81,11 +81,11 @@ export default function MessageContainer(props: PropsState) {
                 prevUser = item.user;
                 let userName;
                 let userType;
-                if (item.user === roomInfo.myGroupId) {
-                    userName = roomInfo.myGroupName;
+                if (item.user === roomInfo?.myGroupId) {
+                    userName = roomInfo?.myGroupName;
                     userType = "me";
                 } else {
-                    userName = roomInfo.otherGroupName;
+                    userName = roomInfo?.otherGroupName;
                     userType = "another";
                 }
                 

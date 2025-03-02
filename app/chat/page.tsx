@@ -8,8 +8,8 @@ import InputBox from "./InputBox";
 
 interface Messages{
     user : string,
-    msg? : string,
-    img? : string,
+    msg : string | null,
+    img : string | null,
 }
 
 interface RoomInfo{
@@ -41,30 +41,33 @@ export default function Home() {
     });
 
     newSocket.on("message", (msg, senderId) => {
-      console.log(roomInfoRef.current?.myGroupName);
       const roomInfo = roomInfoRef.current;
-      let user: string | undefined;
-      if (senderId === newSocket.id) {
-        user = roomInfo?.myGroupId;
-      } else {
-        user = roomInfo?.otherGroupId;
+      let user: string;
+      if (roomInfo) {
+        if (senderId === newSocket.id) {
+          user = roomInfo?.myGroupId;
+        } else {
+          user = roomInfo?.otherGroupId;
+        }  
       }
-      setMessages((prev) => [...prev, { msg, user}]);
+      setMessages((prev) => [...prev, { msg,img:null, user}]);
     });
 
     newSocket.on("img", (imgFile, senderId) => {
       const roomInfo = roomInfoRef.current;
-      let user: string | undefined;
-      if (senderId === newSocket.id) {
-        user = roomInfo?.myGroupId;
-      } else {
-        user = roomInfo?.otherGroupId;
+      let user: string;
+      if (roomInfo) {
+        if (senderId === newSocket.id) {
+          user = roomInfo?.myGroupId;
+        } else {
+          user = roomInfo?.otherGroupId;
+        }  
       }
-      setMessages((prev) => [...prev, {img:imgFile ,user}])
+      setMessages((prev) => [...prev, {msg:null, img:imgFile ,user}])
     })
 
     newSocket.on("sendFromSystem", (msg)=> {
-      setMessages((prev) => [...prev, { msg, user: "system" }]);
+      setMessages((prev) => [...prev, { msg, img:null,user: "system" }]);
     })
 
     setSocket(newSocket);
