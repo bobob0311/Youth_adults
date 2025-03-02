@@ -15,15 +15,15 @@ const LINE_HEIGHT = 14;
 export default function InputBox(props: PropsState) {
     const { onSend, onImgSend} = props;
     const textareaRef = useRef<HTMLTextAreaElement>(null);
-    const [isActive, setIsActive] = useState<boolean>(false);
-    const [isImgActvie, setIsImgActive] = useState<boolean>(false);
+    const [isText, setIsText] = useState<boolean>(false);
+    const [isInputOpen, setisInputOpen] = useState<boolean>(false);
 
     const sendMessage = () => {
         if (textareaRef.current) {
             onSend(textareaRef.current.value);
             textareaRef.current.value = '';
         }
-        setIsActive(false);
+        setIsText(false);
     }
 
     const handleKeyDown = (event: React.KeyboardEvent<HTMLTextAreaElement>) => {
@@ -54,12 +54,12 @@ export default function InputBox(props: PropsState) {
 
     const handleActiveChange = () => {
         if(textareaRef.current){
-            setIsActive(textareaRef.current.value.length > 0);
+            setIsText(textareaRef.current.value.length > 0);
         }
     }
 
     const sendImg = () => {
-        setIsImgActive((prev) => !prev);
+        setisInputOpen((prev) => !prev);
     }
 
     
@@ -75,16 +75,16 @@ export default function InputBox(props: PropsState) {
                     onChange={handleActiveChange}
                 />
                 
-                {isImgActvie &&
+                {isInputOpen &&
                     <ImgUpload
-                        onClose={() => setIsImgActive(false)}
+                        onClose={() => setisInputOpen(false)}
                         onSend={(imgFile)=> onImgSend(imgFile)}
                     />}
                 <button 
                     className={styles.sendBtn}
-                    onClick={isActive? sendMessage : sendImg}
+                    onClick={isText? sendMessage : sendImg}
                     > 
-                        {isActive? 
+                        {isText? 
                             <img width="20" src="/sent.svg"/>:
                             <img width="20" src="/camera.svg"/> 
                         }
