@@ -1,56 +1,70 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { io,Socket } from "socket.io-client";
 import MessageContainer from "./MessageContainer";
 import styles from "./page.module.scss"
 import InputBox from "./InputBox";
 
 interface Messages{
-    user : "another" | "system" | "me",
+    user : string,
     msg? : string,
     img? : string,
+}
+
+interface RoomInfo{
+  myGroupName: string,
+  otherGroupName: string,
+  myGroupId: string,
+  otherGroupId: string,
 }
 
 export default function Home() {
   const [socket, setSocket] = useState<Socket|null>(null);
   const [messages, setMessages] = useState<Messages[]>([]);
+  const roomInfoRef = useRef<RoomInfo | null>(null);
   const [myId, setMyId] = useState<string | undefined>(undefined);
 
   useEffect(() => {
     const newSocket = io("http://localhost:4000");
     
     newSocket.on("connect", () => {
-      console.log("✅ 서버에 WebSocket 연결됨:", newSocket.id);
       setMyId(newSocket.id);
-      // 이름 전달 받아야함
-      sendConnectMessage(newSocket,"이름");
+      const newRoomInfo = {
+        myGroupName: "그룹 이름",
+        otherGroupName: "상대 그룹 이름",
+        myGroupId: "내 그룹 id",
+        otherGroupId: "상대 그룹 id",
+      };
+      roomInfoRef.current = newRoomInfo;
+      sendConnectMessage(newSocket,newRoomInfo.myGroupName);
     });
 
     newSocket.on("message", (msg, senderId) => {
-      console.log("서버에서 메시지 수신:", msg, newSocket.id, senderId);
-      let user: "me" | "another";
+      console.log(roomInfoRef.current?.myGroupName);
+      const roomInfo = roomInfoRef.current;
+      let user: string | undefined;
       if (senderId === newSocket.id) {
-        user = "me";
+        user = roomInfo?.myGroupId;
       } else {
-        user = "another";
+        user = roomInfo?.otherGroupId;
       }
       setMessages((prev) => [...prev, { msg, user}]);
     });
 
-    newSocket.on("sendFromSystem", (msg)=> {
-      setMessages((prev) => [...prev, { msg, user: "system" }]);
+    newSocket.on("img", (imgFile, senderId) => {
+      const roomInfo = roomInfoRef.current;
+      let user: string | undefined;
+      if (senderId === newSocket.id) {
+        user = roomInfo?.myGroupId;
+      } else {
+        user = roomInfo?.otherGroupId;
+      }
+      setMessages((prev) => [...prev, {img:imgFile ,user}])
     })
 
-    newSocket.on("img", (imgFile, senderId) => {
-      let user: "me" | "another";
-      if (senderId === newSocket.id){
-        user = "me";
-      } else{
-        user = "another";
-      }
-      console.log(user);
-      setMessages((prev) => [...prev, {img:imgFile ,user}])
+    newSocket.on("sendFromSystem", (msg)=> {
+      setMessages((prev) => [...prev, { msg, user: "system" }]);
     })
 
     setSocket(newSocket);
@@ -58,31 +72,33 @@ export default function Home() {
     return () => { newSocket.disconnect() };
   }, []);
 
-  const sendMessage = (message:string) => {
+  const sendTextMessage = (message:string) => {
     if (socket && message.trim()) {
       socket.emit("message", message, myId)
-
     }
   };
+
+  const sendImgMessage = (imgFile:string) => {
+    if (socket) {
+      socket.emit("img", imgFile, myId)
+    } 
+  }
 
   const sendConnectMessage = (sk:Socket,name: string) => {
     sk.emit("sendFromSystem", `${name}님이 입장하였습니다.`);
   }
 
-  const sendImgMessage = (imgFile) => {
-    if (socket) {
-      socket.emit("img",imgFile,myId)  
-    }
-    
-  }
+  
+
   return (
     <>
       <div className={styles.chatContainer}>
         <MessageContainer 
           messages={messages}
+          roomInfo={roomInfoRef.current}
         />
         <InputBox 
-          onSend={(message) => sendMessage(message)}
+          onSend={(message) => sendTextMessage(message)}
           onImgSend={(imgFile) => sendImgMessage(imgFile)}
         />
       </div>

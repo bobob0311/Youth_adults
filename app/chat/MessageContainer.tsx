@@ -4,21 +4,26 @@ import styles from "./MessageContainer.module.scss";
 
 interface PropsState {
     messages: Messages[]
+    roomInfo: RoomInfo;
 }
 interface Messages{
-    user : User,
+    user : string,
     msg?: string,
     img?: string,
 }
-type User = "another" | "system" | "me";
+
+interface RoomInfo{
+    myGroupName: string,
+    otherGroupName: string,
+    myGroupId: string,
+    otherGroupId: string,
+}
 
 export default function MessageContainer(props: PropsState) {
-    const { messages } = props;
+    const { messages, roomInfo } = props;
     const containerRef = useRef<HTMLDivElement>(null);
     const containerHeightRef = useRef<number|null>(null);
 
-
-        
     let prevUser = "";
     
     useEffect(() => {
@@ -59,7 +64,7 @@ export default function MessageContainer(props: PropsState) {
         }
         // 내가 보낼경우 맨밑으로 스크롤 이동
         // 근데 만약 위로 쭉올려서 보느라고 messages가 변하면...? true false로 조절하자 ㅇㅇㅇㅇㅇ
-        if (messages.length > 0 && messages[messages.length - 1].user == "me") {
+        if (messages.length > 0 && messages[messages.length - 1].user == roomInfo.myGroupId) {
             if (containerRef.current) {
                 containerRef.current.scrollTop = containerRef.current.scrollHeight;    
             }
@@ -74,11 +79,20 @@ export default function MessageContainer(props: PropsState) {
                 }
                 const isDifferentUser = prevUser !== item.user;
                 prevUser = item.user;
+                let userName;
+                let userType;
+                if (item.user === roomInfo.myGroupId) {
+                    userName = roomInfo.myGroupName;
+                    userType = "me";
+                } else {
+                    userName = roomInfo.otherGroupName;
+                    userType = "another";
+                }
                 
                 return (
                     <>
-                        {isDifferentUser && <span key={`user-${idx}`} className={styles[item.user+"name"]}>{item.user}</span>}
-                        {item.img? <img src={item.img} /> : <p key={idx} className={styles[item.user]}>{item.msg}</p>}
+                        {isDifferentUser && <span key={`user-${idx}`} className={styles[userType+"name"]}>{userName}</span>}
+                        {item.img ? <img src={item.img} /> : <p key={idx} className={styles[userType]}>{item.msg} { userType}</p>}
                     </>
                 );
             })}
