@@ -6,7 +6,7 @@ import { uploadImg } from "@/utils/api";
 
 interface PropsState{
     onClose: () => void;
-    onSend: () => void;
+    onSend: (img:string) => void;
 }
 
 export default function ImgUpload(props: PropsState) {
@@ -44,6 +44,7 @@ export default function ImgUpload(props: PropsState) {
             uploadImgToStorage(formData);
         }
         onSend(img);
+        setTimeout(() => onClose(),0);
     }
 
     async function uploadImgToStorage(formData) {
