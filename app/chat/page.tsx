@@ -8,7 +8,8 @@ import InputBox from "./InputBox";
 
 interface Messages{
     user : "another" | "system" | "me",
-    msg : string,
+    msg? : string,
+    img? : string,
 }
 
 export default function Home() {
@@ -41,6 +42,17 @@ export default function Home() {
       setMessages((prev) => [...prev, { msg, user: "system" }]);
     })
 
+    newSocket.on("img", (imgFile, senderId) => {
+      let user: "me" | "another";
+      if (senderId === newSocket.id){
+        user = "me";
+      } else{
+        user = "another";
+      }
+      console.log(user);
+      setMessages((prev) => [...prev, {img:imgFile ,user}])
+    })
+
     setSocket(newSocket);
 
     return () => { newSocket.disconnect() };
@@ -57,6 +69,12 @@ export default function Home() {
     sk.emit("sendFromSystem", `${name}님이 입장하였습니다.`);
   }
 
+  const sendImgMessage = (imgFile) => {
+    if (socket) {
+      socket.emit("img",imgFile,myId)  
+    }
+    
+  }
   return (
     <>
       <div className={styles.chatContainer}>
@@ -65,6 +83,7 @@ export default function Home() {
         />
         <InputBox 
           onSend={(message) => sendMessage(message)}
+          onImgSend={(imgFile) => sendImgMessage(imgFile)}
         />
       </div>
     </>

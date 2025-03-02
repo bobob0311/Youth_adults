@@ -6,10 +6,11 @@ import { uploadImg } from "@/utils/api";
 
 interface PropsState{
     onClose: () => void;
+    onSend: () => void;
 }
 
 export default function ImgUpload(props: PropsState) {
-    const { onClose } = props;
+    const { onClose, onSend } = props;
     const [img, setImg] = useState<string>('');
 
     const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -42,8 +43,7 @@ export default function ImgUpload(props: PropsState) {
             formData.append("fileName", file.name);
             uploadImgToStorage(formData);
         }
-        
-        
+        onSend(img);
     }
 
     async function uploadImgToStorage(formData) {

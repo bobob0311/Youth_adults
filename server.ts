@@ -33,6 +33,10 @@ app.prepare().then(() => {
       console.log("serverSystem");
       io.emit("sendFromSystem", message);
     })
+
+    socket.on("img", (imgFile,myId) => {
+      io.emit("img", imgFile,myId)
+    })
   });
 
   httpServer.listen(4000, () => {

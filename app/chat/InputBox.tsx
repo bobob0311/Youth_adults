@@ -5,14 +5,15 @@ import styles from "./InputBox.module.scss";
 import { useRef, useState } from "react"
 
 interface PropsState{
-    onSend : (message:string) => void 
+    onSend: (message: string) => void,
+    onImgSend: (imgFile: string) => void,
 }
 
 const MAX_LINE = 8;
 const LINE_HEIGHT = 14;
 
 export default function InputBox(props: PropsState) {
-    const { onSend} = props;
+    const { onSend, onImgSend} = props;
     const textareaRef = useRef<HTMLTextAreaElement>(null);
     const [isActive, setIsActive] = useState<boolean>(false);
     const [isImgActvie, setIsImgActive] = useState<boolean>(false);
@@ -74,7 +75,11 @@ export default function InputBox(props: PropsState) {
                     onChange={handleActiveChange}
                 />
                 
-                {isImgActvie && <ImgUpload onClose={() => setIsImgActive(false)} />}
+                {isImgActvie &&
+                    <ImgUpload
+                        onClose={() => setIsImgActive(false)}
+                        onSend={(imgFile)=> onImgSend(imgFile)}
+                    />}
                 <button 
                     className={styles.sendBtn}
                     onClick={isActive? sendMessage : sendImg}

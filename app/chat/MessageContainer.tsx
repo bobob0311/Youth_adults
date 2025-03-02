@@ -7,7 +7,8 @@ interface PropsState {
 }
 interface Messages{
     user : User,
-    msg : string,
+    msg?: string,
+    img?: string,
 }
 type User = "another" | "system" | "me";
 
@@ -77,7 +78,7 @@ export default function MessageContainer(props: PropsState) {
                 return (
                     <>
                         {isDifferentUser && <span key={`user-${idx}`} className={styles[item.user+"name"]}>{item.user}</span>}
-                        <p key={idx} className={styles[item.user]}>{item.msg}</p>
+                        {item.img? <img src={item.img} /> : <p key={idx} className={styles[item.user]}>{item.msg}</p>}
                     </>
                 );
             })}
