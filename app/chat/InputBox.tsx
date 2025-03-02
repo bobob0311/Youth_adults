@@ -1,5 +1,5 @@
 'use client'
-import ImgUpload from "./ImgUpload";
+import ImgInput from "./ImgInput";
 import styles from "./InputBox.module.scss";
 
 import { useRef, useState } from "react"
@@ -62,6 +62,10 @@ export default function InputBox(props: PropsState) {
         setisInputOpen((prev) => !prev);
     }
 
+    const handleUploadImg = () => {
+
+    }
+
     
     return (
         <div className={styles.InputContainer}>
@@ -76,9 +80,8 @@ export default function InputBox(props: PropsState) {
                 />
                 
                 {isInputOpen &&
-                    <ImgUpload
-                        onClose={() => setisInputOpen(false)}
-                        onSend={(imgFile)=> onImgSend(imgFile)}
+                    <ImgInput
+                        onImg={()=> handleUploadImg()}
                     />}
                 <button 
                     className={styles.sendBtn}

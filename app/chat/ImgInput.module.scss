@@ -1,0 +1,33 @@
+.container{
+    width: 176px;
+    height: 85px;
+    background-color: white;
+    position: absolute;
+    right: 0;
+    bottom: 54px;
+    border-radius: 10px;
+    z-index: 10;
+    div {
+        display: flex;
+        flex-direction: column;
+    }
+    
+    label {
+        all: unset;
+        z-index: 100;
+        color: #4E4E4E;
+        height: 50%;
+        padding-inline: 15px;
+        font-size: 14px;
+        letter-spacing: -0.43px;
+        line-height: 3;
+    }
+    
+    label:last-of-type {
+        border-top: solid 1px gray;
+    }
+    
+    label:hover {
+        cursor: pointer;
+    }
+}
