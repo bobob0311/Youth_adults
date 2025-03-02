@@ -44,7 +44,7 @@ export default function ImgUpload(props: PropsState) {
             uploadImgToStorage(formData);
         }
         onSend(img);
-        setTimeout(() => onClose(),0);
+        // setTimeout(() => onClose(),0);
     }
 
     async function uploadImgToStorage(formData) {
