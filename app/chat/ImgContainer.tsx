@@ -4,11 +4,12 @@ import styles from "./ImgContainer.module.scss"
 
 interface PropsState{
     src: string;
-    onSendImg: () => void
+    onSendImg: () => void;
+    onRetry: () => void;
 }
 
 export default function ImgContainer(props:PropsState) {
-    const { src,onSendImg } = props;
+    const { src,onSendImg, onRetry } = props;
     
     const handleUploadImg = () => {
         const input = document.getElementById("galleryInput") as HTMLInputElement;
@@ -28,7 +29,7 @@ export default function ImgContainer(props:PropsState) {
     }
 
     const handleRetry = () => {
-        //다시 창 열 수 있게 
+        onRetry();
     }
 
     return (

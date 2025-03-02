@@ -80,6 +80,7 @@ export default function InputBox(props: PropsState) {
                             onImgSend(image)
                             setImage('')
                         }}
+                        onRetry={()=> setisInputOpen((prev) => !prev)}
                     />
                     :
                     <>
@@ -105,6 +106,7 @@ export default function InputBox(props: PropsState) {
                 
                 <ImgInput
                     visible={isInputOpen}
+                    isRetry={(image)}
                     onImg={(imageUrl) => handleUploadImg(imageUrl)}
                     onClose={() =>setisInputOpen(false)}
                 />

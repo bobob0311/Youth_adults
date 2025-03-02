@@ -6,10 +6,11 @@ interface PropsState{
     onImg: (imageUrl: string) => void;
     onClose: () => void;
     visible: boolean;
+    isRetry: boolean;
 }
 
 export default function ImgInput(props: PropsState) {
-    const { onImg, onClose,visible } = props;
+    const { onImg, onClose,visible,isRetry } = props;
     
     const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const file = e.target.files?.[0];
@@ -21,7 +22,7 @@ export default function ImgInput(props: PropsState) {
     }
     
     return (
-        <div className={`${styles.container} ${visible? "" : styles.none}`}>
+        <div className={`${styles.container} ${visible? "" : styles.none} ${isRetry? styles.retry:""}`}>
             <div>
             <label htmlFor="galleryInput" >
                 사진 보관함
