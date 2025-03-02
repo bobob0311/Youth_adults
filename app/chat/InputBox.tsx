@@ -1,4 +1,5 @@
 'use client'
+import ImgContainer from "./ImgContainer";
 import ImgInput from "./ImgInput";
 import styles from "./InputBox.module.scss";
 
@@ -17,6 +18,7 @@ export default function InputBox(props: PropsState) {
     const textareaRef = useRef<HTMLTextAreaElement>(null);
     const [isText, setIsText] = useState<boolean>(false);
     const [isInputOpen, setisInputOpen] = useState<boolean>(false);
+    const [image, setImage] = useState<string>('');
 
     const sendMessage = () => {
         if (textareaRef.current) {
@@ -62,36 +64,51 @@ export default function InputBox(props: PropsState) {
         setisInputOpen((prev) => !prev);
     }
 
-    const handleUploadImg = () => {
-
+    const handleUploadImg = (imageUrl) => {
+        setImage(imageUrl);
     }
 
     
     return (
         <div className={styles.InputContainer}>
             <div className={styles.box}>
-                <textarea
-                    placeholder="메시지 입력..."
-                    rows={1}
-                    ref = {textareaRef}
-                    onKeyDown={handleKeyDown}
-                    onInput={handleResizeHeight}
-                    onChange={handleActiveChange}
-                />
                 
-                {isInputOpen &&
-                    <ImgInput
-                        onImg={()=> handleUploadImg()}
-                    />}
-                <button 
-                    className={styles.sendBtn}
-                    onClick={isText? sendMessage : sendImg}
-                    > 
-                        {isText? 
-                            <img width="20" src="/sent.svg"/>:
-                            <img width="20" src="/camera.svg"/> 
-                        }
-                </button>        
+                {image ?
+                    <ImgContainer
+                        src={image}
+                        onSendImg={() => {
+                            onImgSend(image)
+                            setImage('')
+                        }}
+                    />
+                    :
+                    <>
+                        <textarea
+                            placeholder="메시지 입력..."
+                            rows={1}
+                            ref = {textareaRef}
+                            onKeyDown={handleKeyDown}
+                            onInput={handleResizeHeight}
+                            onChange={handleActiveChange}
+                        />
+                        <button 
+                            className={styles.sendBtn}
+                            onClick={isText? sendMessage : sendImg}
+                            > 
+                                {isText? 
+                                <img width="20" src="/sent.svg"/>:
+                                <img width="20" src="/camera.svg"/> 
+                            }
+                            </button>
+                    </>        
+                }
+                
+                <ImgInput
+                    visible={isInputOpen}
+                    onImg={(imageUrl) => handleUploadImg(imageUrl)}
+                    onClose={() =>setisInputOpen(false)}
+                />
+                       
             </div>
         </div>
     )

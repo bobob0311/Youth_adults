@@ -3,22 +3,25 @@
 import styles from "./ImgInput.module.scss"
 
 interface PropsState{
-    onImg: (imageUrl : string) => void;
+    onImg: (imageUrl: string) => void;
+    onClose: () => void;
+    visible: boolean;
 }
 
 export default function ImgInput(props: PropsState) {
-    const { onImg } = props;
+    const { onImg, onClose,visible } = props;
     
     const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const file = e.target.files?.[0];
         if (file) {
             const imageUrl = URL.createObjectURL(file); 
             onImg(imageUrl);
+            onClose();
         }
     }
     
     return (
-        <div className={styles.container}>
+        <div className={`${styles.container} ${visible? "" : styles.none}`}>
             <div>
             <label htmlFor="galleryInput" >
                 사진 보관함
