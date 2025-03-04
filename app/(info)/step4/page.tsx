@@ -136,7 +136,7 @@ export default function Page() {
                     ))
                 }
             </section>
-            <NavigationButton onStore={() => {insertData(userData)}} isValid={true} title="다음으로" url="done" />
+            <NavigationButton onStore={() => {insertData(userData)}} isValid={isBtnValid} title="다음으로" url="done" />
         </div>
     )
 }
