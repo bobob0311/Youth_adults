@@ -6,7 +6,6 @@ import ImgSlider from "./imgSlider";
 import { Modal } from "./Modal";
 import { useParams } from "next/navigation";
 import { getUserDataById } from "@/utils/api";
-import { userInfo } from "os";
 
 const IMGINFO = [
     {
