@@ -118,7 +118,10 @@ export default function Page() {
                 <h2 className={styles.title}>카카오톡을 통해 인증을 받아주세요</h2>
                 {
                     phoneData.map((item) => (
-                        <div key={item.inputInfo.label}>
+                        <div
+                            key={item.inputInfo.label}
+                            className={styles.wrapper}
+                        >
                             <InputBox
                                 inputInfo={item.inputInfo}
                                 valid={item.valid}

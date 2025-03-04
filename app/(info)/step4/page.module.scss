@@ -5,3 +5,19 @@
 .container {
     @include mixin.topBottom();
 }
+
+.wrapper{
+    position: relative;
+}
+
+.wrapper button{
+    all: unset;
+    position: absolute;
+    right: 0;
+    bottom: -25;
+    font-size: 14px;
+    color: var(--purple-400);
+    &:hover{
+        cursor: pointer;
+    }
+}
