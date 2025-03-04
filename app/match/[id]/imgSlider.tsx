@@ -37,7 +37,9 @@ export default function ImgSlider(props: PropsState) {
   }, [imgRef]);
 
   const handleStart = (e: React.MouseEvent | React.TouchEvent) => {
-    e.preventDefault();
+    if (e.type === "mousedown") {
+      e.preventDefault();  
+    }
     const clientX = "touches" in e ? e.touches[0].clientX : e.clientX;
     setStartX(clientX);
     setIsDragging(true);
