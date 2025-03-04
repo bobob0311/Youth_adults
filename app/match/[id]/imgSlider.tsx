@@ -34,7 +34,7 @@ export default function ImgSlider(props: PropsState) {
     if (imgRef.current) {
       setImgWidth(imgRef.current.offsetWidth);
     }
-  }, [imgInfo]);
+  }, [imgRef]);
 
   const handleStart = (e: React.MouseEvent | React.TouchEvent) => {
     e.preventDefault();
@@ -114,7 +114,6 @@ export default function ImgSlider(props: PropsState) {
         {imgInfo.map((item, index) => 
           (
             <img
-              width={370}
               key={item.title}
               ref={index === 0 ? imgRef : null}
               src={item.imgSrc}
