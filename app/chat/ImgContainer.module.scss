@@ -30,6 +30,9 @@
     height: 40px;
     margin-bottom: 8px;
     background-color: #6922C5;
+    &:hover{
+        cursor: pointer;
+    }
 }
 
 .retryBtn{
@@ -43,6 +46,9 @@
     height: 40px;
     margin-bottom: 8px;
     background-color: #646464;
+    &:hover{
+        cursor: pointer;
+    }
 }
 
 .image{
