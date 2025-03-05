@@ -5,6 +5,7 @@ import { io,Socket } from "socket.io-client";
 import MessageContainer from "./MessageContainer";
 import styles from "./page.module.scss"
 import InputBox from "./InputBox";
+import { useSearchParams } from "next/navigation";
 
 interface Messages{
     user : string,
@@ -25,11 +26,16 @@ export default function Home() {
   const roomInfoRef = useRef<RoomInfo | null>(null);
   const [myId, setMyId] = useState<string | undefined>(undefined);
 
+  const searchParams = useSearchParams();
+  const roomId = searchParams.get("roomId");
+  
   useEffect(() => {
     const newSocket = io("http://localhost:4000");
     
     newSocket.on("connect", () => {
       setMyId(newSocket.id);
+      handleEnterRoom(newSocket,roomId);
+      newSocket.emit("joinRoom", roomId);
       const newRoomInfo = {
         myGroupName: "그룹 이름",
         otherGroupName: "상대 그룹 이름",
@@ -89,6 +95,13 @@ export default function Home() {
 
   const sendConnectMessage = (sk:Socket,name: string) => {
     sk.emit("sendFromSystem", `${name}님이 입장하였습니다.`);
+  }
+
+  const handleEnterRoom = (socket:Socket,roomId) => {
+    if (socket) {
+      socket.emit("joinRoom", roomId);
+      console.log(`${roomId}에 입장하기!!~`)
+    }
   }
 
   

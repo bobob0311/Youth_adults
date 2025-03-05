@@ -20,7 +20,11 @@ app.prepare().then(() => {
   io.on("connection", (socket) => {
     console.log("클라이언트 연결됨:", socket.id);
 
-    socket.on("message", (msg,myId) => {
+    socket.on("joinRoom", (roomId) => {
+      socket.join(roomId);
+    })
+
+    socket.on("message", (msg, myId) => {
       console.log("메시지 수신:", msg);
       io.emit("message", msg,myId);
     });
@@ -37,6 +41,7 @@ app.prepare().then(() => {
     socket.on("img", (imgFile,myId) => {
       io.emit("img", imgFile,myId)
     })
+
   });
 
   httpServer.listen(4000, () => {
