@@ -92,7 +92,7 @@ export default function MessageContainer(props: PropsState) {
                 return (
                     <>
                         {isDifferentUser && <span key={`user-${idx}`} className={styles[userType+"name"]}>{userName}</span>}
-                        {item.img ? <img src={item.img} /> : <p key={idx} className={styles[userType]}>{item.msg} { userType}</p>}
+                        {item.img ? <img className={styles[`${userType}Img`]} src={item.img} /> : <p key={idx} className={styles[userType]}>{item.msg}</p>}
                     </>
                 );
             })}
