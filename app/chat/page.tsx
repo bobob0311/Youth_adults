@@ -35,7 +35,6 @@ export default function Home() {
     newSocket.on("connect", () => {
       setMyId(newSocket.id);
       handleEnterRoom(newSocket,roomId);
-      newSocket.emit("joinRoom", roomId);
       const newRoomInfo = {
         myGroupName: "그룹 이름",
         otherGroupName: "상대 그룹 이름",
@@ -83,7 +82,7 @@ export default function Home() {
 
   const sendTextMessage = (message:string) => {
     if (socket && message.trim()) {
-      socket.emit("message", message, myId)
+      socket.emit("message", message, myId,roomId)
     }
   };
 

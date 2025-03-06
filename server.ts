@@ -24,9 +24,9 @@ app.prepare().then(() => {
       socket.join(roomId);
     })
 
-    socket.on("message", (msg, myId) => {
+    socket.on("message", (msg, myId, roomId) => {
       console.log("메시지 수신:", msg);
-      io.emit("message", msg,myId);
+      io.to(roomId).emit("message", msg, myId);
     });
 
     socket.on("disconnect", () => {
