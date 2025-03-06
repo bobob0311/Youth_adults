@@ -38,8 +38,8 @@ app.prepare().then(() => {
       io.to(roomId).emit("sendFromSystem", message);
     })
 
-    socket.on("img", (imgFile,myId) => {
-      io.emit("img", imgFile,myId)
+    socket.on("img", (imgFile,myId,roomId) => {
+      io.to(roomId).emit("img", imgFile,myId)
     })
 
   });

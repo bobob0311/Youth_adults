@@ -90,7 +90,7 @@ export default function Home() {
 
   const sendImgMessage = (imgFile:string) => {
     if (socket) {
-      socket.emit("img", imgFile, myId)
+      socket.emit("img", imgFile, myId, roomId)
     } 
   }
 
