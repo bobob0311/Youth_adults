@@ -33,8 +33,7 @@ export default function Home() {
     const newSocket = io("http://localhost:4000");
     
     newSocket.on("connect", () => {
-      setMyId(newSocket.id);
-      handleEnterRoom(newSocket,roomId);
+      // 정보 실제로 받아서 변경해야됩니다.
       const newRoomInfo = {
         myGroupName: "그룹 이름",
         otherGroupName: "상대 그룹 이름",
@@ -42,7 +41,9 @@ export default function Home() {
         otherGroupId: "상대 그룹 id",
       };
       roomInfoRef.current = newRoomInfo;
-      sendConnectMessage(newSocket,newRoomInfo.myGroupName);
+
+      setMyId(newSocket.id);
+      handleEnterRoom(newSocket, roomId);
     });
 
     newSocket.on("message", (msg, senderId) => {
@@ -72,7 +73,8 @@ export default function Home() {
     })
 
     newSocket.on("sendFromSystem", (msg)=> {
-      setMessages((prev) => [...prev, { msg, img:null,user: "system" }]);
+      setMessages((prev) => [...prev, { msg, img: null, user: "system" }]);
+      console.log("야야야야야야");
     })
 
     setSocket(newSocket);
@@ -92,14 +94,15 @@ export default function Home() {
     } 
   }
 
-  const sendConnectMessage = (sk:Socket,name: string) => {
-    sk.emit("sendFromSystem", `${name}님이 입장하였습니다.`);
+  const sendConnectMessage = (socket: Socket, name: string, roomId) => {
+    socket.emit("sendFromSystem", `${name}님이 입장하였습니다.`,roomId);
   }
 
   const handleEnterRoom = (socket:Socket,roomId) => {
     if (socket) {
       socket.emit("joinRoom", roomId);
       console.log(`${roomId}에 입장하기!!~`)
+      sendConnectMessage(socket, roomInfoRef.current?.myGroupName, roomId);
     }
   }
 

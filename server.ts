@@ -33,9 +33,9 @@ app.prepare().then(() => {
       console.log("클라이언트 연결 종료:", socket.id);
     });
 
-    socket.on("sendFromSystem", (message) => {
+    socket.on("sendFromSystem", (message,roomId) => {
       console.log("serverSystem");
-      io.emit("sendFromSystem", message);
+      io.to(roomId).emit("sendFromSystem", message);
     })
 
     socket.on("img", (imgFile,myId) => {
