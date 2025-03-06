@@ -21,6 +21,7 @@ app.prepare().then(() => {
     console.log("클라이언트 연결됨:", socket.id);
 
     socket.on("joinRoom", (roomId) => {
+      socket.to(roomId).emit("uploadChatData");
       socket.join(roomId);
     })
 

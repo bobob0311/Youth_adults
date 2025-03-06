@@ -6,6 +6,7 @@ import MessageContainer from "./MessageContainer";
 import styles from "./page.module.scss"
 import InputBox from "./InputBox";
 import { useSearchParams } from "next/navigation";
+import { getChatData, uploadChat } from "@/utils/api";
 
 interface Messages{
     user : string,
@@ -25,6 +26,7 @@ export default function Home() {
   const [messages, setMessages] = useState<Messages[]>([]);
   const roomInfoRef = useRef<RoomInfo | null>(null);
   const [myId, setMyId] = useState<string | undefined>(undefined);
+  const messagesRef = useRef(messages);
 
   const searchParams = useSearchParams();
   const roomId = searchParams.get("roomId");
@@ -32,7 +34,8 @@ export default function Home() {
   useEffect(() => {
     const newSocket = io("http://localhost:4000");
     
-    newSocket.on("connect", () => {
+    newSocket.on("connect", async() => {
+      // 여기서 채팅방 정보를 불러와야될거같은데 이걸 어떻게 처리해야되는거지?
       // 정보 실제로 받아서 변경해야됩니다.
       const newRoomInfo = {
         myGroupName: "그룹 이름",
@@ -41,7 +44,9 @@ export default function Home() {
         otherGroupId: "상대 그룹 id",
       };
       roomInfoRef.current = newRoomInfo;
-
+      const messageData = await handleGetChatData(roomId);
+      console.log("메시지 데이타:", messageData.data);
+      setMessages(messageData.data);
       setMyId(newSocket.id);
       handleEnterRoom(newSocket, roomId);
     });
@@ -56,7 +61,7 @@ export default function Home() {
           user = roomInfo?.otherGroupId;
         }  
       }
-      setMessages((prev) => [...prev, { msg,img:null, user}]);
+      setMessages((prev) => [...prev, { msg, img: null, user }]);
     });
 
     newSocket.on("img", (imgFile, senderId) => {
@@ -69,18 +74,25 @@ export default function Home() {
           user = roomInfo?.otherGroupId;
         }  
       }
-      setMessages((prev) => [...prev, {msg:null, img:imgFile ,user}])
+      setMessages((prev) => [...prev, { msg: null, img: imgFile, user }])
     })
 
     newSocket.on("sendFromSystem", (msg)=> {
       setMessages((prev) => [...prev, { msg, img: null, user: "system" }]);
-      console.log("야야야야야야");
+    })
+
+    newSocket.on("uploadChatData", () => {
+      handlePostMessage();
     })
 
     setSocket(newSocket);
 
     return () => { newSocket.disconnect() };
   }, []);
+
+  useEffect(() => {
+    messagesRef.current = messages;
+  }, [messages]);
 
   const sendTextMessage = (message:string) => {
     if (socket && message.trim()) {
@@ -101,12 +113,20 @@ export default function Home() {
   const handleEnterRoom = (socket:Socket,roomId) => {
     if (socket) {
       socket.emit("joinRoom", roomId);
-      console.log(`${roomId}에 입장하기!!~`)
       sendConnectMessage(socket, roomInfoRef.current?.myGroupName, roomId);
     }
   }
+  
+  const handlePostMessage = () => {
+    const chatData = { roomName: roomId, data: messagesRef.current };
+    uploadChat(chatData);
+  };
 
   
+  async function handleGetChatData(roomId) {
+    const data = await getChatData(roomId);
+    return data;  // data를 반환
+  }
 
   return (
     <>
