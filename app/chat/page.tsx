@@ -48,6 +48,10 @@ export default function Home() {
       handleEnterRoom(newSocket, roomId,newSocket.id);
     });
 
+    newSocket.on("roomFull", (msg) => {
+      alert(msg);
+    })
+
     newSocket.on("getData", async () => {
       console.log("getData실행!!")
       const messageData = await handleGetChatData(roomId);
