@@ -35,7 +35,6 @@ export default function Home() {
     const newSocket = io("http://localhost:4000");
     
     newSocket.on("connect", async() => {
-      // 여기서 채팅방 정보를 불러와야될거같은데 이걸 어떻게 처리해야되는거지?
       // 정보 실제로 받아서 변경해야됩니다.
       const newRoomInfo = {
         myGroupName: "그룹 이름",
@@ -44,12 +43,19 @@ export default function Home() {
         otherGroupId: "상대 그룹 id",
       };
       roomInfoRef.current = newRoomInfo;
-      const messageData = await handleGetChatData(roomId);
-      console.log("메시지 데이타:", messageData.data);
-      setMessages(messageData.data);
       setMyId(newSocket.id);
-      handleEnterRoom(newSocket, roomId);
+
+      handleEnterRoom(newSocket, roomId,newSocket.id);
     });
+
+    newSocket.on("getData", async () => {
+      console.log("getData실행!!")
+      const messageData = await handleGetChatData(roomId);
+      if (messageData.data) {
+        console.log(messageData.data, messageData.length)
+        setMessages([...messageData.data]);  
+      }
+    })
 
     newSocket.on("message", (msg, senderId) => {
       const roomInfo = roomInfoRef.current;
@@ -81,8 +87,9 @@ export default function Home() {
       setMessages((prev) => [...prev, { msg, img: null, user: "system" }]);
     })
 
-    newSocket.on("uploadChatData", () => {
-      handlePostMessage();
+    newSocket.on("uploadChatData", async () => {
+      await handlePostMessage();
+      newSocket.emit("uploadComplete",roomId,myId);
     })
 
     setSocket(newSocket);
@@ -92,6 +99,7 @@ export default function Home() {
 
   useEffect(() => {
     messagesRef.current = messages;
+    console.log(messagesRef.current);
   }, [messages]);
 
   const sendTextMessage = (message:string) => {
@@ -110,16 +118,18 @@ export default function Home() {
     socket.emit("sendFromSystem", `${name}님이 입장하였습니다.`,roomId);
   }
 
-  const handleEnterRoom = (socket:Socket,roomId) => {
+  const handleEnterRoom = (socket:Socket,roomId,myId) => {
     if (socket) {
-      socket.emit("joinRoom", roomId);
+      console.log("handleEnterRoom");
+      console.log(myId);
+      socket.emit("joinRoom", roomId,myId);
       sendConnectMessage(socket, roomInfoRef.current?.myGroupName, roomId);
     }
   }
   
   const handlePostMessage = () => {
     const chatData = { roomName: roomId, data: messagesRef.current };
-    uploadChat(chatData);
+    return uploadChat(chatData);
   };
 
   

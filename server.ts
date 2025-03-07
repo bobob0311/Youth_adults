@@ -6,6 +6,7 @@ import { createServer } from "http";
 const dev = process.env.NODE_ENV !== "production";
 const app = next({ dev });
 
+
 app.prepare().then(() => {
   const server = express();
   const httpServer = createServer(server);
@@ -20,10 +21,18 @@ app.prepare().then(() => {
   io.on("connection", (socket) => {
     console.log("클라이언트 연결됨:", socket.id);
 
-    socket.on("joinRoom", (roomId) => {
-      socket.to(roomId).emit("uploadChatData");
+    socket.on("joinRoom", (roomId, myId) => {
+      console.log("joinRoom 실행");
       socket.join(roomId);
-    })
+      socket.to(roomId).except(myId).emit("uploadChatData");
+      
+    });
+
+    socket.on("uploadComplete", (roomId,myId) => {
+      console.log("✅ 모든 클라이언트가 데이터 업로드 완료!");
+      socket.to(roomId).except(myId).emit("getData");
+    });
+
 
     socket.on("message", (msg, myId, roomId) => {
       console.log("메시지 수신:", msg);
