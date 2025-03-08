@@ -23,22 +23,18 @@ app.prepare().then(() => {
 
     socket.on("joinRoom", (roomId, myId) => {
       const currentRoomCount = io.sockets.adapter.rooms.get(roomId)?.size || 0;
-      console.log("crc:",currentRoomCount)
       if (currentRoomCount >= maxCapacity) {
         socket.emit("roomFull", "이 방은 이미 최대 인원 수 입니다.")
       } else if(currentRoomCount === 0 ){
-        console.log("getData가즈아~")
         socket.join(roomId);
         socket.emit("getData");
       } else {
-        console.log("joinRoom 실행");
         socket.join(roomId);
         socket.to(roomId).except(myId).emit("uploadChatData");  
       }
     });
 
     socket.on("uploadComplete", (roomId,myId) => {
-      console.log("✅ 모든 클라이언트가 데이터 업로드 완료!");
       socket.to(roomId).except(myId).emit("getData");
     });
 
@@ -53,7 +49,6 @@ app.prepare().then(() => {
     });
 
     socket.on("sendFromSystem", (message,roomId) => {
-      console.log("serverSystem");
       io.to(roomId).emit("sendFromSystem", message);
     })
 
