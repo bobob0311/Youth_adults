@@ -18,14 +18,18 @@ app.prepare().then(() => {
       methods: ["GET", "POST"]
     }
   });
-
   io.on("connection", (socket) => {
     console.log("클라이언트 연결됨:", socket.id);
 
     socket.on("joinRoom", (roomId, myId) => {
       const currentRoomCount = io.sockets.adapter.rooms.get(roomId)?.size || 0;
+      console.log("crc:",currentRoomCount)
       if (currentRoomCount >= maxCapacity) {
         socket.emit("roomFull", "이 방은 이미 최대 인원 수 입니다.")
+      } else if(currentRoomCount === 0 ){
+        console.log("getData가즈아~")
+        socket.join(roomId);
+        socket.emit("getData");
       } else {
         console.log("joinRoom 실행");
         socket.join(roomId);
