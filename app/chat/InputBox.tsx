@@ -76,8 +76,8 @@ export default function InputBox(props: PropsState) {
                 {image ?
                     <ImgContainer
                         src={image}
-                        onSendImg={() => {
-                            onImgSend(image)
+                        onSendImg={(publicUrl) => {
+                            onImgSend(publicUrl)
                             setImage('')
                         }}
                         onRetry={()=> setisInputOpen((prev) => !prev)}

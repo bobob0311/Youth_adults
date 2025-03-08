@@ -4,28 +4,28 @@ import styles from "./ImgContainer.module.scss"
 
 interface PropsState{
     src: string;
-    onSendImg: () => void;
+    onSendImg: (imgURL:string) => void;
     onRetry: () => void;
 }
 
 export default function ImgContainer(props:PropsState) {
     const { src,onSendImg, onRetry } = props;
     
-    const handleUploadImg = () => {
+    const handleUploadImg = async() => {
         const input = document.getElementById("galleryInput") as HTMLInputElement;
         if (input?.files?.length) {
             const file = input.files[0];
             const formData = new FormData();
             formData.append("file", file);
             formData.append("fileName", file.name);
-            uploadImgToStorage(formData);
-            onSendImg();
-            console.log(file);
+            const ImgURL = await uploadImgToStorage(formData);
+            console.log("이거먼저 확인:",ImgURL.data.data.publicUrl)
+            onSendImg(ImgURL.data.data.publicUrl);
         }
     }
 
     async function uploadImgToStorage(formData) {
-       await uploadImg(formData);
+       return await uploadImg(formData);
     }
 
     const handleRetry = () => {
