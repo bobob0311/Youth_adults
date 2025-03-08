@@ -6,7 +6,7 @@ import MessageContainer from "./MessageContainer";
 import styles from "./page.module.scss"
 import InputBox from "./InputBox";
 import { useSearchParams } from "next/navigation";
-import { getChatData, getUserDataById, uploadChat } from "@/utils/api";
+import { changeFirstIn, getChatData, getUserDataById, uploadChat } from "@/utils/api";
 
 interface Messages{
     user : string,
@@ -19,6 +19,7 @@ interface RoomInfo{
   otherGroupName: string,
   myGroupId: string,
   otherGroupId: string,
+  isFirst : boolean,
 }
 
 export default function Home() {
@@ -36,19 +37,18 @@ export default function Home() {
     const newSocket = io("http://localhost:4000");
     
     newSocket.on("connect", async() => {
-      // 정보 실제로 받아서 변경해야됩니다.
       const userData = await handleGetUserData(id);
-      console.log("받아온 userData", userData);
       const newRoomInfo = {
         myGroupName: userData.group_name,
         otherGroupName: userData.matchedName,
         myGroupId: userData.id,
         otherGroupId: userData.matchedId,
+        isFirst: userData.firstIn,
       };
       roomInfoRef.current = newRoomInfo;
       setMyId(newSocket.id);
 
-      handleEnterRoom(newSocket, roomId,newSocket.id);
+      handleEnterRoom(newSocket, roomId,newSocket.id, userData.id);
     });
 
     newSocket.on("roomFull", (msg) => {
@@ -56,11 +56,9 @@ export default function Home() {
     })
 
     newSocket.on("getData", async () => {
-      console.log("getData실행!!")
       const messageData = await handleGetChatData(roomId);
       if (messageData.data) {
-        console.log(messageData.data, messageData.length)
-        setMessages([...messageData.data]);  
+        setMessages((prev) => [...messageData.data,...prev]);  
       }
     })
 
@@ -122,15 +120,20 @@ export default function Home() {
   }
 
   const sendConnectMessage = (socket: Socket, name: string, roomId) => {
+    console.log("시스템에서 보냈네요?");
     socket.emit("sendFromSystem", `${name}님이 입장하였습니다.`,roomId);
   }
 
-  const handleEnterRoom = (socket:Socket,roomId,myId) => {
+  const handleEnterRoom = (socket:Socket,roomId,myId,userId) => {
     if (socket) {
-      console.log("handleEnterRoom");
-      console.log(myId);
-      socket.emit("joinRoom", roomId,myId);
-      sendConnectMessage(socket, roomInfoRef.current?.myGroupName, roomId);
+      socket.emit("joinRoom", roomId, myId);
+      if (roomInfoRef.current) {
+        console.log("이게이게", roomInfoRef.current.isFirst);
+        if (roomInfoRef.current.isFirst) {
+          changeFirstIn(false, userId)
+          sendConnectMessage(socket, roomInfoRef.current?.myGroupName, roomId);  
+        }
+      }
     }
   }
   
