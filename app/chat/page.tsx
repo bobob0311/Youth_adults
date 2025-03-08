@@ -6,7 +6,7 @@ import MessageContainer from "./MessageContainer";
 import styles from "./page.module.scss"
 import InputBox from "./InputBox";
 import { useSearchParams } from "next/navigation";
-import { getChatData, uploadChat } from "@/utils/api";
+import { getChatData, getUserDataById, uploadChat } from "@/utils/api";
 
 interface Messages{
     user : string,
@@ -30,17 +30,20 @@ export default function Home() {
 
   const searchParams = useSearchParams();
   const roomId = searchParams.get("roomId");
+  const id = searchParams.get("id");
   
   useEffect(() => {
     const newSocket = io("http://localhost:4000");
     
     newSocket.on("connect", async() => {
       // 정보 실제로 받아서 변경해야됩니다.
+      const userData = await handleGetUserData(id);
+      console.log("받아온 userData", userData);
       const newRoomInfo = {
-        myGroupName: "그룹 이름",
-        otherGroupName: "상대 그룹 이름",
-        myGroupId: "내 그룹 id",
-        otherGroupId: "상대 그룹 id",
+        myGroupName: userData.group_name,
+        otherGroupName: userData.matchedName,
+        myGroupId: userData.id,
+        otherGroupId: userData.matchedId,
       };
       roomInfoRef.current = newRoomInfo;
       setMyId(newSocket.id);
@@ -140,6 +143,11 @@ export default function Home() {
   async function handleGetChatData(roomId) {
     const data = await getChatData(roomId);
     return data;  // data를 반환
+  }
+
+  const handleGetUserData = (id) => {
+    const userData = getUserDataById(id);
+    return userData;
   }
 
   return (

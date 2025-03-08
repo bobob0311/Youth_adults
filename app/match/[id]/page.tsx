@@ -45,7 +45,7 @@ export default function Page() {
         },3000)
         const fetchData = async () => {
             const userInfo = await handleGetUserInfo(id);
-            setMatchedUserInfo(userInfo[0]);
+            setMatchedUserInfo(userInfo);
         }
         fetchData();
     },[id])
