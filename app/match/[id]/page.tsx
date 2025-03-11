@@ -30,7 +30,7 @@ export default function Page() {
     const [matchedUserInfo, setMatchedUserInfo] = useState<any>(null);
     const [modal, setModal] = useState<boolean>(false);
     const [content, setContent] = useState<number>(0);
-
+    
     const params = useParams();
     const { id } = params;
 
@@ -40,14 +40,16 @@ export default function Page() {
     }
 
     useEffect(() => {
-        setTimeout(() => {
-            setIsStart(false);
-        },3000)
         const fetchData = async () => {
             const userInfo = await handleGetUserInfo(id);
             setMatchedUserInfo(userInfo);
         }
         fetchData();
+        setTimeout(() => {
+            setIsStart(false);
+        },3000)
+        
+        
     },[id])
     
     const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
