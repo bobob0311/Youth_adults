@@ -2,14 +2,37 @@
 
 import styles from "./page.module.scss"
 import NavigationButton from "@/components/button/NavigationButton";
-import { useParams } from "next/navigation"
+import { changeUserPayment, getUserDataById } from "@/utils/api";
+import {useSearchParams } from "next/navigation"
 
 export default function PaymentPage() {
-    const params = useParams();
-    const { id } = params;
-    const handlePayment = () => {
-        //id 값 기준으로 이사람 결제 상태 변경 로직
+    const params = useSearchParams();
+    const myId = params.get("id");
+    console.log(myId);
+    const handlePayment = async() => {
+        const { data: myData } = await changeUserPayment(myId, true);
+        console.log(myData[0].matchedId);
+        const matchedData = await getUserDataById(myData[0].matchedId);
+        console.log(myData[0]);
+        console.log(matchedData);
+        if (myData[0].payment && matchedData.payment) {
+            handleChatRoomMessage(myData[0], matchedData)
+        }
     }
+
+    function handleChatRoomMessage(myData, matchedData) {
+        const baseURL = "localhost:3000"
+        const roomId = "djzpwjdgkwl"
+
+        const url = `${baseURL}/chat?roomId=${roomId}&id=`;
+
+        sendChatRoomMessage(url, myData.id, myData.phone_number);
+        sendChatRoomMessage(url, matchedData.id, matchedData.phone_number);
+    }
+    function sendChatRoomMessage(url, userId, phoneNumber) {
+        console.log(`phoneNumber: ${phoneNumber}에게 ${url}${userId} 를 보냅니다`)
+    }
+
     return (
         <>
         <div className={styles.wrapper}>
