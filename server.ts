@@ -25,17 +25,17 @@ app.prepare().then(() => {
       const currentRoomCount = io.sockets.adapter.rooms.get(roomId)?.size || 0;
       if (currentRoomCount >= maxCapacity) {
         socket.emit("roomFull", "이 방은 이미 최대 인원 수 입니다.")
-      } else if(currentRoomCount === 0 ){
+      } else if (currentRoomCount === 0) {
         socket.join(roomId);
-        socket.emit("getData");
+        socket.emit("getDataFromStorage");
       } else {
-        socket.join(roomId);
         socket.to(roomId).except(myId).emit("uploadChatData");  
+        socket.join(roomId);
       }
     });
 
-    socket.on("uploadComplete", (roomId,myId) => {
-      socket.to(roomId).except(myId).emit("getData");
+    socket.on("uploadComplete", (roomId, myId, chatData) => {
+      socket.to(roomId).except(myId).emit("getData",chatData);
     });
 
 

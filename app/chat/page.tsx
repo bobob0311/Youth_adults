@@ -55,10 +55,14 @@ export default function Home() {
       alert(msg);
     })
 
-    newSocket.on("getData", async () => {
+    newSocket.on("getData", async (chatData) => {
+      setMessages((prev) => [...chatData,...prev]);  
+    })
+
+    newSocket.on("getDataFromStorage", async () => {
       const messageData = await handleGetChatData(roomId);
       if (messageData.data) {
-        setMessages((prev) => [...messageData.data,...prev]);  
+        setMessages((prev) =>[ ...messageData.data,...prev ]);
       }
     })
 
@@ -92,9 +96,8 @@ export default function Home() {
       setMessages((prev) => [...prev, { msg, img: null, user: "system" }]);
     })
 
-    newSocket.on("uploadChatData", async () => {
-      await handlePostMessage();
-      newSocket.emit("uploadComplete",roomId,myId);
+    newSocket.on("uploadChatData", () => {
+      handlePostMessage(newSocket);
     })
 
     setSocket(newSocket);
@@ -137,9 +140,11 @@ export default function Home() {
     }
   }
   
-  const handlePostMessage = () => {
+  const handlePostMessage = (newSocket:Socket) => {
     const chatData = { roomName: roomId, data: messagesRef.current };
-    return uploadChat(chatData);
+    const data = uploadChat(chatData);
+    newSocket.emit("uploadComplete", roomId, myId,messagesRef.current)  
+    return data;
   };
 
   
