@@ -34,7 +34,7 @@ export default function ImgSlider(props: PropsState) {
     if (imgRef.current) {
       setImgWidth(imgRef.current.offsetWidth);
     }
-  }, [imgRef]);
+  }, [imgRef.current?.offsetWidth]);
 
   const handleStart = (e: React.MouseEvent | React.TouchEvent) => {
     if (e.type === "mousedown") {
