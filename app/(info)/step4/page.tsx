@@ -86,12 +86,15 @@ export default function Page() {
     }
 
     const handleCheckNumber = () => {
-        if (myCodeRef.current === verificationCodeRef.current) {
-            setIsBtnValid(true);
-        } else {
-            alert("인증번호가 잘못되었습니다. 다시 확인해주세요")
-            setIsBtnValid(false);
+        if (phoneNumberRef.current) {
+            if (myCodeRef.current === verificationCodeRef.current) {
+                setIsBtnValid(true);
+            } else {
+                alert("인증번호가 잘못되었습니다. 다시 확인해주세요")
+                setIsBtnValid(false);
+            }    
         }
+        
     }
 
     const phoneNumberValidCondition = {
