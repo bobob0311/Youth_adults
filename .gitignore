@@ -17,8 +17,11 @@
 /.next/
 /out/
 // temp
+
+#logic
 /utils/api.ts
 */api
+/utils/matching.ts
 
 # production
 /build
