@@ -1,0 +1,17 @@
+{
+  "builds": [
+    {
+      "src": "utils/api.ts",
+      "use": "@vercel/node"
+    },
+    {
+      "src": "utils/matching.ts",
+      "use": "@vercel/node"
+    }
+  ],
+  "includeFiles": [
+    "utils/api.ts",
+    "utils/matching.ts",
+    "*/api"
+  ]
+}
