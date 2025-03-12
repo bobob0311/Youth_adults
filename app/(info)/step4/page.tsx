@@ -1,6 +1,5 @@
 'use client'
 
-import { v4 as uuidv4 } from "uuid";
 import InputBox from "@/components/input/InputBox";
 import NavigationButton from "@/components/button/NavigationButton";
 import styles from "./page.module.scss"
@@ -11,6 +10,7 @@ import { checkNumber, checkNumberLength, checkPhoneNumber } from "@/utils/regex"
 import { insertUserData } from "@/utils/api";
 import { RootState } from "@/redux/store";
 import { changeUserFormat } from "@/utils/dataFomat";
+import matching from "@/utils/matching";
 
 interface Valid {
     onInputCondition: (text: string) => boolean; 
@@ -47,8 +47,8 @@ const phoneData = [
 ]
 
 export default function Page() {
-    const verificationCodeRef = useRef<string>('');
-    const myCodeRef = useRef<string>('');
+    const verificationCodeRef = useRef<number>(undefined);
+    const myCodeRef = useRef<number>(undefined);
     const phoneNumberRef = useRef<string>('');
     const [isBtnValid, setIsBtnValid] = useState<boolean>(false);
     const [isPhoneNumberValid, setIsPhoneNumberValid] = useState<boolean>(false);
@@ -62,7 +62,7 @@ export default function Page() {
             setIsPhoneNumberValid(isValid);
 
         } else if (category === "authNumber") {
-            myCodeRef.current = newValue
+            myCodeRef.current = Number(newValue)
         }
     }
 
@@ -71,20 +71,25 @@ export default function Page() {
         if (isPhoneNumberValid) {
             const number = Number(phoneNumberRef.current);
             dispatch(changePhoneNumber(number));
-            const code = uuidv4();
-            console.log(code);
+            const code = Math.floor(10000 + Math.random() * 90000);
+            sendVerificationCodeMessage(code);
             verificationCodeRef.current = code;
             // 메세지 보내는 code생성    
         } else {
-            alert("핸드폰 번호 제대로 입력해라 ;;")
+            alert("핸드폰 번호 제대로 입력해라;;")
         }
         
+    }
+
+    const sendVerificationCodeMessage = (code) => {
+        console.log(code);    
     }
 
     const handleCheckNumber = () => {
         if (myCodeRef.current === verificationCodeRef.current) {
             setIsBtnValid(true);
         } else {
+            alert("인증번호가 잘못되었습니다. 다시 확인해주세요")
             setIsBtnValid(false);
         }
     }
@@ -108,6 +113,7 @@ export default function Page() {
     
     async function insertData(userData) {
         insertUserData(userData);
+        matching();
     }
 
     

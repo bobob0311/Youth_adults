@@ -1,4 +1,5 @@
 'use client'
+import Image from "next/image";
 import ImgContainer from "./ImgContainer";
 import ImgInput from "./ImgInput";
 import styles from "./InputBox.module.scss";
@@ -97,8 +98,8 @@ export default function InputBox(props: PropsState) {
                             onClick={isText? sendMessage : sendImg}
                             > 
                                 {isText? 
-                                <img width="20" src="/sent.svg"/>:
-                                <img width="20" src="/camera.svg"/> 
+                                <Image width={20} src="/sent.svg" alt="전송 사진"/>:
+                                <Image width={20} src="/camera.svg" alt="갤러리 접근"/> 
                             }
                             </button>
                     </>        
@@ -106,7 +107,7 @@ export default function InputBox(props: PropsState) {
                 
                 <ImgInput
                     visible={isInputOpen}
-                    isRetry={(image)}
+                    isRetry={(!!image)}
                     onImg={(imageUrl) => handleUploadImg(imageUrl)}
                     onClose={() =>setisInputOpen(false)}
                 />

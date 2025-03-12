@@ -9,11 +9,11 @@ import { RootState } from "@/redux/store";
 import { changeLocation } from "../userSlice";
 import { useEffect, useState } from "react";
 
-let DUMMY_INFO = [
-    { locationName: "강남/신논현", imgUrl: "gangnam.png" },
-    { locationName: "홍대/합정", imgUrl: "hongdae.png" },
-    { locationName: "이태원", imgUrl: "itaewon.png" },
-    { locationName: "건대입구", imgUrl: "konkuk.png" },
+const DUMMY_INFO = [
+    { locationName: "강남/신논현", imgUrl: "/gangnam.png" },
+    { locationName: "홍대/합정", imgUrl: "/hongdae.png" },
+    { locationName: "이태원", imgUrl: "/itaewon.png" },
+    { locationName: "건대입구", imgUrl: "/konkuk.png" },
 ]
 
 export default function LocationPage() {

@@ -41,8 +41,10 @@ export default function Page() {
 
     useEffect(() => {
         const fetchData = async () => {
-            const userInfo = await handleGetUserInfo(id);
-            setMatchedUserInfo(userInfo);
+            if (id && typeof id === 'string') {
+                const userInfo = await handleGetUserInfo(id);
+                setMatchedUserInfo(userInfo);
+            }
         }
         fetchData();
         setTimeout(() => {

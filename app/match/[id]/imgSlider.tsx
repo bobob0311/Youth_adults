@@ -1,7 +1,7 @@
 import { useRef, useState, useEffect } from "react";
 import styles from "./imgSlider.module.scss";
 import Introduce from "./Introduce";
-import { userInfo } from "os";
+import Image from "next/image";
 
 interface PropsState {
   imgInfo: ImgInfo[];
@@ -115,7 +115,9 @@ export default function ImgSlider(props: PropsState) {
       <div ref={containerRef} className={styles.imgBox}>
         {imgInfo.map((item, index) => 
           (
-            <img
+          <Image
+            width={370}
+            height={320}
               key={item.title}
               ref={index === 0 ? imgRef : null}
               src={item.imgSrc}

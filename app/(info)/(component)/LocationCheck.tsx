@@ -1,6 +1,7 @@
 'use client'
 import { useState } from "react";
 import styles from "./LocationCheck.module.scss";
+import Image from "next/image";
 
 interface PropsState{
     locationInfo: Location[];
@@ -18,7 +19,7 @@ export default function LocationCheckButton(props: PropsState) {
     const [selectedLocation, setSelectedLocation] = useState<string>(storedLocation);
 
 
-    const handleClick = (event: React.MouseEvent<HTMLElement>, clickedLocation: string) => {
+    const handleClick = (clickedLocation: string) => {
         if (selectedLocation == clickedLocation) {
             setSelectedLocation('');
             onLocationChange('');
@@ -34,12 +35,13 @@ export default function LocationCheckButton(props: PropsState) {
                 locationInfo.map((item) => (
                     <button className={styles.imgBtn}
                         key={item.locationName}
-                        onClick={(e) => handleClick(e,item.locationName)}
-                        aria-checked={item.locationName === selectedLocation ? "true" : "false"}
+                        onClick={() => handleClick(item.locationName)}
                     >
                         <span className={styles.locationName}>{item.locationName}</span>
-                        <img
-                            className={`${styles.locationImg} ${item.locationName === selectedLocation ? styles.selected :""}`}
+                        <Image
+                            width={170}
+                            height={170}
+                            className= {`${styles.locationImg} ${item.locationName === selectedLocation ? styles.selected :""}`}
                             src={item.imgUrl}
                             alt={item.locationName}
                         />

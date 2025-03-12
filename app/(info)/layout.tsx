@@ -3,6 +3,7 @@
 import { usePathname, useRouter } from "next/navigation";
 import styles from "./layout.module.scss";
 import ProgressBar from "@/components/ProgressBar";
+import Image from "next/image";
 
 export default function Layout({ children }: { children: React.ReactNode }) {
     const router = useRouter();
@@ -25,9 +26,16 @@ export default function Layout({ children }: { children: React.ReactNode }) {
                     onClick={() => router.back()}
                     aria-label="뒤로 가기 버튼"
                 >
-                    <img src="/Back.svg" />
+                    
+                    <Image width={25} height={25}  src="/Back.svg" alt="뒤로가기"/>
                 </button>
-                <h1 className={styles.title}><img src="/mainImg.png" alt="청춘 상회"/></h1>
+                <h1 className={styles.title}>
+                    <Image
+                        width={120}
+                        height={40}
+                        src="/mainImg.png"
+                        alt="청춘 상회"
+                    /></h1>
             </header>
             <main>
                 {isStep(path)}

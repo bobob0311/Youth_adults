@@ -1,6 +1,7 @@
 "use client"
 import { useEffect, useRef } from "react";
 import styles from "./MessageContainer.module.scss";
+import Image from "next/image";
 
 interface PropsState {
     messages: Messages[]
@@ -75,7 +76,7 @@ export default function MessageContainer(props: PropsState) {
         <div id="messageContainer" ref={containerRef} className={styles.container}>
             {messages.map((item, idx) => {
                 if(item.user === "system"){
-                    return (<div className={styles.system}>{item.msg}</div>)
+                    return (<div key={item.msg} className={styles.system}>{item.msg}</div>)
                 }
                 const isDifferentUser = prevUser !== item.user;
                 prevUser = item.user;
@@ -92,7 +93,7 @@ export default function MessageContainer(props: PropsState) {
                 return (
                     <>
                         {isDifferentUser && <span key={`user-${idx}`} className={styles[userType+"name"]}>{userName}</span>}
-                        {item.img ? <img className={styles[`${userType}Img`]} src={item.img} /> : <p key={idx} className={styles[userType]}>{item.msg}</p>}
+                        {item.img ? <Image width={220} className={styles[`${userType}Img`]} src={item.img} alt="사진" /> : <p key={idx} className={styles[userType]}>{item.msg}</p>}
                     </>
                 );
             })}

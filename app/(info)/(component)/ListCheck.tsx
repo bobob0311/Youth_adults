@@ -45,7 +45,7 @@ export default function ListCheckButton(props: PropsState) {
                         type="button"
                         role="radio"
                         aria-checked={item === selectedItem ? "true" : "false"}
-                        onClick={(e) => handleClick(item)}
+                        onClick={() => handleClick(item)}
                     >
                         {item}
                     </button>

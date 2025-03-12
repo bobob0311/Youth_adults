@@ -21,7 +21,7 @@ const DUMMY_INFO = [
 
 export default function SelectionPage() {
     const [isBtnValid, setIsBtnValid] = useState<boolean>(false);
-    const [validArr, setValidArr] = useState<Check[]>([]);
+    const [, setValidArr] = useState<Check[]>([]);
    
     const userInfo = useSelector((state: RootState) => state.user.userInfo);
     const dispatch = useDispatch();
@@ -29,6 +29,7 @@ export default function SelectionPage() {
     const handleStore = (category:string,selected: string) => {
         dispatch(changeUserInfo({...userInfo, [category]:selected}));
     }
+
     useEffect(() => {
         const newArr: Check[] = []
         Object.entries(userInfo).forEach(([key, value]) => {

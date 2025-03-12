@@ -1,6 +1,7 @@
 'use Client'
 import { uploadImg } from "@/utils/api";
 import styles from "./ImgContainer.module.scss"
+import Image from "next/image";
 
 interface PropsState{
     src: string;
@@ -34,7 +35,7 @@ export default function ImgContainer(props:PropsState) {
 
     return (
         <div className={styles.imageContainer}>
-            <img className={styles.image} src={src} />
+            <Image className={styles.image} src={src} alt="현재 공유할 사진"/>
             <div className={styles.wrapper}>
                 <h2>이 사진으로 공유할까요?</h2>
                 <button className={styles.uploadBtn} onClick={handleUploadImg}>공유하기</button>

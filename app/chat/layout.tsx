@@ -1,5 +1,6 @@
 'use client'
 
+import Image from "next/image";
 import styles from "./layout.module.scss";
 
 export default function Layout({ children }: { children: React.ReactNode }) {
@@ -7,7 +8,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
     return (
         <>
             <header className={styles.header}>
-                <h1 className={styles.title}><img src="/mainImg.png" alt="청춘 상회"/></h1>
+                <h1 className={styles.title}><Image width={175} height={65} src="/mainImg.png" alt="청춘 상회"/></h1>
             </header>
             <main>
                 <div className={styles.content}>

@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { Suspense, useEffect, useRef, useState } from "react";
 import { io,Socket } from "socket.io-client";
 import MessageContainer from "./MessageContainer";
 import styles from "./page.module.scss"
@@ -22,7 +22,7 @@ interface RoomInfo{
   isFirst : boolean,
 }
 
-export default function Home() {
+function Home() {
   const [socket, setSocket] = useState<Socket|null>(null);
   const [messages, setMessages] = useState<Messages[]>([]);
   const roomInfoRef = useRef<RoomInfo | null>(null);
@@ -159,8 +159,7 @@ export default function Home() {
   }
 
   return (
-    <>
-      <div className={styles.chatContainer}>
+    <div className={styles.chatContainer}>
         <MessageContainer 
           messages={messages}
           roomInfo={roomInfoRef.current}
@@ -169,7 +168,14 @@ export default function Home() {
           onSend={(message) => sendTextMessage(message)}
           onImgSend={(imgFile) => sendImgMessage(imgFile)}
         />
-      </div>
-    </>
+    </div>
   );
+}
+
+export default function ChatPage() {
+  return (
+    <Suspense fallback={<div>loading...</div>}>
+      <Home/>
+    </Suspense>
+  )
 }

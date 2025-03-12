@@ -46,7 +46,7 @@ interface Valid {
 
 export default function Page() {
     const [isBtnValid, setIsBtnValid] = useState<boolean>(false);
-    const [validArr, setValidArr] = useState<Check[]>([]);
+    const [, setValidArr] = useState<Check[]>([]);
 
     const groupInfo = useSelector((state: RootState) => state.user.groupInfo);
     const dispatch = useDispatch();
@@ -62,7 +62,7 @@ export default function Page() {
         })
         setValidArr(newArr);
         checkBtnValid(newArr);
-    },[])
+    },[groupInfo])
 
     const handleValid = (category: string,isChecked:boolean) => {
         setValidArr(prevArr => {
