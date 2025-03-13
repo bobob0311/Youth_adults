@@ -2,7 +2,8 @@
 
 import styles from "./page.module.scss"
 import NavigationButton from "@/components/button/NavigationButton";
-import { changeUserPayment, getUserDataById } from "@/utils/api";
+import { changeUserPayment, getUserDataById, sendAligoMessage } from "@/utils/api";
+import { makeEnterMatchingRoomMessage } from "@/utils/message";
 import {useSearchParams } from "next/navigation"
 import { Suspense } from "react";
 
@@ -24,7 +25,7 @@ function Payment() {
     }
 
     function handleChatRoomMessage(myData, matchedData) {
-        const baseURL = "localhost:3000"
+        const baseURL = process.env.NEXT_PUBLIC_BASE_URL;
         const roomId = "testRoomId"
 
         const url = `${baseURL}/chat?roomId=${roomId}&id=`;
@@ -33,7 +34,8 @@ function Payment() {
         sendChatRoomMessage(url, matchedData.id, matchedData.phone_number);
     }
     function sendChatRoomMessage(url, userId, phoneNumber) {
-        console.log(`phoneNumber: ${phoneNumber}에게 ${url}${userId} 를 보냅니다`)
+        const messageInfo = makeEnterMatchingRoomMessage({phoneNumber,url,userId})
+        sendAligoMessage(messageInfo);
     }
 
     return (
