@@ -69,8 +69,7 @@ export default function Page() {
     const handleSendMessage = () => {
         setIsBtnValid(false);
         if (isPhoneNumberValid) {
-            const number = Number(phoneNumberRef.current);
-            dispatch(changePhoneNumber(number));
+            dispatch(changePhoneNumber(phoneNumberRef.current));
             const code = Math.floor(10000 + Math.random() * 90000);
             sendVerificationCodeMessage(code);
             verificationCodeRef.current = code;

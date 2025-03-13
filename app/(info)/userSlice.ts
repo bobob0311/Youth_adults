@@ -15,7 +15,7 @@ interface InitialState {
     location: string;
     userInfo: UserInfo;
     groupInfo: GroupInfo;
-    phoneNumber: number | undefined;
+    phoneNumber: string;
 }
 
 const initialState: InitialState = {
@@ -29,7 +29,7 @@ const initialState: InitialState = {
         name: '',
         summary: '',    
     },
-    phoneNumber: undefined,
+    phoneNumber: '',
 }
 
 const userSlice = createSlice({
@@ -48,7 +48,7 @@ const userSlice = createSlice({
             state.userInfo.sex = action.payload.sex;
             state.userInfo.old = action.payload.old;
         },
-        changePhoneNumber: (state, action: PayloadAction<number>) => {
+        changePhoneNumber: (state, action: PayloadAction<string>) => {
             state.phoneNumber = action.payload;
         }
     },
