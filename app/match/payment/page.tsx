@@ -14,10 +14,7 @@ function Payment() {
     const handlePayment = async () => {
         if(myId){
             const { data: myData } = await changeUserPayment(myId, true);
-            console.log(myData[0].matchedId);
             const matchedData = await getUserDataById(myData[0].matchedId);
-            console.log(myData[0]);
-            console.log(matchedData);
             if (myData[0].payment && matchedData.payment) {
                 handleChatRoomMessage(myData[0], matchedData)
             }
