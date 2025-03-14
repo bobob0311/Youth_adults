@@ -1,6 +1,7 @@
 'use client'
 import { useEffect, useState } from "react";
 import styles from "./CheckButtons.module.scss"
+import Image from "next/image";
 
 interface PropsState {
     info: LabelInfo | LocationInfo;
@@ -83,7 +84,7 @@ export default function CheckButton(props: PropsState) {
                             key={item.title}
                             onClick={(e) => handleClick(e,idx,item.title)}
                         >
-                            <img
+                            <Image
                                 className={`${styles.locationImg} ${idx === selectedIndex ? styles.imgSelected :""}`}
                                 src={item.url}
                                 alt={item.title}
