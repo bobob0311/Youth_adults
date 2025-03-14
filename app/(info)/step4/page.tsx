@@ -30,10 +30,13 @@ const PHONEDATA = [
 
 export default function Page() {
     const verificationCodeRef = useRef<number>(undefined);
+    const [verificationTime,setVerificationTime] = useState<number>(0);
     const myCodeRef = useRef<number>(undefined);
     const phoneNumberRef = useRef<string>('');
     const [isBtnValid, setIsBtnValid] = useState<boolean>(false);
     const [isPhoneNumberValid, setIsPhoneNumberValid] = useState<boolean>(false);
+    const [isSend, setIsSend] = useState<boolean>(false);
+    
     const dispatch = useDispatch();
 
     const userInfo = useSelector((state: RootState) => state.user);
@@ -47,10 +50,29 @@ export default function Page() {
             myCodeRef.current = Number(newValue)
         }
     }
+    
+    const handleCountDown = () => {
+        const remainingTime = 30;
+        setVerificationTime(remainingTime);
+
+        const countdown = setInterval(() => {
+        setVerificationTime((prev) => prev -1)
+
+        if (verificationTime <= 0) {
+                clearInterval(countdown);
+            }
+        }, 1000);
+    }
+    
 
     const handleSendMessage = () => {
         setIsBtnValid(false);
         if (isPhoneNumberValid) {
+            setIsSend(true);
+            handleCountDown();
+            setTimeout(() => {
+                setIsSend(false);
+            },30000)
             dispatch(changePhoneNumber(phoneNumberRef.current));
             const code = Math.floor(10000 + Math.random() * 90000);
             verificationCodeRef.current = code;
@@ -97,6 +119,10 @@ export default function Page() {
         matching();
     }
 
+    const handleBlockSendMessage = () => {
+        alert(`${verificationTime}초만 기다려주세요`);
+    }
+
     
 
     return (
@@ -109,10 +135,10 @@ export default function Page() {
                         valid={phoneNumberValidCondition}
                         onText={(newValue, category,isValid) => handleInput(newValue,category,isValid)}
                     />
-                    <button
-                        onClick={handleSendMessage}
+                    <button 
+                        onClick={isSend ? handleBlockSendMessage : handleSendMessage}
                     >
-                        인증번호 받기
+                        {isSend? `인증번호 문자 발송완료! 재전송은 ${verificationTime}초 후에 할 수 있어요.`: "인증번호 받기"}
                     </button>
                 </div>
                 <div className={styles.wrapper}>
