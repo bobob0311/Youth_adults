@@ -98,8 +98,8 @@ export default function InputBox(props: PropsState) {
                             onClick={isText? sendMessage : sendImg}
                             > 
                                 {isText? 
-                                <Image width={20} src="/sent.svg" alt="전송 사진"/>:
-                                <Image width={20} src="/camera.svg" alt="갤러리 접근"/> 
+                                <Image width={20} height={30} src="/sent.svg" alt="전송 사진"/>:
+                                <Image width={20} height={30} src="/camera.svg" alt="갤러리 접근"/> 
                             }
                             </button>
                     </>        
