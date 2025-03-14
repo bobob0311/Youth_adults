@@ -52,3 +52,15 @@ export function makeStopMatchingByNoResponse(info) {
     }
     return messageInfo;
 }
+
+export function makeValidCode(info) {
+    const { phoneNumber, code } = info;
+    const messageInfo = {
+        message_title: "청춘상회 매칭 알림",
+        phoneNumber,
+        message:`[청춘상회]\n`+
+        `인증을 위해 인증번호[${code}]를 입력해주세요\n\n`,
+        message_type : "SMS",
+    }
+    return messageInfo;
+}

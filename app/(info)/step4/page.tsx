@@ -7,10 +7,11 @@ import { useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { changePhoneNumber } from "../userSlice";
 import { checkNumber, checkNumberLength, checkPhoneNumber } from "@/utils/regex";
-import { insertUserData } from "@/utils/api";
+import { insertUserData, sendAligoMessage } from "@/utils/api";
 import { RootState } from "@/redux/store";
 import { changeUserFormat } from "@/utils/dataFomat";
 import matching from "@/utils/matching";
+import { makeValidCode } from "@/utils/message";
 
 interface Valid {
     onInputCondition: (text: string) => boolean; 
@@ -71,16 +72,19 @@ export default function Page() {
         if (isPhoneNumberValid) {
             dispatch(changePhoneNumber(phoneNumberRef.current));
             const code = Math.floor(10000 + Math.random() * 90000);
-            sendVerificationCodeMessage(code);
             verificationCodeRef.current = code;
-            // 메세지 보내는 code생성    
+
+            sendVerificationCodeMessage(phoneNumberRef.current,code);         
         } else {
             alert("핸드폰 번호 제대로 입력해라;;")
         }
         
     }
 
-    const sendVerificationCodeMessage = (code) => {
+    const sendVerificationCodeMessage = (phoneNumber,code) => {
+        const info = { phoneNumber, code };
+        const messageInfo = makeValidCode(info);
+        sendAligoMessage(messageInfo);
         console.log(code);    
     }
 
