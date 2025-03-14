@@ -32,9 +32,10 @@ function Home() {
   const searchParams = useSearchParams();
   const roomId = searchParams.get("roomId");
   const id = searchParams.get("id");
+  const serverUrl = process.env.SERVER_URL;
   
   useEffect(() => {
-    const newSocket = io("http://localhost:4000");
+    const newSocket = io(serverUrl);
     
     newSocket.on("connect", async() => {
       const userData = await handleGetUserData(id);
