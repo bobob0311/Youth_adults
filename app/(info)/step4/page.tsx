@@ -13,37 +13,18 @@ import { changeUserFormat } from "@/utils/dataFomat";
 import matching from "@/utils/matching";
 import { makeValidCode } from "@/utils/message";
 
-interface Valid {
-    onInputCondition: (text: string) => boolean; 
-    onValidCondition: (text: string) => boolean;
-}
-
-const phoneData = [
+const PHONEDATA = [
     {
-        inputInfo:{
-            category: "phoneNumber",
-            label: "대표자 번호",
-            inputType: "text",
-            placeholder: "01012345678",
-        },
-        valid: undefined as undefined | Valid,
-        button: {
-            name: "인증번호 받기",
-            onClick: undefined as undefined | (() => void),
-        },
+        category: "phoneNumber",
+        label: "대표자 번호",
+        inputType: "text",
+        placeholder: "01012345678",
     },
     {
-        inputInfo: {
-            category: "authNumber",
-            label : "인증 번호",
-            inputType : "text",
-            placeholder : "12345"
-        },
-        valid: undefined as undefined | Valid,
-        button: {
-            name: "인증번호 확인",
-            onClick: undefined as undefined | (() => void),
-        },
+        category: "authNumber",
+        label : "인증 번호",
+        inputType : "text",
+        placeholder : "12345"
     }
 ]
 
@@ -109,12 +90,6 @@ export default function Page() {
         },
     }
 
-
-    phoneData[0].valid = phoneNumberValidCondition;
-    phoneData[0].button.onClick = handleSendMessage;
-
-    phoneData[1].button.onClick = handleCheckNumber;
-
     const userData = changeUserFormat(userInfo)
     
     async function insertData(userData) {
@@ -128,25 +103,30 @@ export default function Page() {
         <div className={styles.container}>
             <section>
                 <h2 className={styles.title}>카카오톡을 통해 인증을 받아주세요</h2>
-                {
-                    phoneData.map((item) => (
-                        <div
-                            key={item.inputInfo.label}
-                            className={styles.wrapper}
-                        >
-                            <InputBox
-                                inputInfo={item.inputInfo}
-                                valid={item.valid}
-                                onText={(newValue, category,isValid) => handleInput(newValue,category,isValid)}
-                            />
-                            <button
-                                onClick={item.button.onClick}
-                            >
-                                {item.button.name}
-                            </button>
-                        </div>
-                    ))
-                }
+                <div className={styles.wrapper}>
+                    <InputBox
+                        inputInfo={PHONEDATA[0]}
+                        valid={phoneNumberValidCondition}
+                        onText={(newValue, category,isValid) => handleInput(newValue,category,isValid)}
+                    />
+                    <button
+                        onClick={handleSendMessage}
+                    >
+                        인증번호 받기
+                    </button>
+                </div>
+                <div className={styles.wrapper}>
+                    <InputBox
+                        inputInfo={PHONEDATA[1]}
+                        valid={undefined}
+                        onText={(newValue, category,isValid) => handleInput(newValue,category,isValid)}
+                    />
+                    <button
+                        onClick={handleCheckNumber}
+                    >
+                        인증번호 확인
+                    </button>
+                </div>
             </section>
             <NavigationButton onStore={() => {insertData(userData)}} isValid={isBtnValid} title="다음으로" url="done" />
         </div>
