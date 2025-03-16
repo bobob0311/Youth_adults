@@ -29,6 +29,7 @@ export default function Page() {
     const [isStart, setIsStart] = useState<boolean>(true);
     const [matchedUserInfo, setMatchedUserInfo] = useState<any>(null);
     const [modal, setModal] = useState<boolean>(false);
+    const [isPayment, setIsPayment] = useState<boolean>();
     const [content, setContent] = useState<number>(0);
     
     const params = useParams();
@@ -42,8 +43,10 @@ export default function Page() {
     useEffect(() => {
         const fetchData = async () => {
             if (id && typeof id === 'string') {
-                const userInfo = await handleGetUserInfo(id);
-                setMatchedUserInfo(userInfo);
+                const matchedUserInfo = await handleGetUserInfo(id);
+                const myInfo = await handleGetUserInfo(matchedUserInfo.matchedId)
+                setMatchedUserInfo(matchedUserInfo);
+                setIsPayment(myInfo.payment);
             }
         }
         fetchData();
@@ -59,6 +62,11 @@ export default function Page() {
         const buttonId = parseInt(event.currentTarget.dataset.id);
             setContent(buttonId);
         }
+    }
+
+    const handleEnterRoomByPaymentTrue = () => {
+        // payment는 true이니까 입장만 하면 되는 로직
+        // db에 하나 더 추가해서 따로 컨트롤할 생각
     }
 
     return (
@@ -79,10 +87,13 @@ export default function Page() {
                     ))}
                 </div>
                 <div className={styles.content}>
-                    <ImgSlider navIdx={content} onChangeIdx={(idx) => setContent(idx)} imgInfo={IMGINFO} userInfo={matchedUserInfo} />
-                    
+                    <ImgSlider navIdx={content} onChangeIdx={(idx) => setContent(idx)} imgInfo={IMGINFO} userInfo={matchedUserInfo} />    
                 </div>
-                <NavigationButton url={`/match/payment?id=${matchedUserInfo.matchedId}`} subtitle="결제금액: 2,200원" isValid={true} title="결제 후 매칭룸 입장하기"/>
+                    {isPayment ? 
+                    <NavigationButton url={`/match/done`} onStore={()=> {handleEnterRoomByPaymentTrue}} isValid={true} title="매칭룸 입장하기"/>
+                    :
+                    <NavigationButton url={`/match/payment?id=${matchedUserInfo.matchedId}`} subtitle="결제금액: 2,200원" isValid={true} title="결제 후 매칭룸 입장하기"/>
+                    }
                 <div className={styles.btnContainer}>
                     <button className={styles.linkWrapper}
                         onClick={()=> setModal(true)}
