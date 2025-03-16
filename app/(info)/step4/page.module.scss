@@ -10,14 +10,21 @@
     position: relative;
 }
 
-.wrapper button{
+.btn{
     all: unset;
     position: absolute;
     right: 0px;
     bottom: -25px;
     font-size: 14px;
     color: var(--purple-400);
-    &:hover{
+
+    &:hover {
         cursor: pointer;
+    }
+}
+
+.send{
+    &:hover {
+        cursor: default;
     }
 }

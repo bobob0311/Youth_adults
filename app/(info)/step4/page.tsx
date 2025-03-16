@@ -12,6 +12,7 @@ import { RootState } from "@/redux/store";
 import { changeUserFormat } from "@/utils/dataFomat";
 import matching from "@/utils/matching";
 import { makeValidCode } from "@/utils/message";
+import Counter from "./counter";
 
 const PHONEDATA = [
     {
@@ -30,7 +31,7 @@ const PHONEDATA = [
 
 export default function Page() {
     const verificationCodeRef = useRef<number>(undefined);
-    const [verificationTime,setVerificationTime] = useState<number>(0);
+    const verificationTimeRef = useRef<number>(undefined);
     const myCodeRef = useRef<number>(undefined);
     const phoneNumberRef = useRef<string>('');
     const [isBtnValid, setIsBtnValid] = useState<boolean>(false);
@@ -50,26 +51,11 @@ export default function Page() {
             myCodeRef.current = Number(newValue)
         }
     }
-    
-    const handleCountDown = () => {
-        const remainingTime = 30;
-        setVerificationTime(remainingTime);
-
-        const countdown = setInterval(() => {
-        setVerificationTime((prev) => prev -1)
-
-        if (verificationTime <= 0) {
-                clearInterval(countdown);
-            }
-        }, 1000);
-    }
-    
 
     const handleSendMessage = () => {
         setIsBtnValid(false);
         if (isPhoneNumberValid) {
             setIsSend(true);
-            handleCountDown();
             setTimeout(() => {
                 setIsSend(false);
             },30000)
@@ -113,17 +99,11 @@ export default function Page() {
     }
 
     const userData = changeUserFormat(userInfo)
-    
+
     async function insertData(userData) {
         insertUserData(userData);
         matching();
-    }
-
-    const handleBlockSendMessage = () => {
-        alert(`${verificationTime}초만 기다려주세요`);
-    }
-
-    
+    }    
 
     return (
         <div className={styles.container}>
@@ -136,9 +116,17 @@ export default function Page() {
                         onText={(newValue, category,isValid) => handleInput(newValue,category,isValid)}
                     />
                     <button 
-                        onClick={isSend ? handleBlockSendMessage : handleSendMessage}
+                        className={`${styles.btn} ${isSend ? styles.send: undefined}`}
+                        onClick={isSend ? undefined : handleSendMessage}
                     >
-                        {isSend? `인증번호 문자 발송완료! 재전송은 ${verificationTime}초 후에 할 수 있어요.`: "인증번호 받기"}
+                        {isSend ?
+                            <>
+                                인증번호 문자 발송완료! 재전송은
+                                    < Counter countTime={30} onTime={(time)=> {verificationTimeRef.current = time}}/>
+                                초 후에 할 수 있어요.
+                            </>
+                            : "인증번호 받기"
+                            }
                     </button>
                 </div>
                 <div className={styles.wrapper}>
@@ -148,6 +136,7 @@ export default function Page() {
                         onText={(newValue, category,isValid) => handleInput(newValue,category,isValid)}
                     />
                     <button
+                        className={styles.btn}
                         onClick={handleCheckNumber}
                     >
                         인증번호 확인
