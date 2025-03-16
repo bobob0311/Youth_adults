@@ -34,7 +34,8 @@ export default function Page() {
     const verificationTimeRef = useRef<number>(undefined);
     const myCodeRef = useRef<number>(undefined);
     const phoneNumberRef = useRef<string>('');
-    const [isBtnValid, setIsBtnValid] = useState<boolean>(false);
+    
+    const [isBtnValid, setIsBtnValid] = useState<boolean| null>(null);
     const [isPhoneNumberValid, setIsPhoneNumberValid] = useState<boolean>(false);
     const [isSend, setIsSend] = useState<boolean>(false);
     
@@ -53,19 +54,23 @@ export default function Page() {
     }
 
     const handleSendMessage = () => {
-        setIsBtnValid(false);
+        setIsBtnValid(null);
+
         if (isPhoneNumberValid) {
             setIsSend(true);
+
             setTimeout(() => {
                 setIsSend(false);
-            },30000)
+            }, 30000)
+            
             dispatch(changePhoneNumber(phoneNumberRef.current));
+
             const code = Math.floor(10000 + Math.random() * 90000);
             verificationCodeRef.current = code;
 
             sendVerificationCodeMessage(phoneNumberRef.current,code);         
         } else {
-            alert("핸드폰 번호 제대로 입력해라;;")
+            alert("핸드폰 번호를 올바르게 입력해 주세요.")
         }
         
     }
@@ -82,11 +87,12 @@ export default function Page() {
             if (myCodeRef.current === verificationCodeRef.current) {
                 setIsBtnValid(true);
             } else {
-                alert("인증번호가 잘못되었습니다. 다시 확인해주세요")
                 setIsBtnValid(false);
+                setTimeout(() => {
+                    setIsBtnValid(null);
+                },2000)
             }    
         }
-        
     }
 
     const phoneNumberValidCondition = {
@@ -108,7 +114,7 @@ export default function Page() {
     return (
         <div className={styles.container}>
             <section>
-                <h2 className={styles.title}>카카오톡을 통해 인증을 받아주세요</h2>
+                <h2 className={styles.title}>문자를 통해 인증을 받아주세요</h2>
                 <div className={styles.wrapper}>
                     <InputBox
                         inputInfo={PHONEDATA[0]}
@@ -142,6 +148,7 @@ export default function Page() {
                         인증번호 확인
                     </button>
                 </div>
+                {isBtnValid === false? <div className={styles.btnFailMsg}>인증에 실패하였습니다. 잠시 후 다시 시도해주세요!</div>: null}
             </section>
             <NavigationButton onStore={() => {insertData(userData)}} isValid={isBtnValid} title="다음으로" url="done" />
         </div>

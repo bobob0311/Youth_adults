@@ -6,7 +6,7 @@ interface PropsState{
     subtitle?: string;
     url: string;
     onStore?: () => void;
-    isValid: boolean;
+    isValid: boolean| null;
     width?: string;
 }
 
