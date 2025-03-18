@@ -5,21 +5,29 @@ interface PropsState{
     title: string;
     subtitle?: string;
     url: string;
-    onStore?: () => void;
+    onFail?: () => void;
+    onAction?: () => Promise<boolean> | boolean | void;
     isValid: boolean| null;
     width?: string;
 }
 
 export default function NavigationButton(props: PropsState) {
-    const { subtitle,title, url, onStore, isValid,width } = props;
+    const { subtitle,title, url, onAction, isValid,width, onFail } = props;
     const router = useRouter();
 
-    const handleClick = () => {
+    const handleClick = async () => {
         if (isValid) {
-            if (onStore) {
-                onStore();   
+            if (onAction && onFail) {
+                let result: boolean|void;
+                result = await onAction();
+                if (result) {
+                    router.push(url);
+                } else {
+                    onFail()
+                }
+            } else {
+                router.push(url);
             }
-            router.push(url);    
         }
     }
 
