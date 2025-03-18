@@ -8,34 +8,31 @@ import { isEmpty } from "@/utils/valid";
 import { checkNumberLength, checkSpecialCharacters } from "@/utils/regex";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "@/redux/store";
-import { changeGroupInfo } from "../userSlice";
+import { changeUserDetail } from "../userSlice";
+import { UserDetails } from "@/types/user";
 
 interface Check{
-    category: string;
+    category: Category;
     isChecked: boolean;
 }
 
+type Category = "name" | "summary";
+
 const DUMMY_INFO = [
     {
-        inputInfo:{
-            category: "name",
-            label: "그룹명",
-            inputType: "text",
-            placeholder: "서초구 에스파",
-            limit: 10,
-        },
-        valid: undefined as Valid | undefined,
+        category: "name",
+        label: "그룹명",
+        inputType: "text",
+        placeholder: "서초구 에스파",
+        limit: 10,
     },
     {
-        inputInfo: {
-            category: "summary",
-            label:"한줄소개",
-            inputType:"text",
-            placeholder: "ENFP, ESFJ 신입생이에요",
-            limit: 20,    
-        },
-        valid: undefined as Valid | undefined,
-    }
+        category: "summary",
+        label:"한줄소개",
+        inputType:"text",
+        placeholder: "ENFP, ESFJ 신입생이에요",
+        limit: 20,    
+    },
 ]
 
 interface Valid {
@@ -43,28 +40,35 @@ interface Valid {
     onValidCondition: (text: string) => boolean;
 }
 
+const VALID_CONDITIONS: Record<Category, Valid> = {
+    name: {
+        onInputCondition: (input: string) => checkSpecialCharacters(input) && checkNumberLength(input, 10),
+        onValidCondition: (input: string) => isEmpty(input),
+    },
+    summary: {
+        onInputCondition: (input: string) => checkSpecialCharacters(input) && checkNumberLength(input, 20),
+        onValidCondition: (input: string) => isEmpty(input),
+    }
+};
+
 
 export default function Page() {
     const [isBtnValid, setIsBtnValid] = useState<boolean>(false);
     const [, setValidArr] = useState<Check[]>([]);
 
-    const groupInfo = useSelector((state: RootState) => state.user.groupInfo);
+    const userDetails: UserDetails = useSelector((state: RootState) => state.user.userDetails);
     const dispatch = useDispatch();
 
     useEffect(() => {
         const newArr: Check[] = []
-        Object.entries(groupInfo).forEach(([key, value]) => {
-            if (value) {
-                newArr.push({ category: key, isChecked:true});
-            } else {
-                newArr.push({ category: key, isChecked:false});
-            }
+        Object.entries(userDetails).forEach(([key, value]) => {
+            newArr.push({ category: key as Category, isChecked:Boolean(value)});
         })
         setValidArr(newArr);
         checkBtnValid(newArr);
-    },[groupInfo])
+    },[])
 
-    const handleValid = (category: string,isChecked:boolean) => {
+    const handleValid = (category: Category,isChecked:boolean) => {
         setValidArr(prevArr => {
             const updatedArr = prevArr.map(item =>
                 item.category === category ? { ...item, isChecked } : item
@@ -74,9 +78,9 @@ export default function Page() {
         });
     }
 
-    const handleInput = (newValue:string, category:string, check:boolean) => {
-        dispatch(changeGroupInfo({ ...groupInfo, [category]: newValue }))
-        handleValid(category, check);
+    const handleStore = (newValue:string, selectedCategory:string, check:boolean) => {
+        dispatch(changeUserDetail({ ...userDetails, [selectedCategory as Category]: newValue }))
+        handleValid(selectedCategory as Category, check);
     }
 
     const checkBtnValid = (nowValidArr: Check[]) => {
@@ -84,26 +88,6 @@ export default function Page() {
         setIsBtnValid(allValid);
     }
 
-    const groupNameValidCondition = {
-        onInputCondition : (input:string) => {
-            return checkSpecialCharacters(input) && checkNumberLength(input, 10);
-        },
-        onValidCondition : (input: string) => {
-            return isEmpty(input);
-        },
-    }
-
-    const groupSummaryValidCondition = {
-        onInputCondition : (input:string) => {
-            return checkSpecialCharacters(input) && checkNumberLength(input, 20);
-        },
-        onValidCondition : (input: string) => {
-            return isEmpty(input);
-        },
-    }
-
-    DUMMY_INFO[0].valid = groupNameValidCondition;
-    DUMMY_INFO[1].valid = groupSummaryValidCondition;
     return (
         <div className={styles.container}>
             <section>
@@ -112,11 +96,11 @@ export default function Page() {
                 {
                     DUMMY_INFO.map((item) => (
                         <InputBox
-                            key={item.inputInfo.label}
-                            inputInfo={item.inputInfo}
-                            valid={item.valid}
-                            storedText = {groupInfo[item.inputInfo.category]}
-                            onText={(newValue, selectedId,check) => handleInput(newValue, selectedId,check)}
+                            key={item.label}
+                            inputInfo={item}
+                            valid={VALID_CONDITIONS[item.category]}
+                            storedText={userDetails[item.category]}
+                            onText={(newValue, selectedCategory,check) => handleStore(newValue, selectedCategory,check)}
                         />
                     ))
                 }

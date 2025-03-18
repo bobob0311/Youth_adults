@@ -1,12 +1,14 @@
-export function changeUserFormat(data) {
-    const newOld = changeOld(data.userInfo.old);
+import { UserState } from "@/types/user";
+
+export function changeUserFormat(data: UserState) {
+    const newOld = changeOld(data.userProfile.age);
     const userData = {
         location : data.location,
-        member_count: data.userInfo.cnt,
-        gender: data.userInfo.sex,
+        member_count: data.userProfile.count,
+        gender: data.userProfile.gender,
         age: newOld,
-        group_name: data.groupInfo.name,
-        group_description: data.groupInfo.summary,
+        group_name: data.userDetails.name,
+        group_description: data.userDetails.summary,
         phone_number: String(data.phoneNumber),
         payment: false,
     }

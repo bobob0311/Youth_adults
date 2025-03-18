@@ -1,31 +1,15 @@
-import { createSlice,PayloadAction } from "@reduxjs/toolkit";
+import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import {UserDetails, UserProfile, UserState} from "@/types/user"
 
-interface UserInfo {
-    cnt: string;
-    sex: string;
-    old: string;
-    [key: string]: string;
-}
-interface GroupInfo{
-    name: string;
-    summary: string;
-    [key: string]: string;
-}
-interface InitialState {
-    location: string;
-    userInfo: UserInfo;
-    groupInfo: GroupInfo;
-    phoneNumber: string;
-}
 
-const initialState: InitialState = {
+const initialState: UserState = {
     location: '',
-    userInfo: {
-        cnt: '',
-        sex: '',
-        old: '',
+    userProfile: {
+        count: '',
+        gender: '',
+        age: '',
     },
-    groupInfo: {
+    userDetails: {
         name: '',
         summary: '',    
     },
@@ -39,14 +23,14 @@ const userSlice = createSlice({
         changeLocation: (state, action: PayloadAction<string>) => {
             state.location = action.payload;
         },
-        changeGroupInfo: (state, action: PayloadAction<GroupInfo>) => {
-            state.groupInfo.name = action.payload.name;
-            state.groupInfo.summary = action.payload.summary;
+        changeUserDetail: (state, action: PayloadAction<UserDetails>) => {
+            state.userDetails.name = action.payload.name;
+            state.userDetails.summary = action.payload.summary;
         },
-        changeUserInfo: (state, action: PayloadAction<UserInfo>) => {
-            state.userInfo.cnt = action.payload.cnt;
-            state.userInfo.sex = action.payload.sex;
-            state.userInfo.old = action.payload.old;
+        changeUserProfile: (state, action: PayloadAction<UserProfile>) => {
+            state.userProfile.count = action.payload.count;
+            state.userProfile.gender = action.payload.gender;
+            state.userProfile.age = action.payload.age;
         },
         changePhoneNumber: (state, action: PayloadAction<string>) => {
             state.phoneNumber = action.payload;
@@ -54,5 +38,5 @@ const userSlice = createSlice({
     },
 })
 
-export const { changeLocation,changeGroupInfo,changeUserInfo,changePhoneNumber } = userSlice.actions;
+export const { changeLocation,changeUserDetail,changeUserProfile,changePhoneNumber } = userSlice.actions;
 export default userSlice.reducer;

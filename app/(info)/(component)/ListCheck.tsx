@@ -3,17 +3,19 @@
 import { useState } from "react";
 import styles from "./ListCheck.module.scss"
 
+type Category = "count" | "gender" | "age";
+
 interface PropsState{
     listInfo: ListInfo;
     storedItem: string;
-    onValid: (selectedCategory: string, isValid: boolean) => void;
-    onSeletedChange: (category: string, selected: string) => void;
+    onValid: (selectedCategory: Category, isValid: boolean) => void;
+    onSeletedChange: (category: Category, selected: string) => void;
 }
 
 interface ListInfo{
     label: string;
     checkList: string[]
-    category: string;
+    category: Category;
 }
 
 
@@ -22,7 +24,7 @@ export default function ListCheckButton(props: PropsState) {
     const { listInfo, storedItem,onValid,onSeletedChange } = props;
     const [selectedItem, setSelectedItem] = useState<string>(storedItem);
     
-    const handleClick = (clickedItem: string, category: string = listInfo.category) => {
+    const handleClick = (clickedItem: string, category: Category = listInfo.category) => {
         if (selectedItem == clickedItem) {
             setSelectedItem('');
             onValid(category,false);
