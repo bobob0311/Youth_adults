@@ -1,6 +1,6 @@
 'use client'
 import { useSearchParams } from "next/navigation";
-import ChooseMathingBox from "../(component)/chooseMatchingBox";
+import ChooseMathingBox from "../_component/chooseMatchingBox";
 import userApiHandler from "../../../utils/apiHandler/user";
 
 export default function CancelMatchingPage() {

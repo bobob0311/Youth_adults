@@ -1,5 +1,5 @@
 'use client'
-import ChooseMathingBox from "../(component)/chooseMatchingBox";
+import ChooseMathingBox from "../_component/chooseMatchingBox";
 
 export default function CancelMatchingPage() {
     const text = "지금 바로 다른 매칭을 잡을까요?"
