@@ -113,14 +113,16 @@ export default function Page() {
     }
 
     async function handleClickNavBtn(userInfo: UserState) {
-        
+        setLoading(true);
         try {
             const userData = changeUserFormat(userInfo);
             await insertUserData(userData);
             matching();
         } catch (error) {
             console.error("Error during the process:", error);
+            return false;
         }
+        return true;
     }
 
     const handleFail = () => {
@@ -171,7 +173,7 @@ export default function Page() {
                     </div>
                     {isBtnValid === "fail"? <div className={styles.btnFailMsg}>인증에 실패하였습니다. 잠시 후 다시 시도해주세요!</div>: null}
                 </section>
-                <NavigationButton onFail={() => {}} onAction={() => {setLoading(true); handleClickNavBtn(userInfo);  }} isValid={isBtnValid === "success"} title="다음으로" url="done" />
+                <NavigationButton onFail={() => {handleFail()}} onAction={() => { return handleClickNavBtn(userInfo);}} isValid={isBtnValid === "success"} title="다음으로" url="done" />
             </div>
             {loading ?
                 <Modal>
