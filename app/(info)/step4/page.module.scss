@@ -34,3 +34,15 @@
     color: #C94F4F;
     font-size: 12px;
 }
+
+.modalWrapper{
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.loadingText{
+    margin-top: 20px;
+}

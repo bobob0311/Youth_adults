@@ -3,7 +3,7 @@
 import InputBox from "@/components/input/InputBox";
 import NavigationButton from "@/components/button/NavigationButton";
 import styles from "./page.module.scss"
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { changePhoneNumber } from "../userSlice";
 import { checkNumber, checkNumberLength, checkPhone } from "@/utils/regex";
@@ -14,6 +14,8 @@ import matching from "@/utils/matching";
 import { makeValidCode } from "@/utils/message";
 import Counter from "./counter";
 import { UserState } from "@/types/user";
+import { Modal } from "@/components/Modal/Modal";
+import LoadingSpinner from "@/components/loading/LoadingSpinner";
 
 const PHONEDATA = [
     {
@@ -111,7 +113,7 @@ export default function Page() {
     }
 
     async function handleClickNavBtn(userInfo: UserState) {
-        setLoading(true);
+        
         try {
             const userData = changeUserFormat(userInfo);
             await insertUserData(userData);
@@ -125,6 +127,9 @@ export default function Page() {
         setLoading(false);
 
     }
+    useEffect(() => {
+        console.log("Loading 상태 변경:", loading);
+    }, [loading]);
 
     return (
         <>
@@ -166,9 +171,18 @@ export default function Page() {
                     </div>
                     {isBtnValid === "fail"? <div className={styles.btnFailMsg}>인증에 실패하였습니다. 잠시 후 다시 시도해주세요!</div>: null}
                 </section>
-                <NavigationButton onFail={()=> handleFail()} onAction={() => {handleClickNavBtn(userInfo)}} isValid={isBtnValid === "success"} title="다음으로" url="done" />
+                <NavigationButton onFail={() => {}} onAction={() => {setLoading(true); handleClickNavBtn(userInfo);  }} isValid={isBtnValid === "success"} title="다음으로" url="done" />
             </div>
-            {loading && <div>로딩컴포넌트 모달 들어갈듯</div>}
+            {loading ?
+                <Modal>
+                    <div className={styles.modalWrapper}>
+                        <LoadingSpinner />
+                        <h2 className={styles.loadingText}>저장중입니다...</h2>
+                    </div>
+                </Modal>
+                :
+                null
+            }
         </>
     )
 }
