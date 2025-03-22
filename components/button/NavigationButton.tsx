@@ -6,7 +6,7 @@ interface PropsState{
     subtitle?: string;
     url: string;
     onFail?: () => void;
-    onAction?: () => Promise<boolean> | boolean | void;
+    onAction?: () => Promise<boolean> | boolean | void | Promise<void>;
     isValid: boolean| null;
     width?: string;
 }
@@ -18,8 +18,7 @@ export default function NavigationButton(props: PropsState) {
     const handleClick = async () => {
         if (isValid) {
             if (onAction && onFail) {
-                let result: boolean|void;
-                result = await onAction();
+                const result = await onAction();
                 if (result) {
                     router.push(url);
                 } else {
