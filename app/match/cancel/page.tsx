@@ -2,8 +2,9 @@
 import { useSearchParams } from "next/navigation";
 import ChooseMathingBox from "../_component/chooseMatchingBox";
 import userApiHandler from "../../../utils/apiHandler/user";
+import { Suspense } from "react";
 
-export default function CancelMatchingPage() {
+function CancelMatching() {
     const params = useSearchParams();
     const myId = params.get("id");
 
@@ -44,5 +45,13 @@ export default function CancelMatchingPage() {
     
     return (
         <ChooseMathingBox text={text} btnInfo={btnInfo} />
+    )
+}
+
+export default function CancelMatchingPage() {
+    return (
+        <Suspense fallback={<div>loading...</div>}>
+            <CancelMatching/>
+        </Suspense>
     )
 }
