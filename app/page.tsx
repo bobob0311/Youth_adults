@@ -1,26 +1,25 @@
-import NavigationButton from "@/components/button/NavigationButton";
-import styles from "./page.module.scss"
-import Image from "next/image";
+'use client'
+import { useEffect, useState } from "react";
+import OpenPage from "@/components/start/Open";
+import ClosePage from "@/components/start/Close";
 
 export default function Home() {
+  const [isAvailable, setIsAvailable] = useState(false);
+ 
+  useEffect(() => {
+    const today = new Date();
+    const dayOfWeek = today.getDay();
+    if (dayOfWeek === 5 || dayOfWeek === 6 || dayOfWeek === 0) {
+      setIsAvailable(true);
+    } else {
+      setIsAvailable(false);
+    }
+  }, [])
+  
+  
   return (
-    <div className={styles.backGroundImg}>
-      <div className={styles.content}>
-
-        <h1 className={styles.mainImg}>
-          <Image width={300} height={220} src="/startPage.png" alt="청춘 상회 이미지" />
-          <span className={styles.srOnly}>청춘 상회</span>
-        </h1>
-        <h2 className={styles.subtitle}>내 친구가 되어라. 청춘을 후회없이 즐기세요!</h2>
-        
-        <NavigationButton
-          isValid={true}
-          width="220px"
-          title="시작하기!"
-          url="/step1"
-        />
-
-      </div>
-    </div>
-  );
+    <>
+      {isAvailable? <OpenPage/>: <ClosePage/>}
+    </>
+  )
 }
