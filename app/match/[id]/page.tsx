@@ -90,7 +90,7 @@ export default function Page() {
                     <ImgSlider navIdx={content} onChangeIdx={(idx) => setContent(idx)} imgInfo={IMGINFO} userInfo={matchedUserInfo} />    
                 </div>
                     {isPayment ? 
-                    <NavigationButton url={`/match/done`} onAction={()=> {handleEnterRoomByPaymentTrue}} isValid={true} title="매칭룸 입장하기"/>
+                    <NavigationButton url={`/match/done`} onAction={()=> {handleEnterRoomByPaymentTrue()}} isValid={true} title="매칭룸 입장하기"/>
                     :
                     <NavigationButton url={`/match/payment?id=${matchedUserInfo.matchedId}`} subtitle="결제금액: 2,200원" isValid={true} title="결제 후 매칭룸 입장하기"/>
                     }
