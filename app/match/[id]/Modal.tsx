@@ -2,7 +2,7 @@
 import { createPortal } from 'react-dom';
 import styles from "./Modal.module.scss"
 import { useRouter } from 'next/navigation';
-import ChooseMathingBox from '../(component)/chooseMatchingBox';
+import ChooseMathingBox from '../_component/chooseMatchingBox';
 
 export function Modal({ onModal }: { onModal: () => void }) {
   const router = useRouter();
