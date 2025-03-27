@@ -1,6 +1,6 @@
 "use client";
 
-import { Suspense } from "react";
+import { Suspense, useState } from "react";
 import { useSearchParams } from "next/navigation";
 import { useChat } from "@/hooks/useChat";
 import { useUser } from "@/hooks/useUser";
@@ -14,7 +14,7 @@ function Home() {
   const searchParams = useSearchParams();
   const roomId = searchParams.get("roomId");
   const userId = searchParams.get("id");
-
+  const [rematch, setRematch] = useState(false);
 
   const userData = useUser(userId || "");
 
@@ -32,13 +32,15 @@ function Home() {
   const roomInfoRef = useRoom(socket, roomId, roomInfo);
 
   const handleCheckRematch = () => {
-    // inputBox 상태를 여기서 바꿔주면 될듯
+    setRematch(true);
   }
   return (
     <WrapperLayout onRematchClick={handleCheckRematch}>
       <div className={styles.chatContainer}>
         <MessageContainer messages={messages} roomInfo={roomInfoRef.current} />
         <InputBox
+          onRematch={() => setRematch(prev => !prev)}
+          rematch={rematch}
           onSend={(message) => sendTextMessage(message)}
           onImgSend={(imgFile) => sendImgMessage(imgFile)}
         />
