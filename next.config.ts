@@ -1,5 +1,4 @@
 import type { NextConfig } from "next";
-const supabaseUrl = process.env.SUPABASE_URL;
 
 const path = require('path');
 
@@ -9,8 +8,13 @@ const nextConfig: NextConfig = {
     includePaths: [path.join(__dirname, 'styles')],
     prependData: `@use '_mixin.scss';`
   },
-  images: {
-    domains: [supabaseUrl || "http://localhost:3000"], 
+ images: {
+    remotePatterns: [
+      {
+        protocol: 'https',
+        hostname: `${process.env.SUPABASE_URL_SHOHT}`,
+      },
+    ],
   },
 };
 
