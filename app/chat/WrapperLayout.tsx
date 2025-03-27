@@ -1,7 +1,8 @@
+"use client"
 import Image from "next/image";
-import styles from "./layout.module.scss";
+import styles from "./WrapperLayout.module.scss";
 
-export default function Layout({ children }: { children: React.ReactNode }) {
+export default function Wrapper({ children }: { children: React.ReactNode }) {
 
     return (
         <>
