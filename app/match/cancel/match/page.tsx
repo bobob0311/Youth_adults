@@ -8,7 +8,7 @@ import LoadingSpinner from "@/components/loading/LoadingSpinner";
 function CancelMatching() {
     const params = useSearchParams();
     const myId = params.get("id");
-
+    console.log(myId);
     const text = "매칭을 정말 그만두시겠어요?"
     
     const handleStopMatching = () => {
