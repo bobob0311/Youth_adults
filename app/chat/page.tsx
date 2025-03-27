@@ -8,6 +8,7 @@ import { useRoom } from "@/hooks/useRoom";
 import MessageContainer from "./MessageContainer";
 import InputBox from "./InputBox";
 import styles from "./page.module.scss";
+import WrapperLayout from "./WrapperLayout";
 
 function Home() {
   const searchParams = useSearchParams();
@@ -30,14 +31,19 @@ function Home() {
   const { socket,messages, sendTextMessage, sendImgMessage } = useChat(roomId, userId);
   const roomInfoRef = useRoom(socket, roomId, roomInfo);
 
+  const handleCheckRematch = () => {
+    // inputBox 상태를 여기서 바꿔주면 될듯
+  }
   return (
-    <div className={styles.chatContainer}>
-      <MessageContainer messages={messages} roomInfo={roomInfoRef.current} />
-      <InputBox
-        onSend={(message) => sendTextMessage(message)}
-        onImgSend={(imgFile) => sendImgMessage(imgFile)}
-      />
-    </div>
+    <WrapperLayout onRematchClick={handleCheckRematch}>
+      <div className={styles.chatContainer}>
+        <MessageContainer messages={messages} roomInfo={roomInfoRef.current} />
+        <InputBox
+          onSend={(message) => sendTextMessage(message)}
+          onImgSend={(imgFile) => sendImgMessage(imgFile)}
+        />
+      </div>
+     </WrapperLayout> 
   );
 }
 
