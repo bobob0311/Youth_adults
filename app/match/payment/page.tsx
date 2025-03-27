@@ -12,13 +12,23 @@ function Payment() {
     const myId = params.get("id");
     
     const handlePayment = async () => {
-        if(myId){
-            const { data: myData } = await changeUserPayment(myId, true);
-            const matchedData = await getUserDataById(myData[0].matchedId);
-            if (myData[0].payment && matchedData.payment) {
-                handleChatRoomMessage(myData[0], matchedData)
+        try {
+            if(myId){
+                const { data: myData } = await changeUserPayment(myId, true);
+                console.log(myData);
+                const matchedData = await getUserDataById(myData[0].matchedId);
+                if (myData[0].payment && matchedData.payment) {
+                    handleChatRoomMessage(myData[0], matchedData)
+                }
+
+            } else {
+                return false
             }
+        } catch {
+            return false;
         }
+        return true;
+        
     }
 
     function handleChatRoomMessage(myData, matchedData) {
@@ -42,7 +52,7 @@ function Payment() {
             <div>결제 금액은</div>
             <div>0원 입니다</div>
         </div>
-        <NavigationButton onStore={() => handlePayment()} url="/match/done" title="결제하기" subtitle="결제금액 0원" isValid={true} />
+        <NavigationButton onFail={()=>console.log("gg")} onAction={handlePayment} url="/match/done" title="결제하기" subtitle="결제금액 0원" isValid={true} />
         </>
     )
 }
