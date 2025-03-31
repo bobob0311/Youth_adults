@@ -3,7 +3,6 @@ import styles from "./Container.module.scss"
 import Image from "next/image";
 
 interface PropsState{
-    onImgInput: () => void;
     onSendMessage: (msg: string) => void;
 }
 
@@ -12,7 +11,7 @@ const MAX_LINE = 8;
 const LINE_HEIGHT = 14;
 
 export default function Container(props: PropsState) {
-    const { onImgInput,onSendMessage } = props;
+    const { onSendMessage } = props;
 
     const textareaRef = useRef<HTMLTextAreaElement>(null);
     const [isText, setIsText] = useState<boolean>(false);
@@ -72,11 +71,13 @@ export default function Container(props: PropsState) {
             />
             <button 
                 className={styles.sendBtn}
-                onClick={isText? sendMessage : onImgInput}
+                onClick={isText? sendMessage : ()=>{}}
                 > 
                     {isText? 
-                    <Image width={20} height={30} src="/sent.svg" alt="전송 사진"/>:
-                    <Image width={20} height={30} src="/camera.svg" alt="사진 접근"/> 
+                    <Image width={20} height={30} src="/sent.svg" alt="전송 사진" /> :
+                    <label htmlFor="galleryInput">
+                        <Image width={20} height={30} src="/camera.svg" alt="사진 접근"/>
+                    </label>
                 }
             </button>
         </> 

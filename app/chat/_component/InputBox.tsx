@@ -1,6 +1,5 @@
 'use client'
 import ImgContainer from "./_inputBox/ImgContainer";
-import ImgInput from "./_inputBox/ImgInput";
 import styles from "./InputBox.module.scss";
 
 import { useEffect, useState } from "react"
@@ -18,8 +17,7 @@ interface PropsState{
 
 export default function InputBox(props: PropsState) {
     const { onSend, onImgSend, rematch, onRematch} = props;
-    const [isImgInputOpen, setIsImgInputOpen] = useState<boolean>(false);
-    const [image, setImage] = useState<string>('');
+    const [image, setImage] = useState<File|null>(null);
     const [contentType, setContentType] = useState<string>('text');
 
     useEffect(() => {
@@ -28,39 +26,34 @@ export default function InputBox(props: PropsState) {
         }
     },[rematch])
 
-    const handleUploadImg = (imageUrl) => {
+    const handleTempImg = (imageUrl) => {
         setImage(imageUrl);
         if (contentType !== "image") {
             setContentType("image")    
         }
     }
 
+    const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const file = e.target.files?.[0];
+        if (file) {
+            handleTempImg(file);
+        }
+    }
+
+
     let content;
     if (contentType === "text") {
-        content =
-            <>
-                <Container
-                    onImgInput={() => setIsImgInputOpen(true)}
-                    onSendMessage = {(msg) => onSend(msg)}
-                />
-                <ImgInput
-                
-                    visible={isImgInputOpen}
-                    isRetry={(!!image)}
-                    onImg={(imageUrl) => handleUploadImg(imageUrl)}
-                    onClose={() =>setIsImgInputOpen(false)}
-                />
-            </> 
-    } else if (contentType === "image") {
+        content = <Container onSendMessage={(msg) => onSend(msg)} />
+
+    } else if (contentType === "image" && image) {
         content = 
             <ImgContainer
                 src={image}
                 onSendImg={(publicUrl) => {
                     onImgSend(publicUrl)
-                    setImage('')
+                    setImage(null)
                     setContentType('text')
                 }}
-                onRetry={()=> setIsImgInputOpen((prev) => !prev)}
             />
     } else if (contentType === "rematch") {
         content = <RematchContainer
@@ -76,6 +69,13 @@ export default function InputBox(props: PropsState) {
         <div className={styles.InputContainer}>
             <div className={styles.box}>
                 {content}
+                <input
+                    type="file"
+                    id="galleryInput"
+                    accept="image/*"
+                    style={{ display: 'none' }}
+                    onChange={handleFileChange}
+                />
             </div>
         </div>
     )
