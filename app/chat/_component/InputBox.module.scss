@@ -7,18 +7,3 @@
     padding: 8px 0px;
 }
 
-.sendBtn{
-    all:unset;
-    position: absolute;
-    bottom: 12px;
-    right: 0;
-    border-radius: 100%;
-    background-color : var(--purple-500);
-    width: 32px;
-    height: 32px;
-    display:flex;
-    justify-content: center;
-    &:hover{
-        cursor: pointer;
-    }
-}
