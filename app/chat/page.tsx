@@ -5,8 +5,8 @@ import { useSearchParams } from "next/navigation";
 import { useChat } from "@/hooks/useChat";
 import { useUser } from "@/hooks/useUser";
 import { useRoom } from "@/hooks/useRoom";
-import MessageContainer from "./MessageContainer";
-import InputBox from "./InputBox";
+import MessageContainer from "./_component/MessageContainer";
+import InputBox from "./_component/InputBox";
 import styles from "./page.module.scss";
 import WrapperLayout from "./WrapperLayout";
 
