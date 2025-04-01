@@ -6,7 +6,7 @@ interface ModalProps {
   children?: React.ReactNode;
 }
 
-export function Modal({ children }: ModalProps) {
+export default function Modal({ children }: ModalProps) {
 
 
   return createPortal(

@@ -14,7 +14,7 @@ interface PropsState{
 }
 
 
-export default function ChooseMathingBox(props: PropsState) {
+export default function ChooseMatchingBox(props: PropsState) {
     const { onClose, btnInfo,text } = props;
     const { firstBtnName, firstBtnFn, secondBtnName, secondBtnFn, } = btnInfo;
     

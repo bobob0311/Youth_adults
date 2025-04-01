@@ -1,12 +1,16 @@
 'use client'
-import { createPortal } from 'react-dom';
-import styles from "./Modal.module.scss"
+
 import { useRouter } from 'next/navigation';
-import ChooseMathingBox from '../_component/chooseMatchingBox';
+import ChooseMatchingBox from '../_component/chooseMatchingBox';
+import Modal from "../../../components/Modal/Modal"; 
 
-export function Modal({ onModal }: { onModal: () => void }) {
+interface PropsState{
+  onModal: () => void;
+}
+
+export default function MatchGiveUpModal(props:PropsState) {
+  const { onModal } = props;
   const router = useRouter();
-
   const text = "매칭을 정말 포기하시겠어요?";
   
   const handleFindAnother = () => {
@@ -27,10 +31,9 @@ export function Modal({ onModal }: { onModal: () => void }) {
 
 
 
-  return createPortal(
-    <div className={styles.modalBackdrop}>
-      <ChooseMathingBox onClose={() => onModal()} text={text} btnInfo={btnInfo} />
-    </div>,
-    document.getElementById('modal-root')!
-  );
+  return (
+    <Modal>
+      <ChooseMatchingBox onClose={() => onModal()} text={text} btnInfo={btnInfo} />
+    </Modal>
+  )
 }

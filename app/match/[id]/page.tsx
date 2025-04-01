@@ -3,7 +3,7 @@ import { useEffect, useState } from "react"
 import styles from "./page.module.scss"
 import NavigationButton from "@/components/button/NavigationButton";
 import ImgSlider from "./imgSlider";
-import { Modal } from "./Modal";
+import MatchGiveUpModal from "./MatchGiveUpModal";
 import { useParams } from "next/navigation";
 import { getUserDataById } from "@/utils/api";
 
@@ -104,7 +104,7 @@ export default function Page() {
             </>
         }
             
-            {modal && <Modal onModal={() => setModal((prev) => !prev)}/>}
+            {modal && <MatchGiveUpModal onModal={() => setModal((prev) => !prev)}/>}
         </>
     )
 }
