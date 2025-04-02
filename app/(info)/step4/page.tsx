@@ -14,7 +14,7 @@ import matching from "@/utils/matching";
 import { makeValidCode } from "@/utils/message";
 import Counter from "./counter";
 import { UserState } from "@/types/user";
-import { Modal } from "@/components/Modal/Modal";
+import Modal  from "@/components/Modal/Modal";
 import LoadingSpinner from "@/components/loading/LoadingSpinner";
 
 const PHONEDATA = [
