@@ -47,22 +47,7 @@
     }
 }
 
-.content{
+.content {
     padding-top: 50px;
-    height: calc(100vh - 240px);
-}
-
-.btnContainer{
-    display: flex;
-    justify-content: center;
-}
-
-.linkWrapper{
-    all:unset;
-    font-size: 14px;
-    color: #9C9C9C;
-    margin : auto;
-    &:hover{
-        cursor: pointer;
-    }
+    height: calc(100vh - 250px);
 }

@@ -1,8 +1,8 @@
 'use client'
 
 import { useRouter } from 'next/navigation';
-import ChooseMatchingBox from '../_component/chooseMatchingBox';
-import Modal from "../../../components/Modal/Modal"; 
+import ChooseMatchingBox from '../chooseMatchingBox';
+import Modal from "../../../../components/Modal/Modal"; 
 
 interface PropsState{
   onModal: () => void;
