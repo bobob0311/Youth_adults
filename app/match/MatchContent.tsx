@@ -11,7 +11,7 @@ export default async function MatchContent({ id }: { id: string }) {
         return (
             <>
                 <ImgContainer matchedUserInfo={matchedInfo} />
-                <MatchActions isPayment={isPayment} matchedId={matchedInfo.matchedId} />
+                <MatchActions isPayment={isPayment} myId={myInfo.id} />
             </>
         );
     } catch (error) {
