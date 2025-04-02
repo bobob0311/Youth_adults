@@ -7,8 +7,9 @@ import styles from "./MatchActions.module.scss"
 import Modal from "@/components/Modal/Modal";
 import { updateUserEnterRoomStatus } from "@/utils/apiHandler/match";
 import LoadingSpinner from "@/components/loading/LoadingSpinner";
+import enterRoom from "@/utils/enterRoom";
 
-export default function MatchActions({ isPayment, myId }: { isPayment: boolean; myId: string }) {
+export default function MatchActions({ isPayment, myId }: { isPayment: boolean; myId: string; }) {
     const [modal, setModal] = useState(false);
     const [failModal, setFailModal] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
@@ -18,6 +19,10 @@ export default function MatchActions({ isPayment, myId }: { isPayment: boolean; 
         try {
             const res = await updateUserEnterRoomStatus(true, myId, true);
             if (!res.success) {
+                return false;
+            }
+            const result = await enterRoom(myId);
+            if (!result) {
                 return false;
             }
         } catch (error) {
