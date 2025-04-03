@@ -29,3 +29,17 @@ function changeOld(old:string) {
 
     return calcOld;
 }
+
+export function reverseChangeOld(calcOld: number): string {
+    const firstTow = Math.round((calcOld / 3) * 10);
+    const remainder = calcOld % 3;
+
+    let lastOne = "초";
+    if (remainder >= 1.5) {
+        lastOne = "말";
+    } else if (remainder >= 0.5) {
+        lastOne = "중";
+    }
+
+    return `${firstTow}대 ${lastOne}`;
+}
