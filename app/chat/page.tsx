@@ -1,16 +1,23 @@
 import { getRoomInfoByRoomName } from "@/apiHandler/room";
-
+import ChatRoom from "./ChatRoom";
+import PasswordCheck from "./PasswordCheck";
+import { verifyPassword } from "@/serverActions/verifyPassword";
 
 export default async function ChatStartPage({ searchParams }: { searchParams: { id?: string, roomId?: string } }) {
   let isAvailable:boolean = false;
-  
+  let roomInfo;
+  const { roomId, id } = await searchParams;
   try {
-    const { roomId, id } = await searchParams;
+    
     if (!roomId || !id) return <div>잘못된 접근입니다.</div>;
 
-    const roomInfo = await getRoomInfoByRoomName(roomId);
-
+    roomInfo = await getRoomInfoByRoomName(roomId);
     isAvailable = roomInfo?.allow_userId?.includes(id) ? true : false;  
+  
+    const isVerified = await verifyPassword(roomId);
+    if (isVerified) {
+      return <ChatRoom userId={ id } roomId={roomId} />
+    }
 
   } catch (error: any) {
     if (error.status === 400 || error.status === 404) {
@@ -20,10 +27,12 @@ export default async function ChatStartPage({ searchParams }: { searchParams: { 
     }
   }
 
+
+
   return (
     <div>
-    {isAvailable ? (
-      <div>입장을 환영합니다!</div>
+      {isAvailable ? (
+        <PasswordCheck roomId={roomId}  />
     ) : (
       <div>이 방에 입장할 수 없습니다.</div>
     )}
