@@ -11,12 +11,13 @@ interface PropsState{
     onSend: (message: string) => void,
     onImgSend: (imgFile: string) => void,
     onRematch: () => void;
+    onLeaveRoom: () => void;
 }
 
 
 
 export default function InputBox(props: PropsState) {
-    const { onSend, onImgSend, rematch, onRematch} = props;
+    const { onLeaveRoom, onSend, onImgSend, rematch, onRematch} = props;
     const [image, setImage] = useState<File|null>(null);
     const [contentType, setContentType] = useState<string>('text');
 
@@ -59,7 +60,7 @@ export default function InputBox(props: PropsState) {
         content = <RematchContainer
             title="다른 매칭을 찾으시겠습니까?"
             subTitle="재매칭을 진행하면 현재 매칭팀을 다시 만날 수 없어요."
-            leftBtn={{name: "다른 매칭 찾기" , fn :() => { console.log("아직 안했습니다.") }}}
+            leftBtn={{name: "다른 매칭 찾기" , fn :() => onLeaveRoom()}}
             rightBtn={{name: "게속 대화할래요" , fn :() => { onRematch(); setContentType('text') }}}
         />
     }
