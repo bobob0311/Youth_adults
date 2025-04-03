@@ -1,58 +1,32 @@
-"use client";
+import { getRoomInfoByRoomName } from "@/apiHandler/room";
 
-import { Suspense, useState } from "react";
-import { useSearchParams } from "next/navigation";
-import { useChat } from "@/hooks/useChat";
-import { useUser } from "@/hooks/useUser";
-import { useRoom } from "@/hooks/useRoom";
-import MessageContainer from "./_component/MessageContainer";
-import InputBox from "./_component/InputBox";
-import styles from "./page.module.scss";
-import WrapperLayout from "./WrapperLayout";
 
-function Home() {
-  const searchParams = useSearchParams();
-  const roomId = searchParams.get("roomId");
-  const userId = searchParams.get("id");
-  const [rematch, setRematch] = useState(false);
+export default async function ChatStartPage({ searchParams }: { searchParams: { id?: string, roomId?: string } }) {
+  let isAvailable:boolean = false;
+  
+  try {
+    const { roomId, id } = await searchParams;
+    if (!roomId || !id) return <div>잘못된 접근입니다.</div>;
 
-  const userData = useUser(userId || "");
+    const roomInfo = await getRoomInfoByRoomName(roomId);
 
-  const roomInfo = userData ?
-  {
-    myGroupName: userData.group_name,
-    otherGroupName: userData.matched_name,
-    myGroupId: userData.id,
-    otherGroupId: userData.matched_id,
-    isFirst: userData.first_in
+    isAvailable = roomInfo?.allow_userId?.includes(id) ? true : false;  
+
+  } catch (error: any) {
+    if (error.status === 400 || error.status === 404) {
+      return <div>생성된 Room이 없당께요??</div>
+    } else {
+      return <div>서버 오류가 발생했습니다 다시한번 시도해주세요.</div>
     }
-    :
-    null;
-  const { socket,messages, sendTextMessage, sendImgMessage } = useChat(roomId, userId);
-  const roomInfoRef = useRoom(socket, roomId, roomInfo);
-
-  const handleCheckRematch = () => {
-    setRematch(true);
   }
-  return (
-    <WrapperLayout onRematchClick={handleCheckRematch}>
-      <div className={styles.chatContainer}>
-        <MessageContainer messages={messages} roomInfo={roomInfoRef.current} />
-        <InputBox
-          onRematch={() => setRematch(prev => !prev)}
-          rematch={rematch}
-          onSend={(message) => sendTextMessage(message)}
-          onImgSend={(imgFile) => sendImgMessage(imgFile)}
-        />
-      </div>
-     </WrapperLayout> 
-  );
-}
 
-export default function ChatPage() {
   return (
-    <Suspense fallback={<div>loading...</div>}>
-      <Home />
-    </Suspense>
-  );
+    <div>
+    {isAvailable ? (
+      <div>입장을 환영합니다!</div>
+    ) : (
+      <div>이 방에 입장할 수 없습니다.</div>
+    )}
+  </div>
+  )
 }
