@@ -3,7 +3,12 @@ import ChatRoom from "./ChatRoom";
 import PasswordCheck from "./PasswordCheck";
 import { verifyPassword } from "@/serverActions/verifyPassword";
 
-export default async function ChatStartPage({ searchParams }: { searchParams: { id?: string, roomId?: string } }) {
+interface SearchParams {
+  id?: string;
+  roomId?: string;
+}
+
+export default async function ChatStartPage({ searchParams }: { searchParams: Promise<SearchParams> }) {
   let isAvailable:boolean = false;
   let roomInfo;
   const { roomId, id } = await searchParams;
@@ -12,11 +17,11 @@ export default async function ChatStartPage({ searchParams }: { searchParams: { 
     if (!roomId || !id) return <div>잘못된 접근입니다.</div>;
 
     roomInfo = await getRoomInfoByRoomName(roomId);
-    isAvailable = roomInfo?.allow_userId?.includes(id) ? true : false;  
+    isAvailable = roomInfo?.allow_user_id?.includes(id) ? true : false;  
   
     const isVerified = await verifyPassword(roomId);
     if (isVerified) {
-      return <ChatRoom userId={ id } roomId={roomId} />
+      return <ChatRoom userId={ id } roomId={roomId} roomStatus={roomInfo.is_open} />
     }
 
   } catch (error: any) {
