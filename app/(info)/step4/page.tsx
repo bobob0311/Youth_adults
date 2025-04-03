@@ -7,7 +7,7 @@ import { useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { changePhoneNumber } from "../userSlice";
 import { checkNumber, checkNumberLength, checkPhone } from "@/utils/regex";
-import { insertUserData, sendAligoMessage } from "@/utils/api";
+import { insertUserData } from "@/utils/api";
 import { RootState } from "@/redux/store";
 import { changeUserFormat } from "@/utils/dataFomat";
 import matching from "@/utils/matching";
@@ -16,6 +16,7 @@ import Counter from "./counter";
 import { UserState } from "@/types/user";
 import Modal  from "@/components/Modal/Modal";
 import LoadingSpinner from "@/components/loading/LoadingSpinner";
+import { sendAligoMessage } from "@/utils/apiHandler/aligoMessage";
 
 const PHONEDATA = [
     {

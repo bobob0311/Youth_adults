@@ -20,8 +20,11 @@
 
 #logic
 /utils/api.ts
+/utils/apiHandler/*
 */api
 /utils/matching.ts
+/utils/enterRoom.ts
+
 
 # production
 /build
