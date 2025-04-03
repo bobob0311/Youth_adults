@@ -4,7 +4,7 @@
     align-items: center;
     height: calc(100vh - 56px);
     img{
-        width: 80%;
+        object-fit: contain;
         margin-top: 20vh;
         margin-bottom: 15px;
     }
