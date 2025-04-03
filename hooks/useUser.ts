@@ -13,7 +13,7 @@ interface User{
     matched_id: string;
     matched_name: string;
     payment: boolean;
-    first_in: boolean;
+    is_first: boolean;
 }
 
 export function useUser(userId: string) {

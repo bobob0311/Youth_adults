@@ -5,7 +5,7 @@ import MatchActions from "./_component/MatchActions"; // 클라이언트 컴포�
 export default async function MatchContent({ id }: { id: string }) {
     try {
         const matchedInfo = await getUserDataById(id);
-        const myInfo = await getUserDataById(matchedInfo.matchedId);
+        const myInfo = await getUserDataById(matchedInfo.matched_id);
         const isPayment = myInfo.payment;
 
         return (

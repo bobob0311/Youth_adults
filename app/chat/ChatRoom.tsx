@@ -19,10 +19,10 @@ export default function ChatRoom({userId, roomId,roomStatus}: {userId:string, ro
     const roomInfo = userData ?
         {
             myGroupName: userData.group_name,
-            otherGroupName: userData.matchedName,
+            otherGroupName: userData.matched_name,
             myGroupId: userData.id,
-            otherGroupId: userData.matchedId,
-            isFirst: userData.firstIn
+            otherGroupId: userData.matched_id,
+            isFirst: userData.is_first
         }
     :
         null;
