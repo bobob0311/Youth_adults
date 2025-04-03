@@ -5,7 +5,7 @@ import NavigationButton from "@/components/button/NavigationButton";
 import MatchGiveUpModal from "./_MatchAction/MatchGiveUpModal";
 import styles from "./MatchActions.module.scss"
 import Modal from "@/components/Modal/Modal";
-import { updateUserEnterRoomStatus } from "@/utils/apiHandler/match";
+import { updateUserEnterRoomStatus } from "@/apiHandler/match";
 import LoadingSpinner from "@/components/loading/LoadingSpinner";
 import enterRoom from "@/utils/enterRoom";
 

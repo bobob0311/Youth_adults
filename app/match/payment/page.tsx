@@ -3,7 +3,7 @@
 import Modal from "@/components/Modal/Modal";
 import styles from "./page.module.scss"
 import NavigationButton from "@/components/button/NavigationButton";
-import { updateUserEnterRoomStatus } from "@/utils/apiHandler/match";
+import { updateUserEnterRoomStatus } from "@/apiHandler/match";
 import {useSearchParams } from "next/navigation"
 import { Suspense, useState } from "react";
 import LoadingSpinner from "@/components/loading/LoadingSpinner";

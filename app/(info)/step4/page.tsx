@@ -16,7 +16,7 @@ import Counter from "./counter";
 import { UserState } from "@/types/user";
 import Modal  from "@/components/Modal/Modal";
 import LoadingSpinner from "@/components/loading/LoadingSpinner";
-import { sendAligoMessage } from "@/utils/apiHandler/aligoMessage";
+import { sendAligoMessage } from "@/apiHandler/aligoMessage";
 
 const PHONEDATA = [
     {
