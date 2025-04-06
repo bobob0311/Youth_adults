@@ -26,7 +26,7 @@ export default function SelectionPage() {
                 <SelectionGroup
                     userProfile={userProfile}
                     listInfo={LIST_INFO}
-                    onSelectionChange={handleSelectionChange}
+                    onSelectionChange={(category, selectedItem) => handleSelectionChange(category, selectedItem)}
                     onBtnValid = { (isValid) => setIsBtnValid(isValid)}
                 />
             </section>
