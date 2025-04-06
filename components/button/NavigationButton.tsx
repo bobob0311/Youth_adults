@@ -6,7 +6,7 @@ interface PropsState{
     subtitle?: string;
     url: string;
     onFail?: () => void;
-    onAction?: () => Promise<boolean> | boolean | void | Promise<void>;
+    onAction?: () => Promise<any> | any;
     isValid: boolean| null;
     width?: string;
 }
@@ -16,18 +16,23 @@ export default function NavigationButton(props: PropsState) {
     const router = useRouter();
 
     const handleClick = async () => {
-        if (isValid) {
-            if (onAction && onFail) {
-                const result = await onAction();
-                if (result) {
-                    router.push(url);
-                } else {
-                    onFail()
-                }
-            } else {
-                router.push(url);
-            }
+        if (!onAction) {
+            router.push(url);
+            return;
         }
+
+        if (onFail) {
+            const result = await onAction();
+            if (result) {
+                router.push(url);
+            } else {
+                onFail()
+            }
+        } else {
+            onAction();
+            router.push(url);
+        }
+        
     }
 
     return (

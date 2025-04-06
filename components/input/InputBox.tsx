@@ -23,8 +23,10 @@ export default function InputBox(props: PropsState) {
     const [text, setText] = useState<string>(storedText? storedText : '');
 
 
-    const handleChange = (e: React.ChangeEvent<HTMLInputElement>, category:string) => {
+    const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const newValue = e.target.value;
+        const category = inputInfo.category;
+
         if (valid) {
             const { onInputCondition, onValidCondition } = valid;
             if (onInputCondition(newValue)) {
@@ -44,7 +46,7 @@ export default function InputBox(props: PropsState) {
             <span>{inputInfo.label}</span>
             <input
                 value={text}
-                onChange={(e) => handleChange(e,inputInfo.category)}
+                onChange={(e) => handleChange(e)}
                 type={inputInfo.inputType}
                 placeholder={inputInfo.placeholder}
             />
