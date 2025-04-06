@@ -1,4 +1,4 @@
-import { checkNumberLength, checkSpecialCharacters } from "./regex";
+import { checkNumber, checkNumberLength, checkPhone, checkSpecialCharacters } from "./regex";
 import { isEmpty } from "./valid";
 
 interface ListInfo{
@@ -18,6 +18,13 @@ interface GroupInfo{
     inputType: string;
     placeholder: string;
     limit: number;
+}
+
+interface PhoneInfo{
+    category: string;
+    label: string;
+    inputType: string;
+    placeholder: string;
 }
 
 interface Valid {
@@ -55,7 +62,7 @@ export const GROUP_INPUT_INFO: GroupInfo[] = [
     },
 ]
 
-export const GROUP_VALID: Record<string, Valid> = {
+export const GROUP_VALID_CONDITION: Record<string, Valid> = {
     name: {
         onInputCondition: (input: string) => checkSpecialCharacters(input) && checkNumberLength(input, 10),
         onValidCondition: (input: string) => isEmpty(input),
@@ -65,3 +72,27 @@ export const GROUP_VALID: Record<string, Valid> = {
         onValidCondition: (input: string) => isEmpty(input),
     }
 };
+
+export const PHONE_INPUT_INFO: PhoneInfo[]= [
+    {
+        category: "phoneNumber",
+        label: "대표자 번호",
+        inputType: "text",
+        placeholder: "01012345678",
+    },
+    {
+        category: "authNumber",
+        label : "인증 번호",
+        inputType : "text",
+        placeholder : "12345"
+    }
+]
+
+export const PHONE_VALID_CONDITION:Valid = {
+    onInputCondition : (input:string) => {
+        return checkNumber(input) && checkNumberLength(input,11);
+    },
+    onValidCondition : (input: string) => {
+        return checkPhone(input);
+    },
+}
