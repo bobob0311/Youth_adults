@@ -3,7 +3,7 @@ import { useState, useEffect } from 'react';
 import styles from "./counter.module.scss";
 interface PropsState{
     countTime: number;
-    onTime: (time:number) => void;
+    onTime?: (time:number) => void;
 }
 
 export default function Counter(props:PropsState){
@@ -17,7 +17,7 @@ export default function Counter(props:PropsState){
                     clearInterval(intervalId);
                     return 0;
                 }
-                onTime(prev - 1);
+                if(onTime) onTime(prev - 1);
                 return prev - 1;
             })
         }, 1000);
