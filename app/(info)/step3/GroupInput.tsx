@@ -1,6 +1,6 @@
 import InputBox from "@/components/input/InputBox";
 import { UserDetails } from "@/types/user";
-import { GROUP_VALID } from "@/utils/dummyData";
+import { GROUP_VALID_CONDITION } from "@/utils/dummyData";
 import { useEffect, useState } from "react";
 
 interface PropsState{
@@ -49,7 +49,7 @@ export default function GroupInput(props: PropsState) {
             <InputBox
                 key={item.label}
                 inputInfo={item}
-                valid={GROUP_VALID[item.category]}
+                valid={GROUP_VALID_CONDITION[item.category]}
                 storedText={userDetails[item.category]}
                 onText={(newValue, selectedCategory,check) => handleChange(newValue, selectedCategory,check)}
             />
