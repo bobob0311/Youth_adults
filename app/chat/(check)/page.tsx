@@ -10,26 +10,31 @@ interface SearchParams {
 }
 
 export default async function ChatStartPage({ searchParams }: { searchParams: Promise<SearchParams> }) {
-  let isAvailable:boolean = false;
   let roomInfo;
   const { roomId, id } = await searchParams;
   try {
     
-    if (!roomId || !id) return <div>잘못된 접근입니다.</div>;
+    if (!roomId || !id) throw Error("잘못된 접근입니다|발송된 링크를 통해 접속해주세요!");
 
     roomInfo = await getRoomInfoByRoomName(roomId);
-    isAvailable = roomInfo?.allow_user_id?.includes(id) ? true : false;  
+    if (!roomInfo?.allow_user_id?.includes(id)) {
+      const error = new Error("방에 들어갈 수 있는 권한이 없습니다.| 링크를 다시 확인하고 접속해주세요!");
+        (error as any).status = 403;
+      throw error;
+    }
   
     const isVerified = await verifyPassword(roomId);
     if (isVerified) {
-      return <ChatRoom userId={ id } roomId={roomId} roomStatus={roomInfo.is_open} />
+      return <ChatRoom userId={id} roomId={roomId} roomStatus={roomInfo.is_open} />
     }
 
   } catch (error: any) {
     if (error.status === 400 || error.status === 404) {
-      return <div>생성된 Room이 없당께요??</div>
+      throw Error("생성되어있는 방이 없습니다.|발송된 링크를 통해 접속해주세요!")
+    } else if(error.status === 403){
+      throw Error(error.message)
     } else {
-      return <div>서버 오류가 발생했습니다 다시한번 시도해주세요.</div>
+      throw Error("서버 오류가 발생했습니다|발송된 링크를 통해 다시 시도해주세요!")
     }
   }
 
@@ -37,11 +42,7 @@ export default async function ChatStartPage({ searchParams }: { searchParams: Pr
 
   return (
     <BasicLayout>
-      {isAvailable ? (
-        <PasswordCheck roomId={roomId}  />
-    ) : (
-      <div>이 방에 입장할 수 없습니다.</div>
-    )}
-  </BasicLayout>
+      <PasswordCheck roomId={roomId}  />
+    </BasicLayout>
   )
 }
