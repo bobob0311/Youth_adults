@@ -1,0 +1,11 @@
+.container{
+    height: calc(100vh - 150px);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    p{
+        text-align: center;
+        font-size: 24px;
+        font-weight: 700;
+    }
+}
