@@ -1,5 +1,5 @@
 'use client'
-import Image from "next/image";
+
 import Lottie from "lottie-react"; 
 import animationData from "@/assets/done.json"; 
 import styles from "./page.module.scss";
