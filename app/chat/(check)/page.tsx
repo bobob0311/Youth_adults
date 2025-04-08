@@ -1,7 +1,8 @@
 import { getRoomInfoByRoomName } from "@/apiHandler/room";
-import ChatRoom from "./ChatRoom";
+import ChatRoom from "../ChatRoom";
 import PasswordCheck from "./PasswordCheck";
 import { verifyPassword } from "@/serverActions/verifyPassword";
+import BasicLayout from "./BasicLayout";
 
 interface SearchParams {
   id?: string;
@@ -35,12 +36,12 @@ export default async function ChatStartPage({ searchParams }: { searchParams: Pr
 
 
   return (
-    <div>
+    <BasicLayout>
       {isAvailable ? (
         <PasswordCheck roomId={roomId}  />
     ) : (
       <div>이 방에 입장할 수 없습니다.</div>
     )}
-  </div>
+  </BasicLayout>
   )
 }
