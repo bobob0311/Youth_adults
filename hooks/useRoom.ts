@@ -15,16 +15,16 @@ export function useRoom(socket: Socket | null, roomId: string | null, roomInfo: 
 
     useEffect(() => {
         if (!socket || !roomId || !roomInfo) return;
-
         socket.emit("joinRoom", roomId, socket.id);
-
-        if (roomInfo.isFirst) {
+        
+        if (roomInfoRef.current?.isFirst) {
+            roomInfoRef.current.isFirst = false;
             changeFirstIn(false, roomInfo.myGroupId);
-            socket.emit("sendFromSystem", `${roomInfo.myGroupName}님이 입장하였습니다.`, roomId);
+            socket.emit("sendBySystem", `${roomInfo.myGroupName}님이 입장하였습니다.`, roomId);
         }
 
         roomInfoRef.current = roomInfo;
-        }, [socket, roomId, roomInfo]);
+        }, [socket,roomId,roomInfo]);
 
     return roomInfoRef;
 }

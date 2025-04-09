@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { useChat } from "@/hooks/useChat";
 import { useUser } from "@/hooks/useUser";
 import { useRoom } from "@/hooks/useRoom";
@@ -16,16 +16,18 @@ export default function ChatRoom({userId, roomId,roomStatus}: {userId:string, ro
     const [isRoomOpen, setIsRoomOpen] = useState(roomStatus);
     const userData = useUser(userId || "");
     
-    const roomInfo = userData ?
-        {
-            myGroupName: userData.group_name,
-            otherGroupName: userData.matched_name,
-            myGroupId: userData.id,
-            otherGroupId: userData.matched_id,
-            isFirst: userData.is_first
-        }
-    :
-        null;
+    const roomInfo = useMemo(() => {
+        if (!userData) return null;
+        
+        return {
+        myGroupName: userData.group_name,
+        otherGroupName: userData.matched_name,
+        myGroupId: userData.id,
+        otherGroupId: userData.matched_id,
+        isFirst: userData.is_first
+        };
+        
+    }, [userData]);
         
     const { socket,messages, sendTextMessage, sendImgMessage } = useChat(roomId, userId);
     const roomInfoRef = useRoom(socket, roomId, roomInfo);

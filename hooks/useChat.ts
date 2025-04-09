@@ -37,6 +37,10 @@ export function useChat(roomId: string|null, userId: string | null) {
         newSocket.on("getPrevChatData", (chatData) => {
             setMessages((prev) => [...chatData,...prev])
         })
+
+        newSocket.on("sendBySystem", (message) => {
+            setMessages((prev) => [{msg: message, img: null, user: "system"},...prev])
+        })
         
         return ()=> {newSocket.disconnect()};
     }, [roomId]);
