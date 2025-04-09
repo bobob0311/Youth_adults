@@ -1,6 +1,6 @@
 "use client";
 
-import { uploadChat } from "@/utils/api";
+import { getChatData, uploadChat } from "@/utils/api";
 import { useEffect, useRef, useState } from "react";
 import { io, Socket } from "socket.io-client";
 
@@ -41,13 +41,39 @@ export function useChat(roomId: string|null, userId: string | null) {
         newSocket.on("sendBySystem", (message) => {
             setMessages((prev) => [{msg: message, img: null, user: "system"},...prev])
         })
+
+        newSocket.on("getDataFromStorage", async () => {
+            const messageData = await handleGetChatData(roomId);
+            if (messageData.data) {
+                setMessages((prev) =>[ ...messageData.data,...prev ]);
+            }
+        })
+
+        window.addEventListener("beforeunload", handleUnload);
         
-        return ()=> {newSocket.disconnect()};
+        return () => {
+            window.removeEventListener("beforeunload",handleUnload)
+            newSocket.disconnect();
+    };
     }, [roomId]);
 
     useEffect(() => {
         messagesRef.current = messages;
     }, [messages]);
+
+    const handleUnload = () => {
+    if (!roomId) return;
+
+        const payload = JSON.stringify({ roomName: roomId, data: messagesRef.current });
+        const blob = new Blob([payload], { type: "application/json" });
+
+        navigator.sendBeacon("/api/chats?type=blob", blob);
+    };
+
+    const handleGetChatData = async (roomId: string) => {
+        const data = await getChatData(roomId)
+        return data;
+    }
 
     const sendTextMessage = (message: string) => {
         if (socket && message.trim()) {
