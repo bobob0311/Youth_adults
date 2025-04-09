@@ -1,10 +1,14 @@
 'use client'
 
-import Lottie from "lottie-react"; 
+import dynamic from "next/dynamic";
+const Lottie = dynamic(() => import("lottie-react"), {
+  ssr: false,
+  loading: () => <div style={{ width: 600, height: 500 }} />
+});
 import animationData from "@/assets/done.json"; 
 import styles from "./page.module.scss";
 
-export const dynamic = "force-static";
+;
 
 export default function DonePage() {
     return (
