@@ -57,18 +57,18 @@ export const GROUP_INPUT_INFO: GroupInfo[] = [
         category: "summary",
         label:"한줄소개",
         inputType:"text",
-        placeholder: "ENFP, ESFJ 신입생이에요",
+        placeholder: "첫차까지 달릴 수 있는 텐션 소유자!",
         limit: 20,    
     },
 ]
 
 export const GROUP_VALID_CONDITION: Record<string, Valid> = {
     name: {
-        onInputCondition: (input: string) => checkSpecialCharacters(input) && checkNumberLength(input, 10),
+        onInputCondition: (input: string) => checkNumberLength(input, 10),
         onValidCondition: (input: string) => isEmpty(input),
     },
     summary: {
-        onInputCondition: (input: string) => checkSpecialCharacters(input) && checkNumberLength(input, 20),
+        onInputCondition: (input: string) => checkNumberLength(input, 20),
         onValidCondition: (input: string) => isEmpty(input),
     }
 };
