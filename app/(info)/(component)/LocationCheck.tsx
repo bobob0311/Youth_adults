@@ -7,15 +7,20 @@ interface PropsState{
     locationInfo: Location[];
     storedLocation: string;
     onLocationChange: (location: string) => void;
+    block: boolean
 }
 
 interface Location{
     locationName: string;
     imgUrl: string;
+    block: boolean;
 }
 
-export default function LocationCheckButton(props: PropsState) {
-    const { locationInfo, storedLocation, onLocationChange } = props;
+export default function LocationCheckButton({
+    locationInfo,
+    storedLocation,
+    onLocationChange,
+}: PropsState) {
     const [selectedLocation, setSelectedLocation] = useState<string>(storedLocation);
 
 
@@ -33,9 +38,9 @@ export default function LocationCheckButton(props: PropsState) {
         <div className={styles.locationContainer}>
             {
                 locationInfo.map((item) => (
-                    <button className={styles.imgBtn}
+                    <button className={`${styles.imgBtn} ${item.block ? styles.blocked : ''}`}
                         key={item.locationName}
-                        onClick={() => handleClick(item.locationName)}
+                        onClick={item.block? undefined :() => handleClick(item.locationName)}
                     >
                         <span className={styles.locationName}>{item.locationName}</span>
                         <Image
@@ -45,6 +50,12 @@ export default function LocationCheckButton(props: PropsState) {
                             src={item.imgUrl}
                             alt={item.locationName}
                         />
+                        {item.block &&
+                            <div className={styles.blockCover}>
+                                <span>COMMING</span>
+                                <span>SOON!</span>
+                            </div>
+                        }   
                     </button>
                 ))
             }
