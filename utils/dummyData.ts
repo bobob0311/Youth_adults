@@ -10,6 +10,7 @@ interface ListInfo{
 interface LocationInfo{
     locationName: string;
     imgUrl: string;
+    block: boolean;
 }
 
 interface GroupInfo{
@@ -33,10 +34,10 @@ interface Valid {
 }
 
 export const LOCATION_INFO: LocationInfo[] = [
-    { locationName: "강남/신논현", imgUrl: "/gangnam.png" },
-    { locationName: "홍대/합정", imgUrl: "/hongdae.png" },
-    { locationName: "이태원", imgUrl: "/itaewon.png" },
-    { locationName: "건대입구", imgUrl: "/konkuk.png" },
+    { locationName: "부평역", imgUrl: "/gangnam.png", block:false },
+    { locationName: "홍대/합정", imgUrl: "/hongdae.png",block:false },
+    { locationName: "이태원", imgUrl: "/itaewon.png",block:true },
+    { locationName: "건대입구", imgUrl: "/konkuk.png",block:true },
 ]
 
 export const LIST_INFO: ListInfo[] = [
