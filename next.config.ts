@@ -12,7 +12,7 @@ const nextConfig: NextConfig = {
     remotePatterns: [
       {
         protocol: 'https',
-        hostname: `${process.env.SUPABASE_URL_SHOHT}`,
+        hostname: 'cmmqdlqltpdygchpwbkd.supabase.co',
       },
     ],
   },

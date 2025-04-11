@@ -15,11 +15,10 @@ export function useChat(roomId: string|null, userId: string | null) {
     const [messages, setMessages] = useState<Messages[]>([]);
     const messagesRef = useRef(messages);
 
-    const serverUrl = process.env.SERVER_URL;
     useEffect(() => {
         if (!roomId) return;
 
-        const newSocket = io("http://localhost:4000");
+        const newSocket = io(process.env.NEXT_PUBLIC_SERVER_URL);
         setSocket(newSocket);
 
         newSocket.on("message", (msg, sendrId) => {
