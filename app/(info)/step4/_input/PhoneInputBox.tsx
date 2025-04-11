@@ -6,7 +6,7 @@ import Counter from "../counter";
 import { changePhoneNumber } from "../../userSlice";
 
 
-export default function phoneInputBox({setIsBtnValid,phoneInput,valid,dispatch,onPhoneNumber }) {
+export default function PhoneInputBox({setIsBtnValid,phoneInput,valid,dispatch,onPhoneNumber }) {
     const [isSend, setIsSend] = useState<boolean>(false);
     const phoneNumberRef = useRef<string>('');
     const phoneNumberValid = useRef<boolean>(false);

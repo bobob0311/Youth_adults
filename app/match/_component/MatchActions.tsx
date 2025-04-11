@@ -25,7 +25,7 @@ export default function MatchActions({ isPayment, myId }: { isPayment: boolean; 
             if (!result) {
                 return false;
             }
-        } catch (error) {
+        } catch {
             return false;
         }
         return true;

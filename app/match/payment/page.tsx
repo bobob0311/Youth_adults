@@ -30,7 +30,7 @@ function Payment() {
             } else {
                 return false
             }
-        } catch (error){
+        } catch {
             return false;
         }
         return true;

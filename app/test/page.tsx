@@ -1,6 +1,5 @@
 'use client'
 
-import { createRoom } from "@/apiHandler/room"
 import matching from "@/utils/matching"
 import { useEffect } from "react"
 
