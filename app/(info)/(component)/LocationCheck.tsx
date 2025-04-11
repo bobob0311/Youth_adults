@@ -7,7 +7,6 @@ interface PropsState{
     locationInfo: Location[];
     storedLocation: string;
     onLocationChange: (location: string) => void;
-    block: boolean
 }
 
 interface Location{
