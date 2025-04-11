@@ -56,7 +56,7 @@ export default function MatchActions({ isPayment, myId }: { isPayment: boolean; 
             </div>
             {isLoading && <Modal><LoadingSpinner/> </Modal>}
             {failModal && <Modal><div>다시 시도해주세요..</div></Modal>}
-            {modal && <MatchGiveUpModal onModal={() => setModal((prev) => !prev)}/>}
+            {modal && <MatchGiveUpModal id={myId} onModal={() => setModal((prev) => !prev)}/>}
         </>
     );
 }

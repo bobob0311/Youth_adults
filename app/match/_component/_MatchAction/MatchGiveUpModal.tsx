@@ -3,23 +3,31 @@
 import { useRouter } from 'next/navigation';
 import ChooseMatchingBox from '../chooseMatchingBox';
 import Modal from "../../../../components/Modal/Modal"; 
+import { deleteUser } from '@/apiHandler/user';
 
 interface PropsState{
   onModal: () => void;
+  id: string;
 }
 
 export default function MatchGiveUpModal(props:PropsState) {
-  const { onModal } = props;
+  const { onModal,id } = props;
   const router = useRouter();
   const text = "매칭을 정말 포기하시겠어요?";
   
-  const handleFindAnother = () => {
+  const handleFindAnother = async () => {
     router.push("/match/researching")
   }
 
-  const handleGiveUp = () => {
-    router.push("/match/fail");
-    // 매칭 포기 로직
+  const handleGiveUp = async () => {
+    try {
+      await deleteUser(id);  
+      router.push("/match/cancel");
+    } catch(err) {
+      console.log(err);
+    }
+    
+    
   }
 
   const btnInfo = {
