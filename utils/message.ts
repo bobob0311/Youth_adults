@@ -21,7 +21,7 @@ export function makeEnterMatchingRoomMessage(info) {
     message:`[청춘상회]\n`+
     `매칭을 성공했어요! 지금 즉시 매칭룸에 입장해주세요!\n\n` +
     `10분 내 매칭룸에 입장하지 않으면 매칭이 자동 취소됩니다.\n\n`+
-    `매칭룸 입장:\n${url}${userId}\n`+
+    `매칭룸 입장:\n${url}${userId}`+
     `비밀번호:[${password}]`,
     message_type : "LMS",
     }
