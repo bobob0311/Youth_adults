@@ -14,7 +14,6 @@ import { useRouter } from "next/navigation";
 
 export default function ChatRoom({userId, roomId,roomStatus}: {userId:string, roomId: string, roomStatus:boolean}) {
     const [rematch, setRematch] = useState(false);
-    const [isRoomOpen, setIsRoomOpen] = useState(roomStatus);
     const userData = useUser(userId || "");
     const router = useRouter();
     
@@ -48,7 +47,7 @@ export default function ChatRoom({userId, roomId,roomStatus}: {userId:string, ro
             <div className={styles.chatContainer}>
                 <MessageContainer messages={messages} roomInfo={roomInfoRef.current} />
                 {
-                    isRoomOpen ?
+                    roomStatus ?
                         <InputBox
                             onRematch={() => setRematch(prev => !prev)}
                             rematch={rematch}
