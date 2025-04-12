@@ -2,7 +2,7 @@
 
 import NavigationButton from "@/components/button/NavigationButton";
 import styles from "./page.module.scss"
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { insertUserData } from "@/utils/api";
 import { RootState } from "@/redux/store";
 import { changeUserFormat } from "@/utils/dataFomat";
@@ -23,18 +23,22 @@ export default function Page() {
         setLoading(true);
         try {
             const userData = changeUserFormat(userInfo);
+
             await insertUserData(userData);
-            await matching();
+
+            const result = await matching();
+
+            if (result) {
+                console.log("✅ matching 완료");
+            }
         } catch (error) {
-            console.error("Error during the process:", error);
+            console.error("❌ 전체 흐름 중 에러 발생:", error);
             return false;
         }
+
         return true;
     }
 
-    useEffect(() => {
-        console.log(loading)
-    })
 
     const handleFail = () => {
         setLoading(false);
