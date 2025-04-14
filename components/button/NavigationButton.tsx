@@ -16,6 +16,9 @@ export default function NavigationButton(props: PropsState) {
     const router = useRouter();
 
     const handleClick = async () => {
+        if (!isValid) return;
+
+
         if (!onAction) {
             router.push(url);
             return;
