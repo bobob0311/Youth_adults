@@ -13,3 +13,23 @@
         cursor: pointer;
     }
 }
+
+.matched{
+    text-align: center;
+    margin-bottom: 20px;
+    background-color: #6922C5;
+    padding: 10px;
+    border-radius: 30px;
+}
+
+.text{
+    font-size: 16px;
+    color: var(--text-button);
+    margin-bottom: 8px;
+    font-weight: 700;
+}
+
+.subText{
+    font-size: 12px;
+    color:var(--purple-200)
+}  

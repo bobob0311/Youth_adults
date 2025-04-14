@@ -7,11 +7,12 @@ export default async function MatchContent({ id }: { id: string }) {
         const matchedInfo = await getUserDataById(id);
         const myInfo = await getUserDataById(matchedInfo.matched_id);
         const isPayment = myInfo.payment;
+        const isEnter = myInfo.is_enter_room;
 
         return (
             <>
                 <ImgContainer matchedUserInfo={matchedInfo} />
-                <MatchActions isPayment={isPayment} myId={myInfo.id} />
+                <MatchActions isEnter={isEnter} isPayment={isPayment} myId={myInfo.id} />
             </>
         );
     } catch  {

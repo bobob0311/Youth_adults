@@ -9,7 +9,7 @@ import { updateUserEnterRoomStatus } from "@/apiHandler/match";
 import LoadingSpinner from "@/components/loading/LoadingSpinner";
 import enterRoom from "@/utils/enterRoom";
 
-export default function MatchActions({ isPayment, myId }: { isPayment: boolean; myId: string; }) {
+export default function MatchActions({ isPayment, myId, isEnter }: { isPayment: boolean; myId: string; isEnter:boolean}) {
     const [modal, setModal] = useState(false);
     const [failModal, setFailModal] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
@@ -41,12 +41,22 @@ export default function MatchActions({ isPayment, myId }: { isPayment: boolean; 
 
     return (
         <>
-            {isPayment ?             
-                <NavigationButton onFail={handleFailByPaymentTrue} onAction={handleEnterRoomByPaymentTrue} url={`/match/done`} isValid={true} title="매칭룸 입장하기" /> 
-                :
-                <NavigationButton url={`/match/payment?id=${myId}`} subtitle="결제금액: 2,200원" isValid={true} title="결제 후 매칭룸 입장하기" />
+            {isEnter ? (
+                <div className={styles.matched}>
+                    <p className={styles.text}>현재 매칭된 상태입니다.</p>
+                    <p className={styles.subText}> 아래 매칭 포기하기 버튼을 통해 취소가 가능합니다.</p>    
+                </div>
+            ) : (
+                
+                <>
+                {isPayment ?             
+                    <NavigationButton onFail={handleFailByPaymentTrue} onAction={handleEnterRoomByPaymentTrue} url={`/match/done`} isValid={true} title="매칭룸 입장하기" /> 
+                    :
+                    <NavigationButton url={`/match/payment?id=${myId}`} subtitle="결제금액: 2,200원" isValid={true} title="결제 후 매칭룸 입장하기" />
+                }
+                </>
+            )
             }
-
             <div className={styles.btnContainer}>
                 <button className={styles.linkWrapper}
                     onClick={()=> setModal(true)}
