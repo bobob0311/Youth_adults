@@ -10,10 +10,11 @@ interface Messages{
     img: string | null;
 }
 
-export function useChat(roomId: string|null, userId: string | null) {
+export function useChat(roomId: string|null, userId: string | null, roomStatus: boolean|null) {
     const [socket, setSocket] = useState<Socket | null>(null)
     const [messages, setMessages] = useState<Messages[]>([]);
     const [isLoading, setIsLoading] = useState<boolean>(true);
+    const [isOpen, setIsOpen] = useState<boolean|null>(roomStatus);
     const messagesRef = useRef(messages);
 
     useEffect(() => {
@@ -40,7 +41,7 @@ export function useChat(roomId: string|null, userId: string | null) {
         })
 
         newSocket.on("sendBySystem", (message) => {
-            setMessages((prev) => [{msg: message, img: null, user: "system"},...prev])
+            setMessages((prev) => [...prev,{msg: message, img: null, user: "system"}])
         })
 
         newSocket.on("getDataFromStorage", async () => {
@@ -49,6 +50,11 @@ export function useChat(roomId: string|null, userId: string | null) {
                 setMessages((prev) =>[ ...messageData.data,...prev ]);
             }
             setIsLoading(false);
+        })
+
+        newSocket.on("alertLeaveRoom", (name) => {
+            setMessages((prev) => [...prev,{msg: `${name}님이 방을 나가셨습니다.`, img: null, user: "system"}])
+            setIsOpen(false);
         })
 
         window.addEventListener("beforeunload", handleUnload);
@@ -96,5 +102,11 @@ export function useChat(roomId: string|null, userId: string | null) {
         newSocket.emit("uploadComplete", roomId, userId, messagesRef.current);
     };
 
-    return {socket ,messages, sendTextMessage, sendImgMessage,isLoading}
+    const alertLeave = (myName: string) => {
+        if(socket){
+            socket.emit("alertLeaveRoom",roomId,myName);
+        }
+    }
+
+    return {isOpen, setIsOpen,socket ,messages, sendTextMessage, sendImgMessage,isLoading, alertLeave}
 }

@@ -12,9 +12,11 @@ import RematchContainer from "./_component/_inputBox/RematchContainer";
 import { leaveRoom } from "@/apiHandler/room";
 import { useRouter } from "next/navigation";
 import LoadingModal from "@/components/Modal/LoadingModal";
+import { deleteUser } from "@/apiHandler/user";
+import matching from "@/utils/matching";
 
 export default function ChatRoom({userId, roomId,roomStatus}: {userId:string, roomId: string, roomStatus:boolean}) {
-    const [rematch, setRematch] = useState(false);
+    const [rematch, setRematch] = useState<boolean>(false);
     const userData = useUser(userId || "");
     const router = useRouter();
     
@@ -31,16 +33,25 @@ export default function ChatRoom({userId, roomId,roomStatus}: {userId:string, ro
 
     }, [userData]);
         
-    const { socket,messages, sendTextMessage, sendImgMessage, isLoading } = useChat(roomId, userId);
+    const { socket,messages, sendTextMessage, sendImgMessage, isLoading, alertLeave,isOpen } 
+    = useChat(roomId, userId,roomStatus);
     const roomInfoRef = useRoom(socket, roomId, roomInfo);
 
     const handleCheckRematch = () => {
+        console.log(roomInfoRef.current?.myGroupName)
         setRematch(true);
     }
 
-    const handleLeaveRoom = async () => {
-        leaveRoom(roomId, userId);
-        router.push("/chat/done");
+    const handleCancelMatch = async () => {
+        await deleteUser(userId);
+        router.push('/match/cancel');
+    }
+
+    const handleLeaveRoom = async (myName) => {
+        // await leaveRoom(roomId, userId);
+        // await matching();
+        alertLeave(myName);
+        // router.push("/chat/done");
     }
     return (
         <WrapperLayout onRematchClick={handleCheckRematch}>
@@ -52,13 +63,13 @@ export default function ChatRoom({userId, roomId,roomStatus}: {userId:string, ro
                     <>
                         <MessageContainer messages={messages} roomInfo={roomInfoRef.current} />
                     
-                        {roomStatus ?(
+                        {isOpen ?(
                             <InputBox
-                                onRematch={() => setRematch(prev => !prev)}
+                                onRematch={() => { setRematch(prev => !prev);  }}
                                 rematch={rematch}
                                 onSend={(message) => sendTextMessage(message)}
                                 onImgSend={(imgFile) => sendImgMessage(imgFile)}
-                                onLeaveRoom={() => handleLeaveRoom()}
+                                onLeaveRoom={() => handleLeaveRoom(roomInfoRef.current?.myGroupName)}
                              />
                         ):(
                             
@@ -66,8 +77,8 @@ export default function ChatRoom({userId, roomId,roomStatus}: {userId:string, ro
                                 <RematchContainer
                                     title="상대가 매칭룸을 나갔어요."
                                     subTitle="다른 매칭 찾기를 선택하시면 우선적으로 매칭을 찾아드려요"
-                                    leftBtn={{ name: "매칭 취소", fn: () => { console.log("아직 안했습니다.") } }}
-                                    rightBtn={{ name: "다른 매칭 찾기", fn: () => { handleLeaveRoom() } }}
+                                    leftBtn={{ name: "매칭 취소", fn: () => { handleCancelMatch() } }}
+                                    rightBtn={{ name: "다른 매칭 찾기", fn: () => { handleLeaveRoom(roomInfoRef.current?.myGroupName) } }}
                                 />
                             </div>
                             
