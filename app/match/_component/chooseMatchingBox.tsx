@@ -1,6 +1,7 @@
 'use client'
 import Image from "next/image";
 import styles from "./chooseMatchingBox.module.scss";
+import LoadingSpinner from "@/components/loading/LoadingSpinner";
 
 interface PropsState{
     onClose?: () => void;
@@ -11,11 +12,12 @@ interface PropsState{
         secondBtnName: string;
         secondBtnFn: () => void;
     }
+    loading?: boolean;
 }
 
 
 export default function ChooseMatchingBox(props: PropsState) {
-    const { onClose, btnInfo,text } = props;
+    const { onClose, btnInfo,text, loading } = props;
     const { firstBtnName, firstBtnFn, secondBtnName, secondBtnFn, } = btnInfo;
     
     return (
@@ -28,11 +30,15 @@ export default function ChooseMatchingBox(props: PropsState) {
                     :
                     null
                 }
-                
+                {loading ?
+                    <div className={styles.loadingContainer}>
+                        <LoadingSpinner />
+                    </div>    
+                    : 
                 <div className={styles.imgContainer}>
                     <Image width={120} height={120} src="/modalImg.png" alt="모달 사진"/>
                 </div>
-                
+                }
                 <h3 className={styles.title}>{text}</h3>
                 
                 <div className={styles.pBox}>
