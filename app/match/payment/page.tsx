@@ -6,8 +6,8 @@ import NavigationButton from "@/components/button/NavigationButton";
 import { updateUserEnterRoomStatus } from "@/apiHandler/match";
 import {useSearchParams } from "next/navigation"
 import { Suspense, useState } from "react";
-import LoadingSpinner from "@/components/loading/LoadingSpinner";
 import enterRoom from "@/utils/enterRoom";
+import LoadingModal from "@/components/Modal/LoadingModal";
 
 function Payment() {
     const params = useSearchParams();
@@ -53,7 +53,7 @@ function Payment() {
             <div>0원 입니다</div>
         </div>
         <NavigationButton onFail={handleFailByPaymentFalse} onAction={handleEnterRoomByPaymentFalse} url="/match/done" title="결제하기" subtitle="결제금액 0원" isValid={true} />
-            {isLoading && <Modal><LoadingSpinner /></Modal>}
+            {isLoading && <LoadingModal>매칭룸에 입장중입니다.</LoadingModal>}
             {isModal && <Modal><div>다시 시도해주세요..</div></Modal>}
         
         </>
