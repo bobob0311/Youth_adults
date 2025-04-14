@@ -12,7 +12,6 @@ interface RoomInfo{
 
 export function useRoom(socket: Socket | null, roomId: string | null, roomInfo: RoomInfo | null) {
     const roomInfoRef = useRef(roomInfo);
-    console.log("이건 roomInfo",roomInfo);
     useEffect(() => {
         if (!roomInfoRef.current) {
             roomInfoRef.current = roomInfo;    

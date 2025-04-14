@@ -48,10 +48,10 @@ export default function ChatRoom({userId, roomId,roomStatus}: {userId:string, ro
     }
 
     const handleLeaveRoom = async (myName) => {
-        // await leaveRoom(roomId, userId);
-        // await matching();
+        await leaveRoom(roomId, userId);
+        await matching();
         alertLeave(myName);
-        // router.push("/chat/done");
+        router.push("/chat/done");
     }
     return (
         <WrapperLayout onRematchClick={handleCheckRematch}>
