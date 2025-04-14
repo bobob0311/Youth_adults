@@ -13,6 +13,7 @@ interface Messages{
 export function useChat(roomId: string|null, userId: string | null) {
     const [socket, setSocket] = useState<Socket | null>(null)
     const [messages, setMessages] = useState<Messages[]>([]);
+    const [isLoading, setIsLoading] = useState<boolean>(true);
     const messagesRef = useRef(messages);
 
     useEffect(() => {
@@ -34,7 +35,8 @@ export function useChat(roomId: string|null, userId: string | null) {
         });
 
         newSocket.on("getPrevChatData", (chatData) => {
-            setMessages((prev) => [...chatData,...prev])
+            setMessages((prev) => [...chatData, ...prev])
+            setIsLoading(false);
         })
 
         newSocket.on("sendBySystem", (message) => {
@@ -46,6 +48,7 @@ export function useChat(roomId: string|null, userId: string | null) {
             if (messageData.data) {
                 setMessages((prev) =>[ ...messageData.data,...prev ]);
             }
+            setIsLoading(false);
         })
 
         window.addEventListener("beforeunload", handleUnload);
@@ -61,7 +64,7 @@ export function useChat(roomId: string|null, userId: string | null) {
     }, [messages]);
 
     const handleUnload = () => {
-    if (!roomId) return;
+    if (!roomId || messagesRef.current.length == 0) return;
 
         const payload = JSON.stringify({ roomName: roomId, data: messagesRef.current });
         const blob = new Blob([payload], { type: "application/json" });
@@ -93,5 +96,5 @@ export function useChat(roomId: string|null, userId: string | null) {
         newSocket.emit("uploadComplete", roomId, userId, messagesRef.current);
     };
 
-    return {socket ,messages, sendTextMessage, sendImgMessage}
+    return {socket ,messages, sendTextMessage, sendImgMessage,isLoading}
 }
