@@ -12,18 +12,20 @@ interface RoomInfo{
 
 export function useRoom(socket: Socket | null, roomId: string | null, roomInfo: RoomInfo | null) {
     const roomInfoRef = useRef(roomInfo);
-
+    console.log("이건 roomInfo",roomInfo);
     useEffect(() => {
+        if (!roomInfoRef.current) {
+            roomInfoRef.current = roomInfo;    
+        }
+
         if (!socket || !roomId || !roomInfo) return;
         socket.emit("joinRoom", roomId, socket.id);
-        
         if (roomInfoRef.current?.isFirst) {
             roomInfoRef.current.isFirst = false;
             changeFirstIn(false, roomInfo.myGroupId);
             socket.emit("sendBySystem", `${roomInfo.myGroupName}님이 입장하였습니다.`, roomId);
         }
-
-        roomInfoRef.current = roomInfo;
+         
         }, [socket,roomId,roomInfo]);
 
     return roomInfoRef;
