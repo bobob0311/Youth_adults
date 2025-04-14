@@ -16,6 +16,7 @@ function Payment() {
     const [isModal, setIsModal] = useState<boolean>(false);
 
     const handleEnterRoomByPaymentFalse = async () => {
+        setIsLoading(true);
         try {
             if (myId) {
                 const res = await updateUserEnterRoomStatus(true, myId, false);
