@@ -8,6 +8,8 @@ interface Messages{
     user: string;
     msg: string | null;
     img: string | null;
+    status: "pending" | "sent" | "error";
+    tempId?: string;
 }
 
 export function useChat(roomId: string|null, userId: string | null, roomStatus: boolean|null) {
@@ -24,11 +26,11 @@ export function useChat(roomId: string|null, userId: string | null, roomStatus: 
         setSocket(newSocket);
 
         newSocket.on("message", (msg, sendrId) => {
-            setMessages((prev) => [...prev, { msg, img: null, user: sendrId }]);
+            setMessages((prev) => [...prev, { msg, img: null, user: sendrId, status: "sent" }]);
         })
 
         newSocket.on("img", (imgFile, senderId) => {
-            setMessages((prev) => [...prev, { msg: null, img: imgFile, user: senderId }]);
+            setMessages((prev) => [...prev, { msg: null, img: imgFile, user: senderId, status: "sent" }]);
         });
 
         newSocket.on("uploadChatData", () => {
@@ -41,7 +43,7 @@ export function useChat(roomId: string|null, userId: string | null, roomStatus: 
         })
 
         newSocket.on("sendBySystem", (message) => {
-            setMessages((prev) => [...prev,{msg: message, img: null, user: "system"}])
+            setMessages((prev) => [...prev,{msg: message, img: null, user: "system", status: "sent",tempId : "system"}])
         })
 
         newSocket.on("getDataFromStorage", async () => {
@@ -53,7 +55,7 @@ export function useChat(roomId: string|null, userId: string | null, roomStatus: 
         })
 
         newSocket.on("alertLeaveRoom", (name) => {
-            setMessages((prev) => [...prev,{msg: `${name}님이 방을 나가셨습니다.`, img: null, user: "system"}])
+            setMessages((prev) => [...prev,{msg: `${name}님이 방을 나가셨습니다.`, img: null, user: "system", status: "sent"}])
             setIsOpen(false);
         })
 
@@ -84,9 +86,34 @@ export function useChat(roomId: string|null, userId: string | null, roomStatus: 
     }
 
     const sendTextMessage = (message: string) => {
-        if (socket && message.trim()) {
-            socket.emit("message", message, userId, roomId);
-        }
+        if (!socket || !message.trim() || !userId) return;
+        const tempId = crypto.randomUUID();
+
+        const optimisticMessage: Messages = {
+            user: userId,
+            msg: message,
+            img: null,
+            status: "pending",
+            tempId,
+        } 
+
+        setMessages(prev => [...prev, optimisticMessage]);
+
+        
+        socket.emit("message", message, userId, tempId, (ack: { success: boolean ,tempId:string}) => {
+            setMessages((prev) => {
+                const index = prev.findIndex((m) => m.tempId === ack.tempId);
+                if (index === -1) return prev;
+
+                const updated = [...prev];
+                updated[index] = {
+                    ...updated[index],
+                    status: ack.success ? "sent" : "error",
+                };
+                return updated;
+            });
+        });
+        
     };
 
     const sendImgMessage = (imgFile: string) => {

@@ -2,6 +2,7 @@
 import { useEffect, useRef } from "react";
 import styles from "./MessageContainer.module.scss";
 import Image from "next/image";
+import LoadingSpinner from "@/components/loading/LoadingSpinner";
 
 interface PropsState {
     messages: Messages[]
@@ -11,6 +12,7 @@ interface Messages{
     user : string,
     msg: string | null,
     img: string | null,
+    status: string;
 }
 
 interface RoomInfo{
@@ -70,7 +72,22 @@ export default function MessageContainer(props: PropsState) {
                 containerRef.current.scrollTop = containerRef.current.scrollHeight;    
             }
         }
-    },[messages])
+        console.log(messages);
+    }, [messages])
+    
+    const renderStatus = (status: string) => {
+        console.log(status);
+        switch (status) {
+            case "pending":
+                return <LoadingSpinner/>;
+            case "sent":
+                return null;
+            case "error":
+                return <span className={styles.failedStatus}>전송 실패</span>;
+            default:
+                return null;
+        }
+    };
 
     return (
         <div id="messageContainer" ref={containerRef} className={styles.container}>
@@ -93,10 +110,12 @@ export default function MessageContainer(props: PropsState) {
                 return (
                     <div className={styles.messageBox} key={`message-${item.msg}-${idx}`}>
                         {isDifferentUser && <span className={styles[userType+"name"]}>{userName}</span>}
+                        {renderStatus(item.status)}
                         {item.img ? 
                             <Image width={200} height={200} className={styles[`${userType}Img`]} src={item.img} alt="사진" /> 
                             : 
                             <p className={styles[userType]}>{item.msg}</p>}
+                        
                     </div>
                 );
             })}
