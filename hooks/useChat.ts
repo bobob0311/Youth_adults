@@ -100,7 +100,7 @@ export function useChat(roomId: string|null, userId: string | null, roomStatus: 
         setMessages(prev => [...prev, optimisticMessage]);
 
         
-        socket.emit("message", message, userId, tempId, (ack: { success: boolean ,tempId:string}) => {
+        socket.emit("message", message, userId, roomId, tempId, (ack: { success: boolean ,tempId:string}) => {
             setMessages((prev) => {
                 const index = prev.findIndex((m) => m.tempId === ack.tempId);
                 if (index === -1) return prev;

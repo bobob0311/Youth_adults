@@ -2,7 +2,6 @@
 import { useEffect, useRef } from "react";
 import styles from "./MessageContainer.module.scss";
 import Image from "next/image";
-import LoadingSpinner from "@/components/loading/LoadingSpinner";
 
 interface PropsState {
     messages: Messages[]
@@ -76,10 +75,9 @@ export default function MessageContainer(props: PropsState) {
     }, [messages])
     
     const renderStatus = (status: string) => {
-        console.log(status);
         switch (status) {
             case "pending":
-                return <LoadingSpinner/>;
+                return <span className={styles.spinner}/>;
             case "sent":
                 return null;
             case "error":
@@ -110,12 +108,13 @@ export default function MessageContainer(props: PropsState) {
                 return (
                     <div className={styles.messageBox} key={`message-${item.msg}-${idx}`}>
                         {isDifferentUser && <span className={styles[userType+"name"]}>{userName}</span>}
-                        {renderStatus(item.status)}
-                        {item.img ? 
-                            <Image width={200} height={200} className={styles[`${userType}Img`]} src={item.img} alt="사진" /> 
-                            : 
-                            <p className={styles[userType]}>{item.msg}</p>}
-                        
+                        <span className={styles[userType]}>
+                            {renderStatus(item.status)}
+                            {item.img ? 
+                                <Image width={200} height={200} className={styles[`${userType}Img`]} src={item.img} alt="사진" /> 
+                                : 
+                                <p>{item.msg}</p>}
+                        </span>
                     </div>
                 );
             })}
