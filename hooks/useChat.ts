@@ -1,6 +1,6 @@
 "use client";
 
-import { getChatData, uploadChat } from "@/utils/api";
+import { getChatData, uploadChat, uploadImg } from "@/utils/api";
 import { useEffect, useRef, useState } from "react";
 import { io, Socket } from "socket.io-client";
 
@@ -102,7 +102,7 @@ export function useChat(roomId: string|null, userId: string | null, roomStatus: 
         
         socket.emit("message", message, userId, roomId, tempId, (ack: { success: boolean ,tempId:string}) => {
             setMessages((prev) => {
-                const index = prev.findIndex((m) => m.tempId === ack.tempId);
+                const index = prev.findLastIndex((m) => m.tempId === ack.tempId);
                 if (index === -1) return prev;
 
                 const updated = [...prev];
@@ -113,12 +113,58 @@ export function useChat(roomId: string|null, userId: string | null, roomStatus: 
                 return updated;
             });
         });
-        
     };
 
-    const sendImgMessage = (imgFile: string) => {
-        if (socket) {
-            socket.emit("img", imgFile, userId, roomId);
+    const sendImgMessage = async (previewUrl, src) => {
+        if (!socket || !userId) return;
+        const tempId = crypto.randomUUID();
+
+        const optimisticMessage: Messages = {
+            user: userId,
+            msg: null,
+            img: previewUrl,
+            status: "pending",
+            tempId,
+        } 
+
+        setMessages(prev => [...prev, optimisticMessage]);
+        
+        try {
+            const formData = new FormData();
+            formData.append("file", src);
+            formData.append("fileName", src.name);
+
+            const res = await uploadImg(formData);
+            const uploadedUrl = res.data.data.publicUrl;
+
+            socket.emit("img", uploadedUrl, userId, roomId, tempId, (ack: { success: boolean, tempId: string }) => {
+
+                setMessages((prev) => {
+                    const index = prev.findLastIndex((m) => m.tempId === ack.tempId);
+                    if (index === -1) return prev;
+
+                    const updated = [...prev];
+                    updated[index] = {
+                        ...updated[index],
+                        img: uploadedUrl,
+                        status: ack.success ? "sent" : "error",
+                    };
+                    return updated;
+                });
+            });
+
+        } catch (err) {
+            setMessages((prev) => {
+                const index = prev.findLastIndex((m) => m.tempId === tempId);
+                if (index === -1) return prev;
+
+                const updated = [...prev];
+                updated[index] = {
+                    ...updated[index],
+                    status: "error",
+                };
+                return updated;
+            });
         }
     };
 

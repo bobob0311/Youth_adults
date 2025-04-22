@@ -9,7 +9,7 @@ import Container from "./_inputBox/Container";
 interface PropsState{
     rematch: boolean;
     onSend: (message: string) => void,
-    onImgSend: (imgFile: string) => void,
+    onImgSend: (imgFile: string,src : File) => void,
     onRematch: () => void;
     onLeaveRoom: () => void;
 }
@@ -50,8 +50,8 @@ export default function InputBox(props: PropsState) {
         content = 
             <ImgContainer
                 src={image}
-                onSendImg={(publicUrl) => {
-                    onImgSend(publicUrl)
+                onSendImg={(previewUrl, src) => {
+                    onImgSend(previewUrl,src)
                     setImage(null)
                     setContentType('text')
                 }}

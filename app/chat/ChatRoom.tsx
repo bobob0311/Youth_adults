@@ -68,7 +68,7 @@ export default function ChatRoom({userId, roomId,roomStatus}: {userId:string, ro
                                 onRematch={() => { setRematch(prev => !prev);  }}
                                 rematch={rematch}
                                 onSend={(message) => sendTextMessage(message)}
-                                onImgSend={(imgFile) => sendImgMessage(imgFile)}
+                                onImgSend={(previewURl, src) => sendImgMessage(previewURl, src)}
                                 onLeaveRoom={() => handleLeaveRoom(roomInfoRef.current?.myGroupName)}
                              />
                         ):(
