@@ -1,5 +1,4 @@
 @mixin talkBox($color) {
-    max-width: 80%;
     padding-inline: 13px;
     padding-top: 10px;
     padding-bottom: 10px;
@@ -37,8 +36,12 @@
     font-size:12px;
 }
 .another{
-    @include talkBox(#2B2B2B);
+    p{
+        @include talkBox(#2B2B2B);
+    }
+    
     align-self: flex-start;
+    max-width: 80%;
 }
 
 .mename{
@@ -48,7 +51,10 @@
     font-size: 12px;
 }
 .me{
-    @include talkBox(var(--purple-500));
+    max-width: 80%;
+    p{
+        @include talkBox(var(--purple-500));
+    }
     align-self: flex-end;
     position : relative;
 }
@@ -65,12 +71,16 @@
     align-self: flex-end;
     max-width: 220px;
     max-height: 250px;
+    background-color: white;
+    border-radius: 5px;
 }
 
 .anotherImg{
     align-self: flex-start;
     max-width: 220px;
     max-height: 250px;
+    background-color: white;
+    border-radius: 5px;
 }
 
 .messageBox{
