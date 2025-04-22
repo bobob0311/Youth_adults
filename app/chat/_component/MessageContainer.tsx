@@ -2,16 +2,21 @@
 import { useEffect, useRef } from "react";
 import styles from "./MessageContainer.module.scss";
 import Image from "next/image";
+import RenderStatus from "./_inputBox/RenderState";
 
 interface PropsState {
     messages: Messages[]
     roomInfo: RoomInfo | null;
+    onResend: (messages: Messages) => void;
+    onDelete: (tempId: string |undefined) => void;
 }
 interface Messages{
     user : string,
     msg: string | null,
     img: string | null,
-    status: string;
+    status: string,
+    tempId?: string,
+    src?: string,
 }
 
 interface RoomInfo{
@@ -22,7 +27,7 @@ interface RoomInfo{
 }
 
 export default function MessageContainer(props: PropsState) {
-    const { messages, roomInfo } = props;
+    const { messages, roomInfo,onResend,onDelete } = props;
     const containerRef = useRef<HTMLDivElement>(null);
     const containerHeightRef = useRef<number|null>(null);
 
@@ -73,19 +78,6 @@ export default function MessageContainer(props: PropsState) {
         }
         console.log(messages);
     }, [messages])
-    
-    const renderStatus = (status: string) => {
-        switch (status) {
-            case "pending":
-                return <span className={styles.spinner}/>;
-            case "sent":
-                return null;
-            case "error":
-                return <span className={styles.failedStatus}>전송 실패</span>;
-            default:
-                return null;
-        }
-    };
 
     return (
         <div id="messageContainer" ref={containerRef} className={styles.container}>
@@ -109,7 +101,7 @@ export default function MessageContainer(props: PropsState) {
                     <div className={styles.messageBox} key={`message-${item.msg}-${idx}`}>
                         {isDifferentUser && <span className={styles[userType+"name"]}>{userName}</span>}
                         <span className={styles[userType]}>
-                            {renderStatus(item.status)}
+                            <RenderStatus status={item.status} onResendMessage ={() => onResend(item) } onDeleteMessage = {() => onDelete(item?.tempId) } />
                             {item.img ? 
                                 <Image width={200} height={200} className={styles[`${userType}Img`]} src={item.img} alt="사진" /> 
                                 : 

@@ -10,6 +10,7 @@ interface Messages{
     img: string | null;
     status: "pending" | "sent" | "error";
     tempId?: string;
+    src?: string;
 }
 
 export function useChat(roomId: string|null, userId: string | null, roomStatus: boolean|null) {
@@ -125,6 +126,7 @@ export function useChat(roomId: string|null, userId: string | null, roomStatus: 
             img: previewUrl,
             status: "pending",
             tempId,
+            src: src,
         } 
 
         setMessages(prev => [...prev, optimisticMessage]);
@@ -181,5 +183,19 @@ export function useChat(roomId: string|null, userId: string | null, roomStatus: 
         }
     }
 
-    return {isOpen, setIsOpen,socket ,messages, sendTextMessage, sendImgMessage,isLoading, alertLeave}
+    const handleDeleteMessage = (tempId: string | undefined) => {
+        if (!tempId) return;
+        setMessages(prev => prev.filter(m => m.tempId !== tempId));
+    }
+
+    const handleResend = (message) => {
+        handleDeleteMessage(message.tempId);
+        if (message.msg) {
+            sendTextMessage(message.msg);
+        } else {
+            sendImgMessage(message.img, message.src);
+        }
+    }
+
+    return {isOpen, setIsOpen,socket ,messages, sendTextMessage, sendImgMessage,isLoading, alertLeave,handleDeleteMessage,handleResend}
 }
