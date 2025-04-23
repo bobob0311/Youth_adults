@@ -3,6 +3,8 @@ import { useEffect, useRef } from "react";
 import styles from "./MessageContainer.module.scss";
 import Image from "next/image";
 import RenderStatus from "./_inputBox/RenderState";
+import Toast from "./messageToast";
+import { createRoot } from "react-dom/client";
 
 interface PropsState {
     messages: Messages[]
@@ -29,7 +31,8 @@ interface RoomInfo{
 export default function MessageContainer(props: PropsState) {
     const { messages, roomInfo,onResend,onDelete } = props;
     const containerRef = useRef<HTMLDivElement>(null);
-    const containerHeightRef = useRef<number|null>(null);
+    const containerHeightRef = useRef<number | null>(null);
+    
 
     let prevUser = "";
     
@@ -43,7 +46,7 @@ export default function MessageContainer(props: PropsState) {
 
             const resizeObserver = new ResizeObserver(() => {
                 if (containerHeightRef.current !== null) {
-                    console.log(Math.abs(container.scrollTop - (container.scrollHeight - container.clientHeight)));
+
                     if (Math.abs(container.scrollTop - (container.scrollHeight - container.clientHeight)) > 1) {
                         const diff = containerHeightRef.current - container.clientHeight;  
                         container.scrollTop += diff;
@@ -60,56 +63,94 @@ export default function MessageContainer(props: PropsState) {
 
     useEffect(() => {
         const now = containerRef.current;
-        if (now) {
-            if (now.scrollTop +100 > now.scrollHeight - now.clientHeight) {
+        if (!now) return;
+        
+        const isScrolledToBottom = now.scrollTop + 100 > now.scrollHeight - now.clientHeight;
+        
+        const lastMessage = messages[messages.length - 1];
+        const isFromMe = lastMessage?.user === roomInfo?.myGroupId;
+
+        // 밑에 있을 때 밑으로 고정
+        if (isScrolledToBottom) {
+            now.scrollTop = now.scrollHeight;
+        } else {
+            // 내가 보내면 밑으로 내려가기
+            if (isFromMe) {
                 now.scrollTop = now.scrollHeight;
+
+            // 상대가 보내면 토스트
             } else {
-                // 만약 위에를 보고 있을 때의 로직을 생성해야함.
-                // 지금은 그냥 위로 계속 보고있음
-                // 밑에 toast가 제일 괜찮은듯?
+                if (lastMessage.msg) {
+                    showToast(lastMessage.msg);
+                } else {
+                    showToast("새로운 사진이 도착했습니다.");
+                }
+                    
             }
         }
-        // 내가 보낼경우 맨밑으로 스크롤 이동
-        // 근데 만약 위로 쭉올려서 보느라고 messages가 변하면...? true false로 조절하자 ㅇㅇㅇㅇㅇ
-        if (messages.length > 0 && messages[messages.length - 1].user == roomInfo?.myGroupId) {
-            if (containerRef.current) {
-                containerRef.current.scrollTop = containerRef.current.scrollHeight;    
-            }
-        }
-        console.log(messages);
     }, [messages])
 
+    function showToast(message: string) {
+        const toastRoot = document.getElementById("toast-root");
+        if (!toastRoot) return;
+
+        const existingToast = toastRoot.querySelector(`.${styles["custom-toast"]}`);
+        if (existingToast) {
+            toastRoot.removeChild(existingToast);
+        }
+
+        const toast = document.createElement("div");
+        toast.className = styles['toast-container'];
+        toastRoot.appendChild(toast);
+
+        const root = createRoot(toast);
+
+        const onDismiss = () => {
+            root.unmount(); // 이게 핵심! React 내부 메모리 정리
+            if (toastRoot.contains(toast)) {
+                toastRoot.removeChild(toast);
+            }
+        };
+        root.render(<Toast message={message} onDismiss={onDismiss} />);
+    }
+
+
+
+
     return (
-        <div id="messageContainer" ref={containerRef} className={styles.container}>
-            {messages.map((item, idx) => {
-                if(item.user === "system"){
-                    return (<div key={item.msg} className={styles.system}>{item.msg}</div>)
-                }
-                const isDifferentUser = prevUser !== item.user;
-                prevUser = item.user;
-                let userName;
-                let userType;
-                if (item.user === roomInfo?.myGroupId) {
-                    userName = roomInfo?.myGroupName;
-                    userType = "me";
-                } else {
-                    userName = roomInfo?.otherGroupName;
-                    userType = "another";
-                }
-                
-                return (
-                    <div className={styles.messageBox} key={`message-${item.msg}-${idx}`}>
-                        {isDifferentUser && <span className={styles[userType+"name"]}>{userName}</span>}
-                        <span className={styles[userType]}>
-                            <RenderStatus status={item.status} onResendMessage ={() => onResend(item) } onDeleteMessage = {() => onDelete(item?.tempId) } />
-                            {item.img ? 
-                                <Image width={200} height={200} className={styles[`${userType}Img`]} src={item.img} alt="사진" /> 
-                                : 
-                                <p>{item.msg}</p>}
-                        </span>
-                    </div>
-                );
-            })}
-        </div>
+        <div className={styles.content}>
+            <div id="messageContainer" ref={containerRef} className={styles.container}>
+                {messages.map((item, idx) => {
+                    if(item.user === "system"){
+                        return (<div key={item.msg} className={styles.system}>{item.msg}</div>)
+                    }
+                    const isDifferentUser = prevUser !== item.user;
+                    prevUser = item.user;
+                    let userName;
+                    let userType;
+                    if (item.user === roomInfo?.myGroupId) {
+                        userName = roomInfo?.myGroupName;
+                        userType = "me";
+                    } else {
+                        userName = roomInfo?.otherGroupName;
+                        userType = "another";
+                    }
+                    
+                    return (
+                        <div id="messageBox" className={styles.messageBox} key={`message-${item.msg}-${idx}`}>
+                            {isDifferentUser && <span className={styles[userType+"name"]}>{userName}</span>}
+                            <span className={styles[userType]}>
+                                <RenderStatus status={item.status} onResendMessage ={() => onResend(item) } onDeleteMessage = {() => onDelete(item?.tempId) } />
+                                {item.img ? 
+                                    <Image width={200} height={200} className={styles[`${userType}Img`]} src={item.img} alt="사진" /> 
+                                    : 
+                                    <p>{item.msg}</p>}
+                            </span>
+                        </div>
+                    );
+                })}
+            </div>
+            <div id="toast-root" />
+        </div>    
     );
 }

@@ -1,0 +1,38 @@
+.custom-toast {
+    background-color: var(--purple-400);
+    width: 370px;
+    height: 50px;
+
+    position: absolute;
+    bottom: 0px;
+    left: 0px;
+
+    color: white;
+    padding: 15px 20px;
+    border-radius: 10px;
+    animation: fadeInOut 3s ease-in-out;
+    z-index: 9999;
+    text-align: center;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    &:hover{
+        cursor: pointer;
+    }
+}
+
+@keyframes fadeInOut {
+    0% {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+
+    10%,
+    90% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+
+    100% {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+}
