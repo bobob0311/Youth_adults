@@ -91,7 +91,7 @@ export default function MessageContainer(props: PropsState) {
     }, [messages])
 
     function showToast(message: string) {
-        const toastRoot = document.getElementById("toast-root");
+        const toastRoot = document.getElementById("modal-root");
         if (!toastRoot) return;
 
         const existingToast = toastRoot.querySelector(`.${styles["custom-toast"]}`);
@@ -118,8 +118,8 @@ export default function MessageContainer(props: PropsState) {
 
 
     return (
-        <div className={styles.content}>
-            <div id="messageContainer" ref={containerRef} className={styles.container}>
+
+        <div id="messageContainer" ref={containerRef} className={styles.container}>
                 {messages.map((item, idx) => {
                     if(item.user === "system"){
                         return (<div key={item.msg} className={styles.system}>{item.msg}</div>)
@@ -149,8 +149,7 @@ export default function MessageContainer(props: PropsState) {
                         </div>
                     );
                 })}
-            </div>
-            <div id="toast-root" />
-        </div>    
+        </div>
+            
     );
 }
