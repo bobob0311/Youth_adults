@@ -33,7 +33,7 @@ export default function ChatRoom({userId, roomId,roomStatus}: {userId:string, ro
 
     }, [userData]);
         
-    const { socket,messages, sendTextMessage, sendImgMessage, isLoading, alertLeave,isOpen } 
+    const { socket,messages, sendTextMessage, sendImgMessage, isLoading, alertLeave,isOpen, handleDeleteMessage,handleResend } 
     = useChat(roomId, userId,roomStatus);
     const roomInfoRef = useRoom(socket, roomId, roomInfo);
 
@@ -53,6 +53,9 @@ export default function ChatRoom({userId, roomId,roomStatus}: {userId:string, ro
         alertLeave(myName);
         router.push("/chat/done");
     }
+
+    
+
     return (
         <WrapperLayout onRematchClick={handleCheckRematch}>
             <div className={styles.chatContainer}>
@@ -61,7 +64,12 @@ export default function ChatRoom({userId, roomId,roomStatus}: {userId:string, ro
                 ) : (
 
                     <>
-                        <MessageContainer messages={messages} roomInfo={roomInfoRef.current} />
+                            <MessageContainer
+                                onResend={(msg) => handleResend(msg)}
+                                onDelete={(tempId) => handleDeleteMessage(tempId)}
+                                messages={messages}
+                                roomInfo={roomInfoRef.current}
+                            />
                     
                         {isOpen ?(
                             <InputBox
