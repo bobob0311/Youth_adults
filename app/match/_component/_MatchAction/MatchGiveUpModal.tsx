@@ -4,6 +4,8 @@ import { useRouter } from 'next/navigation';
 import ChooseMatchingBox from '../chooseMatchingBox';
 import Modal from "../../../../components/Modal/Modal"; 
 import { deleteUser } from '@/apiHandler/user';
+import { useState } from 'react';
+import { findAnotherUserAndNotice } from '@/apiHandler/function';
 
 interface PropsState{
   onModal: () => void;
@@ -11,37 +13,47 @@ interface PropsState{
 }
 
 export default function MatchGiveUpModal(props:PropsState) {
-  const { onModal,id } = props;
+  const { onModal, id } = props;
+  const [isLoading, setIsLoading] = useState<boolean>(false);
   const router = useRouter();
-  const text = "매칭을 정말 포기하시겠어요?";
   
   const handleFindAnother = async () => {
-    router.push("/match/researching")
+    setIsLoading(true);
+    try {
+      await findAnotherUserAndNotice(id);
+      router.push("/done");
+    } catch {
+      setIsLoading(false);
+      alert("다시 시도해주세요.")
+    }
+    
   }
 
   const handleGiveUp = async () => {
+    setIsLoading(true);
     try {
-      await deleteUser(id);  
+      await deleteUser(id);
       router.push("/match/cancel");
-    } catch(err) {
-      console.log(err);
+    } catch {
+      setIsLoading(false);
+      alert("다시 시도해주세요.");
     }
     
     
   }
 
-  const btnInfo = {
-    firstBtnName: "다른 매칭 찾기",
-    firstBtnFn: handleFindAnother,
-    secondBtnName: "매칭 포기",
-    secondBtnFn: handleGiveUp,
-  }
-
-
-
   return (
     <Modal>
-      <ChooseMatchingBox onClose={() => onModal()} text={text} btnInfo={btnInfo} />
+      <ChooseMatchingBox
+        onClose={() => onModal()}
+        text="매칭을 정말 포기하시겠어요?"
+        btnInfo={{
+          firstBtnName: "다른 매칭 찾기",
+          firstBtnFn: handleFindAnother,
+          secondBtnName: "매칭 포기",
+          secondBtnFn: handleGiveUp,
+        }}
+        loading={isLoading} />
     </Modal>
   )
 }
