@@ -3,9 +3,8 @@
 import { useRouter } from 'next/navigation';
 import ChooseMatchingBox from '../chooseMatchingBox';
 import Modal from "../../../../components/Modal/Modal"; 
-import { deleteUser } from '@/apiHandler/user';
 import { useState } from 'react';
-import { findAnotherUserAndNotice } from '@/apiHandler/function';
+import { findAnotherUserAndNotice, giveUpAndNotice } from '@/apiHandler/function';
 
 interface PropsState{
   onModal: () => void;
@@ -32,7 +31,7 @@ export default function MatchGiveUpModal(props:PropsState) {
   const handleGiveUp = async () => {
     setIsLoading(true);
     try {
-      await deleteUser(id);
+      await giveUpAndNotice(id);
       router.push("/match/cancel");
     } catch {
       setIsLoading(false);
