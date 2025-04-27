@@ -1,18 +1,29 @@
 'use client'
-import { useSearchParams } from "next/navigation";
+import { useSearchParams, useRouter } from "next/navigation";
 import ChooseMathingBox from "../../_component/chooseMatchingBox";
 import { Suspense } from "react";
 import LoadingSpinner from "@/components/loading/LoadingSpinner";
+import { deleteUser } from "@/apiHandler/user";
+import ErrorScreen from "@/app/chat/(check)/ErrorScreen";
 
 
 function CancelMatching() {
     const params = useSearchParams();
     const myId = params.get("id");
-    console.log(myId);
+    if(!myId) return <ErrorScreen message="잘못된 링크입니다."></ErrorScreen>
+    const router = useRouter();
+    
+
     const text = "매칭을 정말 그만두시겠어요?"
     
-    const handleStopMatching = () => {
-        // id를 기준으로 matching에 들어가지 않게 db에서 처리해야할듯.
+    const handleStopMatching = async() => {
+        try {
+            await deleteUser(myId);
+            router.push("/match/cancel");
+        } catch (error) {
+            console.log(error);
+            alert("url를 확인하고 다시 시도해주세요.")
+        }
     }
     const handleClosePage = () => {
         window.close();
