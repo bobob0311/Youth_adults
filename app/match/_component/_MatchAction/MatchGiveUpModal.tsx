@@ -21,8 +21,9 @@ export default function MatchGiveUpModal(props:PropsState) {
     try {
       await findAnotherUserAndNotice(id);
       router.push("/done");
-    } catch {
+    } catch (error) {
       setIsLoading(false);
+      console.error(error);
       alert("다시 시도해주세요.")
     }
     
@@ -33,12 +34,11 @@ export default function MatchGiveUpModal(props:PropsState) {
     try {
       await giveUpAndNotice(id);
       router.push("/match/cancel");
-    } catch {
+    } catch (error) {
       setIsLoading(false);
+      console.error(error);
       alert("다시 시도해주세요.");
     }
-    
-    
   }
 
   return (
