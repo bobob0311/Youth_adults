@@ -18,6 +18,8 @@ export default function LocationPage() {
     useEffect(() => {
         if (location !== '') {
             setIsBtnValid(true);
+        } else {
+            setIsBtnValid(false);
         }
     }, [location])
 
