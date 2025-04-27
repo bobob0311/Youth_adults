@@ -10,11 +10,9 @@ import ErrorScreen from "@/app/chat/(check)/ErrorScreen";
 function CancelMatching() {
     const params = useSearchParams();
     const myId = params.get("id");
-    if(!myId) return <ErrorScreen message="잘못된 링크입니다."></ErrorScreen>
-    const router = useRouter();
+    if (!myId) return <ErrorScreen message="잘못된 링크입니다."></ErrorScreen>
     
-
-    const text = "매칭을 정말 그만두시겠어요?"
+    const router = useRouter();
     
     const handleStopMatching = async() => {
         try {
@@ -29,18 +27,16 @@ function CancelMatching() {
         window.close();
     }
     
-    const btnInfo = {
-        firstBtnName: "매칭 중단",
-        firstBtnFn: handleStopMatching,
-        secondBtnName: "창 닫기",
-        secondBtnFn: handleClosePage
-    }
-    
-    
-
-    
     return (
-        <ChooseMathingBox text={text} btnInfo={btnInfo} />
+        <ChooseMathingBox
+            text="매칭을 정말 그만두시겠어요?"
+            btnInfo={{
+                firstBtnName: "매칭 중단",
+                firstBtnFn: handleStopMatching,
+                secondBtnName: "창 닫기",
+                secondBtnFn: handleClosePage
+            }}
+        />
     )
 }
 
