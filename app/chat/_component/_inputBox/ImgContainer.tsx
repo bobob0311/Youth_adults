@@ -1,7 +1,7 @@
 'use Client'
 import styles from "./ImgContainer.module.scss"
 import Image from "next/image";
-import { useEffect, useMemo } from "react";
+import { useMemo } from "react";
 
 interface PropsState{
     src: File;
