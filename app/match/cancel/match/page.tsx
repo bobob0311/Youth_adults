@@ -10,9 +10,11 @@ import ErrorScreen from "@/app/chat/(check)/ErrorScreen";
 function CancelMatching() {
     const params = useSearchParams();
     const myId = params.get("id");
+    const router = useRouter();
+    
     if (!myId) return <ErrorScreen message="잘못된 링크입니다."></ErrorScreen>
     
-    const router = useRouter();
+
     
     const handleStopMatching = async() => {
         try {
