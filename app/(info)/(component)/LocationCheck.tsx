@@ -43,8 +43,8 @@ export default function LocationCheckButton({
                     >
                         <span className={styles.locationName}>{item.locationName}</span>
                         <Image
-                            width={170}
-                            height={170}
+                            width={150}
+                            height={150}
                             className= {`${styles.locationImg} ${item.locationName === selectedLocation ? styles.selected :""}`}
                             src={item.imgUrl}
                             alt={item.locationName}
