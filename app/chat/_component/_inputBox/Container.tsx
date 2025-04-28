@@ -1,11 +1,10 @@
-import { useRef, useState } from "react";
-import styles from "./Container.module.scss"
+import { useRef, useState, useEffect } from "react";
+import styles from "./Container.module.scss";
 import Image from "next/image";
 
 interface PropsState{
     onSendMessage: (msg: string) => void;
 }
-
 
 const MAX_LINE = 8;
 const LINE_HEIGHT = 14;
@@ -14,27 +13,43 @@ export default function Container(props: PropsState) {
     const { onSendMessage } = props;
 
     const textareaRef = useRef<HTMLTextAreaElement>(null);
+    const hiddenInputRef = useRef<HTMLInputElement>(null); // 숨겨진 input
+    const [isMobile, setIsMobile] = useState<boolean>(false);
     const [isText, setIsText] = useState<boolean>(false);
+
+    useEffect(() => {
+      const userAgent = navigator.userAgent;
+      setIsMobile(/iPhone|iPad|iPod|Android/i.test(userAgent));
+    }, []);
 
     const sendMessage = () => {
         if (textareaRef.current) {
             onSendMessage(textareaRef.current.value);
+
             textareaRef.current.value = '';
+            hiddenInputRef.current?.focus();
+            textareaRef.current?.focus();
+
         }
         setIsText(false);
-    }
-
-    const handleKeyDown = (event: React.KeyboardEvent<HTMLTextAreaElement>) => {
-        if (event.key === "Enter") {
-            if(event.shiftKey){
-                return;
-            }
-            event.preventDefault();
-            if (textareaRef.current) textareaRef.current.style.height = 'auto';
-            // 메시지 보내는 로직
-            sendMessage();
-        }
     };
+
+  const handleKeyDown = (event: React.KeyboardEvent<HTMLTextAreaElement>) => {
+    if (event.key === "Enter") {
+      if (event.nativeEvent.isComposing) return;
+
+      if (isMobile) {
+        return;
+      } else {
+        if (event.shiftKey) {
+          return;
+        } else {
+          event.preventDefault();
+          sendMessage();
+        }
+      }
+    }
+  };
 
     const handleResizeHeight = () => {
         if (textareaRef.current) {
