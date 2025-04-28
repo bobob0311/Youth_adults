@@ -20,11 +20,11 @@
 
 #logic
 /utils/api.ts
-/utils/apiHandler/*
+/apiHandler/*
 */api
 /utils/matching.ts
 /utils/enterRoom.ts
-
+/serverActions
 
 # production
 /build
