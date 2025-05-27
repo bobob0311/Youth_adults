@@ -1,4 +1,5 @@
 import { uploadImg, uploadChat, getChatData } from "@/utils/api";
+import { useRef } from "react";
 
 interface Messages{
     user: string;
@@ -9,16 +10,23 @@ interface Messages{
     src?: string;
 }
 
-export const useChatActions = (socket: any, roomId: string | null, userId: string | null, messagesRef: any, setMessages: any) => {
+export const useChatActions = (roomId: string | null, userId: string | null, messagesRef: any, setMessages: any) => {
+    const socketRef = useRef(null);
+    
+    const setSocket = (socket) => {
+        socketRef.current = socket;
+        console.log(socketRef.current)
+    }
+    
     const handleGetChatData = async (roomId: string | null) => {
-        if (roomId) return;
+        if (!roomId) return;
         
         const data = await getChatData(roomId)
         return data;
     }
 
     const sendTextMessage = (message: string) => {
-        if (!socket || !message.trim() || !userId) return;
+        if (!socketRef.current || !message.trim() || !userId) return;
 
         const tempId = crypto.randomUUID();
 
@@ -32,7 +40,7 @@ export const useChatActions = (socket: any, roomId: string | null, userId: strin
 
         setMessages(prev => [...prev, optimisticTextMessage]);
 
-        socket.emit("message", message, userId, roomId, tempId, (ack: { success: boolean ,tempId:string}) => {
+        socketRef.current.emit("message", message, userId, roomId, tempId, (ack: { success: boolean ,tempId:string}) => {
             setMessages((prev) => {
                 const index = prev.findLastIndex((m) => m.tempId === ack.tempId);
                 if (index === -1) return prev;
@@ -48,7 +56,7 @@ export const useChatActions = (socket: any, roomId: string | null, userId: strin
     };
 
     const sendImgMessage = async (previewUrl, src) => {
-        if (!socket || !userId) return;
+        if (!socketRef.current || !userId) return;
         const tempId = crypto.randomUUID();
 
         const optimisticMessage: Messages = {
@@ -70,7 +78,7 @@ export const useChatActions = (socket: any, roomId: string | null, userId: strin
             const res = await uploadImg(formData);
             const uploadedUrl = res.data.data.publicUrl;
 
-            socket.emit("img", uploadedUrl, userId, roomId, tempId, (ack: { success: boolean, tempId: string }) => {
+            socketRef.current.emit("img", uploadedUrl, userId, roomId, tempId, (ack: { success: boolean, tempId: string }) => {
 
                 setMessages((prev) => {
                     const index = prev.findLastIndex((m) => m.tempId === ack.tempId);
@@ -102,14 +110,14 @@ export const useChatActions = (socket: any, roomId: string | null, userId: strin
     };
 
     const handlePostMessage = () => {
-        if (!socket || !roomId) return;
+        if (!socketRef.current || !roomId) return;
         
         uploadChat({ roomName: roomId, data: messagesRef.current });
-        socket.emit("uploadComplete", roomId, userId, messagesRef.current);
+        socketRef.current.emit("uploadComplete", roomId, userId, messagesRef.current);
     };
 
   const alertLeave = (myName: string) => {
-    socket?.emit("alertLeaveRoom", roomId, myName);
+    socketRef.current?.emit("alertLeaveRoom", roomId, myName);
   };
 
   const handleDeleteMessage = (tempId: string | undefined) => {
@@ -134,8 +142,9 @@ export const useChatActions = (socket: any, roomId: string | null, userId: strin
         handleDeleteMessage,
         handleResend,
         handleGetChatData,
+        setSocket,
     }
 
-    return chatHandler;
+  return chatHandler;
 
 };

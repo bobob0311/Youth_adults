@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { useSocket } from "./useSocket";
 import { useChatActions } from "./useChatAction";
 
@@ -29,7 +29,9 @@ export function useChat(roomId: string|null, userId: string | null, roomStatus: 
     const [isOpen, setIsOpen] = useState<boolean|null>(roomStatus);
     const messagesRef = useRef(messages);
 
-    const socketHandlers: UseSocketHandlers = {
+    const chatHandler = useChatActions(roomId, userId, messagesRef, setMessages);
+
+    const socketHandlers: UseSocketHandlers = useMemo(() =>({
         onMessage: (msg, senderId) => {
             setMessages((prev) => [...prev, { msg, img: null, user: senderId, status: "sent" }]);
         },
@@ -73,11 +75,13 @@ export function useChat(roomId: string|null, userId: string | null, roomStatus: 
                 navigator.sendBeacon("/api/chats?type=blob", blob);
             }
         
-    };
+        }),[roomId]);
 
     const socket = useSocket({ roomId, socketHandlers });
 
-    const chatHandler = useChatActions(socket, roomId, userId, messagesRef, setMessages);
+    useEffect(() => {
+        chatHandler.setSocket(socket);
+    }, [socket]);
     
     useEffect(() => {
         messagesRef.current = messages;
