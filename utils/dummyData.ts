@@ -35,7 +35,7 @@ interface Valid {
 
 export const LOCATION_INFO: LocationInfo[] = [
     { locationName: "부평역", imgUrl: "/gangnam.png", block:false },
-    { locationName: "홍대/합정", imgUrl: "/hongdae.png",block:false },
+    { locationName: "부천역", imgUrl: "/hongdae.png",block:false },
     { locationName: "이태원", imgUrl: "/itaewon.png",block:true },
     { locationName: "건대입구", imgUrl: "/konkuk.png",block:true },
 ]

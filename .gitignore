@@ -25,6 +25,7 @@
 /utils/matching.ts
 /utils/enterRoom.ts
 /serverActions
+/server
 
 # production
 /build
