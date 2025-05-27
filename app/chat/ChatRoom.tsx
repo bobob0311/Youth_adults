@@ -15,7 +15,6 @@ export default function ChatRoom({userId, roomId,roomStatus}: {userId:string, ro
     
     const userData = useUser(userId || "");
     
-    
     const roomInfo = useMemo(() => {
         if (!userData) return null;
         
@@ -32,7 +31,6 @@ export default function ChatRoom({userId, roomId,roomStatus}: {userId:string, ro
     const {socket, messages, isLoading, isOpen, chatHandler } = useChat(roomId, userId,roomStatus);
     const roomInfoRef = useRoom(socket, roomId, roomInfo);
 
-    console.log("하 여기야?");
     const handleCheckRematch = () => {
         setRematch(true);
     }
