@@ -16,16 +16,19 @@ interface User{
     is_first: boolean;
 }
 
+// user 정보 가져오는 hook
 export function useUser(userId: string) {
     const [userData, setUserData] = useState<User|null>(null);
 
     useEffect(() => {
+
         if (!userId) return;
 
         (async () => {
             const data = await getUserDataById(userId);
             setUserData(data);
         })();
+
     }, [userId]);
 
     return userData;
