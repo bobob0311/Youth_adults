@@ -26,11 +26,11 @@ export default function Wrapper({ children, onRematchClick}: { children: React.R
           
           $wrapper.style.height = `${viewportHeight}px`;
           $scroll.style.height = `${viewportHeight + 1}px`
-          $chatRoomWrapper.style.height = `${viewportHeight - 54}px`
+          $chatRoomWrapper.style.height = `${viewportHeight}px`
 
           if ($MessageContainer && $chatRoom)  {
-            $MessageContainer.style.height = `${viewportHeight - 54 - 55}px`
-            $chatRoom.style.height = `${viewportHeight - 54}px`
+            $MessageContainer.style.height = `${viewportHeight - 55}px`
+            $chatRoom.style.height = `${viewportHeight}px`
             }
           }
       } 
