@@ -114,12 +114,10 @@ export default function MessageContainer(props: PropsState) {
         root.render(<Toast message={message} onDismiss={onDismiss} />);
     }
 
-
-
-
     return (
 
         <div id="messageContainer" ref={containerRef} className={styles.container}>
+            <div className={styles.messageContainer}>
                 {messages.map((item, idx) => {
                     if(item.user === "system"){
                         return (<div key={item.msg} className={styles.system}>{item.msg}</div>)
@@ -149,6 +147,7 @@ export default function MessageContainer(props: PropsState) {
                         </div>
                     );
                 })}
+            </div>    
         </div>
             
     );

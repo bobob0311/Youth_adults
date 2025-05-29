@@ -37,7 +37,7 @@ export default function ChatRoom({userId, roomId,roomStatus}: {userId:string, ro
 
     return (
         <WrapperLayout onRematchClick={handleCheckRematch}>
-            <div className={styles.chatContainer}>
+            <div id="chatRoom" className={styles.chatContainer}>
                 {isLoading ? (
                     <LoadingModal>채팅을 불러오고있습니다..</LoadingModal>
                 ) : (
