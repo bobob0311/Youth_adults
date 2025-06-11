@@ -70,12 +70,50 @@ export default function Container(props: PropsState) {
         if(textareaRef.current){
             setIsText(textareaRef.current.value.length > 0);
         }
-    }
+  }
+  
+
+  const chatRoomWrapperRef = useRef<HTMLElement|null>(null);
+  const scrollRef = useRef<HTMLElement|null>(null);
+  const chatRef = useRef<HTMLElement|null>(null);
+  const messageContainerRef = useRef<HTMLElement | null>(null)
+  const chatRoomRef = useRef<HTMLElement|null>(null)
+  
+  useEffect(() => {
+    chatRoomWrapperRef.current = document.getElementById("wrapper");
+    scrollRef.current = document.getElementById("scroll");
+    chatRef.current = document.getElementById("chatRoomWrapper");
+    messageContainerRef.current = document.getElementById("messageContainer");
+    chatRoomRef.current = document.getElementById("chatRoom");
+  }, []);
+  
+  function updateHeight() {
+    setTimeout(() => {
+      window.scrollTo(0, 0);
+
+      const viewportHeight = window.visualViewport
+        ? window.visualViewport.height
+        : window.innerHeight;
+        
+        
+      if (chatRoomWrapperRef.current && scrollRef.current && chatRef.current) {
+        chatRoomWrapperRef.current.style.height = `${viewportHeight}px`;
+        scrollRef.current.style.height = `${viewportHeight + 1}px`
+        chatRef.current.style.height = `${viewportHeight}px`
+
+        if (messageContainerRef.current && chatRoomRef.current) {
+          messageContainerRef.current.style.height = `${viewportHeight - 55}px`
+          chatRoomRef.current.style.height = `${viewportHeight}px`
+        }
+      }
+    }, 100); 
+    } 
 
 
     return (
         <>
-            <textarea
+        <textarea
+                onFocus={updateHeight}
                 className={styles.textBox}
                 placeholder="메시지 입력..."
                 rows={1}
