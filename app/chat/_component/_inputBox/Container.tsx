@@ -24,11 +24,20 @@ export default function Container(props: PropsState) {
 
     const sendMessage = () => {
         if (textareaRef.current) {
-            onSendMessage(textareaRef.current.value);
+          onSendMessage(textareaRef.current.value);
 
-            textareaRef.current.value = '';
+          const isFocused = document.activeElement === textareaRef.current;
+          console.log(isFocused)
+
+          textareaRef.current.value = '';
+          
+          if (isFocused) {
             hiddenInputRef.current?.focus();
-            textareaRef.current?.focus();
+            textareaRef.current?.focus();  
+          } else {
+            hiddenInputRef.current?.focus();
+            hiddenInputRef.current?.blur();
+          }
 
         }
         setIsText(false);
@@ -107,8 +116,8 @@ export default function Container(props: PropsState) {
   }, []);
   
   function updateHeight() {
-    // 덜컹거리는거 해결해야되고 -> 그냥 전체에 fixed를 줘버리면 덜컹거리지 않지 않을까요????!!!
-    // 복구하는거 만들어야함.-
+    // 덜컹거리는거 해결해야되고
+    // 복구하는건 만들었는데 전체 밑으로 스크롤 안되게 만들어야함
     setTimeout(() => {
       window.scrollTo(0, 0);
 
@@ -148,29 +157,37 @@ export default function Container(props: PropsState) {
 
 
     return (
-        <>
+      <form
+        className={styles.textAreaContainer}
+        onSubmit={(e) => {
+          e.preventDefault();
+          if(isText) sendMessage();
+        }}
+      >
         <textarea
           onFocus={updateHeight}
           onBlur={restoreOriginalHeights}
-                className={styles.textBox}
-                placeholder="메시지 입력..."
-                rows={1}
-                ref = {textareaRef}
-                onKeyDown={handleKeyDown}
-                onInput={handleResizeHeight}
-                onChange={handleBtnChange}
-            />
-            <button 
-                className={styles.sendBtn}
-                onClick={isText? sendMessage : ()=>{}}
-                > 
-                    {isText? 
-                    <Image width={20} height={30} src="/sent.svg" alt="전송 사진" /> :
-                    <label htmlFor="galleryInput">
-                        <Image width={20} height={30} src="/camera.svg" alt="사진 접근"/>
-                    </label>
-                }
-            </button>
-        </> 
+          className={styles.textBox}
+          placeholder="메시지 입력..."
+          rows={1}
+          ref = {textareaRef}
+          onKeyDown={handleKeyDown}
+          onInput={handleResizeHeight}
+          onChange={handleBtnChange}
+        />
+        <button 
+          type="submit"
+          className={styles.sendBtn}
+          onMouseDown={(e) => e.preventDefault()}
+          onTouchStart={(e) => e.preventDefault()}
+        > 
+              {isText? 
+                <Image width={20} height={30} src="/sent.svg" alt="전송 사진" /> :
+                <label htmlFor="galleryInput">
+                    <Image width={20} height={30} src="/camera.svg" alt="사진 접근"/>
+                </label>
+            }
+        </button>
+      </form> 
     )
 }
