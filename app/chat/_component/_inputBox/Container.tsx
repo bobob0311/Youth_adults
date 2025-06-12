@@ -77,17 +77,38 @@ export default function Container(props: PropsState) {
   const scrollRef = useRef<HTMLElement|null>(null);
   const chatRef = useRef<HTMLElement|null>(null);
   const messageContainerRef = useRef<HTMLElement | null>(null)
-  const chatRoomRef = useRef<HTMLElement|null>(null)
+  const chatRoomRef = useRef<HTMLElement | null>(null)
+  const originalHeights = useRef<{
+    chatRoomWrapper?: string;
+    scroll?: string;
+    chat?: string;
+    messageContainer?: string;
+    chatRoom?: string;
+  }>({});
   
   useEffect(() => {
-    chatRoomWrapperRef.current = document.getElementById("wrapper");
-    scrollRef.current = document.getElementById("scroll");
-    chatRef.current = document.getElementById("chatRoomWrapper");
-    messageContainerRef.current = document.getElementById("messageContainer");
-    chatRoomRef.current = document.getElementById("chatRoom");
+    const wrapper = document.getElementById("wrapper");
+  const scroll = document.getElementById("scroll");
+  const chat = document.getElementById("chatRoomWrapper");
+  const msgContainer = document.getElementById("messageContainer");
+  const chatRoom = document.getElementById("chatRoom");
+
+  chatRoomWrapperRef.current = wrapper;
+  scrollRef.current = scroll;
+  chatRef.current = chat;
+  messageContainerRef.current = msgContainer;
+  chatRoomRef.current = chatRoom;
+
+  if (wrapper) originalHeights.current.chatRoomWrapper = wrapper.style.height;
+  if (scroll) originalHeights.current.scroll = scroll.style.height;
+  if (chat) originalHeights.current.chat = chat.style.height;
+  if (msgContainer) originalHeights.current.messageContainer = msgContainer.style.height;
+  if (chatRoom) originalHeights.current.chatRoom = chatRoom.style.height;
   }, []);
   
   function updateHeight() {
+    // 덜컹거리는거 해결해야되고 -> 그냥 전체에 fixed를 줘버리면 덜컹거리지 않지 않을까요????!!!
+    // 복구하는거 만들어야함.-
     setTimeout(() => {
       window.scrollTo(0, 0);
 
@@ -107,13 +128,30 @@ export default function Container(props: PropsState) {
         }
       }
     }, 100); 
-    } 
+  } 
+  
+  function restoreOriginalHeights() {
+    if (
+      chatRoomWrapperRef.current &&
+      scrollRef.current &&
+      chatRef.current &&
+      messageContainerRef.current &&
+      chatRoomRef.current
+    ) {
+      chatRoomWrapperRef.current.style.height = originalHeights.current.chatRoomWrapper || "";
+      scrollRef.current.style.height = originalHeights.current.scroll || "";
+      chatRef.current.style.height = originalHeights.current.chat || "";
+      messageContainerRef.current.style.height = originalHeights.current.messageContainer || "";
+      chatRoomRef.current.style.height = originalHeights.current.chatRoom || "";
+    }
+  }
 
 
     return (
         <>
         <textarea
-                onFocus={updateHeight}
+          onFocus={updateHeight}
+          onBlur={restoreOriginalHeights}
                 className={styles.textBox}
                 placeholder="메시지 입력..."
                 rows={1}
