@@ -12,6 +12,7 @@ interface UseSocketHandlers {
     handleOnAlertLeaveRoom: (name: string) => void;
     handleOnUploadChatData: () => void;
     handleUnload: () => void;
+    handleConnect: () => void;
 }
 
 interface UseSocketProps {
@@ -30,11 +31,12 @@ export function useSocket({ roomId, chatOnHandler }: UseSocketProps) {
     setSocket(newSocket);
 
     // 이벤트 등록
+    newSocket.on("connect",chatOnHandler.handleConnect) 
     newSocket.on("message", chatOnHandler.handleOnMessage);
     newSocket.on("img", chatOnHandler.handleOnImage);
     newSocket.on("sendBySystem", chatOnHandler.handleOnSystemMessage);
     newSocket.on("getPrevChatData", chatOnHandler.handleOnGetPrevChatData);
-    newSocket.on("getDataFromStorage", chatOnHandler.handleOnGetPrevChatData);
+    newSocket.on("getDataFromStorage", chatOnHandler.handleOnGetChatDataFromDB);
     newSocket.on("alertLeaveRoom", chatOnHandler.handleOnAlertLeaveRoom);
     newSocket.on("uploadChatData", chatOnHandler.handleOnUploadChatData);
 

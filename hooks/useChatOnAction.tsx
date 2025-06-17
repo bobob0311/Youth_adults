@@ -2,12 +2,17 @@ import { uploadChat, getChatData } from "@/utils/api";
 import { useEffect, useRef } from "react";
 import { Socket } from "socket.io-client";
 
-export const useChatOnActions = (messages,messagesRef: any, setMessages: any, setIsLoading: any, setIsOpen: any) => {
+export const useChatOnActions = (roomId,messages,messagesRef: any, setMessages: any, setIsLoading: any, setIsOpen: any) => {
     const socketRef = useRef<Socket|null>(null);
     
     const setSocket = (socket) => {
         socketRef.current = socket;
         console.log(socketRef.current)
+    }
+
+    const handleConnect = () => {
+        if (!socketRef.current) return;
+        socketRef.current.emit("joinRoom", roomId);
     }
 
     const handleOnMessage = (msg, senderId) => {
@@ -46,7 +51,7 @@ export const useChatOnActions = (messages,messagesRef: any, setMessages: any, se
         if (!socketRef.current || !roomId) return;
         
         uploadChat({ roomName: roomId, data: messagesRef.current });
-        socketRef.current.emit("uploadComplete", roomId, userId, messagesRef.current);
+        socketRef.current.emit("uploadComplete", roomId, messagesRef.current);
     };
 
     const handleUnload = () => {
@@ -64,6 +69,7 @@ export const useChatOnActions = (messages,messagesRef: any, setMessages: any, se
     }, [messages]);
     
     const chatHandler = {
+        handleConnect,
         handleOnMessage,
         handleOnImage,
         handleOnSystemMessage,

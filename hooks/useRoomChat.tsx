@@ -21,7 +21,7 @@ export function useRoomChat(roomId: string, userId: string, roomStatus: boolean)
     const messagesRef = useRef(messages);
 
     const chatEmitHandler = useChatEmitActions(roomId, userId, messagesRef, setMessages);
-    const chatOnHandler = useChatOnActions(messages,messagesRef, setMessages, setIsLoading, setIsOpen)
+    const chatOnHandler = useChatOnActions(roomId,messages,messagesRef, setMessages, setIsLoading, setIsOpen)
     
     const socket = useSocket({ roomId, chatOnHandler });
 
