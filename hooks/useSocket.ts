@@ -4,23 +4,23 @@ import { useEffect, useState } from "react";
 import { io, Socket } from "socket.io-client";
 
 interface UseSocketHandlers {
-    onMessage: (msg: string, senderId: string) => void;
-    onImage: (imgFile: string, senderId: string) => void;
-    onSystemMessage: (msg: string) => void;
-    onPrevChatData: (chatData: any) => void;
-    onGetDataFromStorage: () => void;
-    onAlertLeaveRoom: (name: string) => void;
-    onUploadChatData: () => void;
-    onUnload: () => void;
+    handleOnMessage: (msg: string, senderId: string) => void;
+    handleOnImage: (imgFile: string, senderId: string) => void;
+    handleOnSystemMessage: (msg: string) => void;
+    handleOnGetPrevChatData: (chatData: any) => void;
+    handleOnGetChatDataFromDB: () => void;
+    handleOnAlertLeaveRoom: (name: string) => void;
+    handleOnUploadChatData: () => void;
+    handleUnload: () => void;
 }
 
 interface UseSocketProps {
   roomId: string | null;
-  socketHandlers: UseSocketHandlers;
+  chatOnHandler: UseSocketHandlers;
 }
 
 
-export function useSocket({ roomId, socketHandlers }: UseSocketProps) {
+export function useSocket({ roomId, chatOnHandler }: UseSocketProps) {
   const [socket, setSocket] = useState<Socket | null>(null);
 
   useEffect(() => {
@@ -30,18 +30,18 @@ export function useSocket({ roomId, socketHandlers }: UseSocketProps) {
     setSocket(newSocket);
 
     // 이벤트 등록
-    newSocket.on("message", socketHandlers.onMessage);
-    newSocket.on("img", socketHandlers.onImage);
-    newSocket.on("sendBySystem", socketHandlers.onSystemMessage);
-    newSocket.on("getPrevChatData", socketHandlers.onPrevChatData);
-    newSocket.on("getDataFromStorage", socketHandlers.onGetDataFromStorage);
-    newSocket.on("alertLeaveRoom", socketHandlers.onAlertLeaveRoom);
-    newSocket.on("uploadChatData", socketHandlers.onUploadChatData);
+    newSocket.on("message", chatOnHandler.handleOnMessage);
+    newSocket.on("img", chatOnHandler.handleOnImage);
+    newSocket.on("sendBySystem", chatOnHandler.handleOnSystemMessage);
+    newSocket.on("getPrevChatData", chatOnHandler.handleOnGetPrevChatData);
+    newSocket.on("getDataFromStorage", chatOnHandler.handleOnGetPrevChatData);
+    newSocket.on("alertLeaveRoom", chatOnHandler.handleOnAlertLeaveRoom);
+    newSocket.on("uploadChatData", chatOnHandler.handleOnUploadChatData);
 
-    window.addEventListener("beforeunload", socketHandlers.onUnload);
+    window.addEventListener("beforeunload", chatOnHandler.handleUnload);
         
     return () => {
-        window.removeEventListener("beforeunload", socketHandlers.onUnload)
+        window.removeEventListener("beforeunload", chatOnHandler.handleUnload)
         newSocket.disconnect();
     };
   }, [roomId]);
