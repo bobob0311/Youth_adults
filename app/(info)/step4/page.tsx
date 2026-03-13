@@ -7,7 +7,10 @@ import { insertUserData } from "@/utils/api";
 import { changeUserFormat } from "@/utils/dataFomat";
 import matching from "@/utils/matching";
 import LoadingModal from "../../../shared/components/LoadingModal";
-import { PHONE_INPUT_INFO, PHONE_VALID_CONDITION } from "@/utils/dummyData";
+import {
+  PHONE_INPUT_INFO,
+  PHONE_VALID_CONDITION,
+} from "@/features/signup/constants";
 import { useAppSelector } from "@/redux/hooks";
 import type { VerificationStatus } from "@/features/signup/types/phone";
 import PhoneVerification from "@/features/signup/components/PhoneVerification";
