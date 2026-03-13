@@ -1,16 +1,17 @@
-import { configureStore } from '@reduxjs/toolkit'
-import userReducer from "../app/(info)/userSlice";
+import { configureStore } from "@reduxjs/toolkit";
+import userReducer from "../features/signup/model/userSlice";
+import stepReducer from "../features/signup/model/stepSlice";
 
 export const makeStore = () => {
   return configureStore({
-      reducer: {
-        user: userReducer,
-    }
-  })
-}
+    reducer: {
+      user: userReducer,
+      step: stepReducer,
+    },
+  });
+};
 
 export const store = makeStore();
 
-export type AppStore = ReturnType<typeof makeStore>
-export type RootState = ReturnType<AppStore['getState']>
-export type AppDispatch = AppStore['dispatch']
+export type RootState = ReturnType<typeof store.getState>;
+export type AppDispatch = typeof store.dispatch;
