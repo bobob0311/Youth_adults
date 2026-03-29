@@ -2,12 +2,6 @@ import { checkNumberLength, checkNumber, checkPhone } from "@/utils/regex";
 import type { GroupInputInfo } from "./types/group";
 import { isEmpty } from "@/utils/valid";
 
-interface LocationInfo {
-  locationName: string;
-  imgUrl: string;
-  block: boolean;
-}
-
 interface ListInfo {
   category: string;
   label: string;
@@ -33,13 +27,6 @@ interface Valid {
   onInputCondition: (text: string) => boolean;
   onValidCondition: (text: string) => boolean;
 }
-
-export const LOCATION_INFO: LocationInfo[] = [
-  { locationName: "부평역", imgUrl: "/gangnam.png", block: false },
-  { locationName: "부천역", imgUrl: "/hongdae.png", block: false },
-  { locationName: "이태원", imgUrl: "/itaewon.png", block: true },
-  { locationName: "건대입구", imgUrl: "/konkuk.png", block: true },
-];
 
 export const LIST_INFO: ListInfo[] = [
   {

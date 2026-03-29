@@ -4,6 +4,7 @@ import {
   UserProfile,
   UserState,
 } from "@/features/signup/types/user";
+import type { LocationValue } from "../constants/location";
 
 const initialState: UserState = {
   location: "",
@@ -23,7 +24,7 @@ const userSlice = createSlice({
   name: "users",
   initialState,
   reducers: {
-    changeLocation: (state, action: PayloadAction<string>) => {
+    changeLocation: (state, action: PayloadAction<LocationValue>) => {
       state.location = action.payload;
     },
     changeUserDetail: (state, action: PayloadAction<UserDetails>) => {

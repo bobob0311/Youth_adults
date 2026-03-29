@@ -2,17 +2,12 @@
 
 import styles from "./LocationCheck.module.scss";
 import Image from "next/image";
+import type { LocationInfoItem, LocationValue } from "../constants/location";
 
 interface PropsState {
-  locationInfo: Location[];
-  selectedLocation: string;
-  onLocationChange: (location: string) => void;
-}
-
-interface Location {
-  locationName: string;
-  imgUrl: string;
-  block: boolean;
+  locationInfo: readonly LocationInfoItem[];
+  selectedLocation: LocationValue;
+  onLocationChange: (location: LocationValue) => void;
 }
 
 export default function LocationCheckButton({
@@ -20,7 +15,7 @@ export default function LocationCheckButton({
   selectedLocation,
   onLocationChange,
 }: PropsState) {
-  const handleClick = (clickedLocation: string) => {
+  const handleClick = (clickedLocation: LocationValue) => {
     if (selectedLocation == clickedLocation) {
       onLocationChange("");
       return;
