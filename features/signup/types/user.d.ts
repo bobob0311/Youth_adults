@@ -1,5 +1,7 @@
+import { LocationValue } from "../constants/location";
+
 interface UserState {
-  location: string;
+  location: LocationValue;
   userProfile: UserProfile;
   userDetails: UserDetails;
   phoneNumber: string;
