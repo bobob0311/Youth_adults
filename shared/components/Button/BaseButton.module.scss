@@ -1,0 +1,42 @@
+.navBtn {
+  all: unset;
+  width: 370px;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  height: 56px;
+
+  text-align: center;
+  font-size: 18px;
+
+  background-color: var(--purple-500);
+  border-radius: 30px;
+  span:first-of-type {
+    color: var(--text-button);
+  }
+  margin-inline: auto;
+  margin-bottom: 24px;
+  &:hover {
+    cursor: pointer;
+    background-color: var(--purple-400);
+  }
+}
+
+.disable {
+  background-color: #a7a7a7;
+  &:hover {
+    cursor: not-allowed;
+    background-color: #a7a7a7;
+  }
+}
+
+.smallTitle {
+  font-size: 14px;
+  margin-bottom: 6px;
+}
+
+.subtitle {
+  color: var(--purple-300);
+  font-size: 12px;
+}
