@@ -7,20 +7,19 @@ import { sendAligoMessage } from "@/apiHandler/aligoMessage";
 import { makeValidCode } from "@/utils/message";
 import type {
   PhoneInputInfo,
-  PhoneValidCondition,
   VerificationStatus,
 } from "@/features/signup/types/phone";
 
 interface PhoneVerificationProps {
   phoneInputInfo: PhoneInputInfo[];
-  phoneValidCondition: PhoneValidCondition;
   verificationStatus: VerificationStatus;
   onVerificationStatusChange: (status: VerificationStatus) => void;
+  onPhoneNumberChange: (phoneNumber: string) => void;
 }
 
 export default function PhoneVerification({
   phoneInputInfo,
-  phoneValidCondition,
+  onPhoneNumberChange,
   verificationStatus,
   onVerificationStatusChange,
 }: PhoneVerificationProps) {
@@ -41,6 +40,7 @@ export default function PhoneVerification({
     code: number,
   ) => {
     const info = { phoneNumber, code };
+    console.log(code);
     const messageInfo = makeValidCode(info);
     await sendAligoMessage(messageInfo);
   };
@@ -81,7 +81,7 @@ export default function PhoneVerification({
       <PhoneInputBox
         verificationStatus={verificationStatus}
         phoneInput={phoneInputInfo[0]}
-        valid={phoneValidCondition}
+        onPhoneNumberChange={onPhoneNumberChange}
         onPhoneNumber={handleCode}
         onVerificationStatusChange={onVerificationStatusChange}
       />

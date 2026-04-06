@@ -4,26 +4,26 @@ import { useEffect, useRef, useState } from "react";
 import styles from "./Phone.module.scss";
 import InputBox from "@/features/signup/components/InputBox";
 import Counter from "./counter";
+import { checkNumber, checkNumberLength, checkPhone } from "@/utils/regex";
 import type {
   PhoneInputInfo,
-  PhoneValidCondition,
   VerificationStatus,
 } from "@/features/signup/types/phone";
 
 interface PhoneInputBoxProps {
   verificationStatus: VerificationStatus;
   phoneInput: PhoneInputInfo;
-  valid: PhoneValidCondition;
   onPhoneNumber: (phoneNumber: string) => Promise<void> | void;
   onVerificationStatusChange: (status: VerificationStatus) => void;
+  onPhoneNumberChange: (phoneNumber: string) => void;
 }
 
 export default function PhoneInputBox({
   verificationStatus,
   phoneInput,
-  valid,
   onPhoneNumber,
   onVerificationStatusChange,
+  onPhoneNumberChange,
 }: PhoneInputBoxProps) {
   const [phoneNumber, setPhoneNumber] = useState("");
   const [isSend, setIsSend] = useState(false);
@@ -37,10 +37,14 @@ export default function PhoneInputBox({
     };
   }, []);
 
-  const isPhoneValid = valid.onValidCondition(phoneNumber);
+  const isPhoneValid = checkPhone(phoneNumber);
 
   const handleInput = (newValue: string) => {
+    if (!checkNumber(newValue) || !checkNumberLength(newValue, 11)) {
+      return;
+    }
     setPhoneNumber(newValue);
+    onPhoneNumberChange(newValue);
 
     if (verificationStatus !== "idle") {
       onVerificationStatusChange("idle");
@@ -72,7 +76,6 @@ export default function PhoneInputBox({
     <div className={styles.wrapper}>
       <InputBox
         inputInfo={phoneInput}
-        valid={valid}
         value={phoneNumber}
         onText={handleInput}
       />
