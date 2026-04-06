@@ -51,6 +51,7 @@ export default function InputBox({
         type={inputInfo.inputType}
         placeholder={inputInfo.placeholder}
         aria-invalid={isInvalid}
+        maxLength={inputInfo.limit}
       />
       {inputInfo.limit && (
         <span
