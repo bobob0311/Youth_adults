@@ -1,21 +1,24 @@
-'use client'
+"use client";
 
-import { useRouter } from 'next/navigation';
-import ChooseMatchingBox from '../chooseMatchingBox';
-import Modal from "../../../../components/Modal/Modal"; 
-import { useState } from 'react';
-import { findAnotherUserAndNotice, giveUpAndNotice } from '@/apiHandler/function';
+import { useRouter } from "next/navigation";
+import ChooseMatchingBox from "../chooseMatchingBox";
+import Modal from "@/shared/components/Modal/Modal";
+import { useState } from "react";
+import {
+  findAnotherUserAndNotice,
+  giveUpAndNotice,
+} from "@/apiHandler/function";
 
-interface PropsState{
+interface PropsState {
   onModal: () => void;
   id: string;
 }
 
-export default function MatchGiveUpModal(props:PropsState) {
+export default function MatchGiveUpModal(props: PropsState) {
   const { onModal, id } = props;
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const router = useRouter();
-  
+
   const handleFindAnother = async () => {
     setIsLoading(true);
     try {
@@ -24,10 +27,9 @@ export default function MatchGiveUpModal(props:PropsState) {
     } catch (error) {
       setIsLoading(false);
       console.error(error);
-      alert("다시 시도해주세요.")
+      alert("다시 시도해주세요.");
     }
-    
-  }
+  };
 
   const handleGiveUp = async () => {
     setIsLoading(true);
@@ -39,7 +41,7 @@ export default function MatchGiveUpModal(props:PropsState) {
       console.error(error);
       alert("다시 시도해주세요.");
     }
-  }
+  };
 
   return (
     <Modal>
@@ -52,7 +54,8 @@ export default function MatchGiveUpModal(props:PropsState) {
           secondBtnName: "매칭 포기",
           secondBtnFn: handleGiveUp,
         }}
-        loading={isLoading} />
+        loading={isLoading}
+      />
     </Modal>
-  )
+  );
 }
