@@ -1,8 +1,7 @@
 "use client";
 
 import styles from "./LocationPage.module.scss";
-import NavigationButton from "@/shared/components/NavigationButton";
-import LocationCheckButton from "../../../features/signup/components/LocationCheck";
+import LocationCheckButton from "@/features/signup/components/LocationCheck";
 
 import { changeLocation } from "@/features/signup/model/userSlice";
 import { LOCATION_INFO } from "@/features/signup/constants/location";
