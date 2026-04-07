@@ -1,22 +1,16 @@
-import { getUserDataById } from "@/utils/api";
-import ImgContainer from "../../features/match/components/matchAction/ImgContainer";
-import MatchActions from "../../features/match/components/MatchActions"; // 클라이언트 컴포넌트
+import ImgContainer from "@/features/match/components/matchAction/ImgContainer";
+import MatchActions from "@/features/match/components/MatchActions";
+import { getMatchContentData } from "@/features/match/services/getMatchContentData";
 
 export default async function MatchContent({ id }: { id: string }) {
   try {
-    const matchedInfo = await getUserDataById(id);
-    const myInfo = await getUserDataById(matchedInfo.matched_id);
-    const isPayment = myInfo.payment;
-    const isEnter = myInfo.is_enter_room;
+    const { matchedInfo, isPayment, isEnter, myId } =
+      await getMatchContentData(id);
 
     return (
       <>
         <ImgContainer matchedUserInfo={matchedInfo} />
-        <MatchActions
-          isEnter={isEnter}
-          isPayment={isPayment}
-          myId={myInfo.id}
-        />
+        <MatchActions isEnter={isEnter} isPayment={isPayment} myId={myId} />
       </>
     );
   } catch {
