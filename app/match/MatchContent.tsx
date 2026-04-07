@@ -1,4 +1,4 @@
-import ImgContainer from "@/features/match/components/matchAction/ImgContainer";
+import ImgContainer from "@/features/match/components/imgContainer/ImgContainer";
 import MatchActions from "@/features/match/components/MatchActions";
 import { getMatchContentData } from "@/features/match/services/getMatchContentData";
 
