@@ -1,27 +1,18 @@
-'use client'
-import ChooseMathingBox from "../_component/chooseMatchingBox";
+"use client";
+import ChooseMathingBox from "../../../features/match/components/chooseMatchingBox";
 
 export default function CancelMatchingPage() {
-    const text = "지금 바로 다른 매칭을 잡을까요?"
-    
-    const handleRematching = () => {
+  const text = "지금 바로 다른 매칭을 잡을까요?";
 
-    }
-    const handleStopMatching = () => {
+  const handleRematching = () => {};
+  const handleStopMatching = () => {};
 
-    }
-    
-    const btnInfo = {
-        firstBtnName: "다른 매칭 찾기",
-        firstBtnFn: handleRematching,
-        secondBtnName: "쉬어가기",
-        secondBtnFn: handleStopMatching
-    }
-    
-    
+  const btnInfo = {
+    firstBtnName: "다른 매칭 찾기",
+    firstBtnFn: handleRematching,
+    secondBtnName: "쉬어가기",
+    secondBtnFn: handleStopMatching,
+  };
 
-    
-    return (
-        <ChooseMathingBox text={text} btnInfo={btnInfo} />
-    )
+  return <ChooseMathingBox text={text} btnInfo={btnInfo} />;
 }

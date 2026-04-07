@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import NavigationButton from "@/shared/components/NavigationButton";
-import MatchGiveUpModal from "./_MatchAction/MatchGiveUpModal";
+import MatchGiveUpModal from "./matchAction/MatchGiveUpModal";
 import styles from "./MatchActions.module.scss";
 import Modal from "@/shared/components/Modal/Modal";
 import { updateUserEnterRoomStatus } from "@/apiHandler/match";
