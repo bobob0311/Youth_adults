@@ -70,7 +70,7 @@ export default function ImgSlider({
   const handleEnd = (e: React.MouseEvent | React.TouchEvent) => {
     if (!containerRef.current || !isDragging) return;
 
-    const clientX = getClientX(e);
+    const clientX = getEndClientX(e);
     const offsetX = clientX - startX;
     const direction = offsetX > 0 ? -1 : 1;
     const imgLength = imgInfo.length - 1;
