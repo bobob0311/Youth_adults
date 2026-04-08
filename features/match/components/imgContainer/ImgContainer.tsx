@@ -1,7 +1,7 @@
 "use client";
 import { useState } from "react";
 import styles from "./ImgContainer.module.scss";
-import ImgSlider from "../matchAction/imgSlider";
+import ImgSlider from "./imgSlider";
 
 const IMGINFO = [
   {
@@ -21,15 +21,11 @@ const IMGINFO = [
   },
 ];
 
-export default function ImgContainer(props) {
-  const { matchedUserInfo } = props;
+export default function ImgContainer({ matchedUserInfo }) {
   const [imgIdx, setImgIdx] = useState<number>(0);
 
-  const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
-    if (event.currentTarget.dataset.id) {
-      const buttonId = parseInt(event.currentTarget.dataset.id);
-      setImgIdx(buttonId);
-    }
+  const handleClick = (id: number) => {
+    setImgIdx(id);
   };
 
   return (
@@ -37,9 +33,8 @@ export default function ImgContainer(props) {
       <div className={styles.container}>
         {IMGINFO.map((item) => (
           <button
-            key={item.title}
-            data-id={item.id}
-            onClick={handleClick}
+            key={item.id}
+            onClick={() => handleClick(item.id)}
             className={`${styles.btn} ${imgIdx === item.id ? styles.selected : ""}`}
           >
             {item.title}
@@ -49,7 +44,7 @@ export default function ImgContainer(props) {
       <div className={styles.content}>
         <ImgSlider
           navIdx={imgIdx}
-          onChangeIdx={(idx) => setImgIdx(idx)}
+          onChangeIdx={setImgIdx}
           imgInfo={IMGINFO}
           userInfo={matchedUserInfo}
         />
