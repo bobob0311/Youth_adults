@@ -24,17 +24,13 @@ const IMGINFO = [
 export default function ImgContainer({ matchedUserInfo }) {
   const [imgIdx, setImgIdx] = useState<number>(0);
 
-  const handleClick = (id: number) => {
-    setImgIdx(id);
-  };
-
   return (
     <div>
       <div className={styles.container}>
         {IMGINFO.map((item) => (
           <button
             key={item.id}
-            onClick={() => handleClick(item.id)}
+            onClick={() => setImgIdx(item.id)}
             className={`${styles.btn} ${imgIdx === item.id ? styles.selected : ""}`}
           >
             {item.title}

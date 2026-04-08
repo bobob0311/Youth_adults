@@ -1,7 +1,7 @@
-import { useRef, useState, useEffect } from "react";
 import styles from "./imgSlider.module.scss";
 import Introduce from "./Introduce";
 import Image from "next/image";
+import { useImageSlider } from "../../hooks/useImageSlider";
 
 interface PropsState {
   imgInfo: ImgInfo[];
@@ -16,102 +16,31 @@ interface ImgInfo {
   imgSrc: string;
 }
 
+const IMG_WIDTH = 370;
+const THRESHOLD = 130;
+
 export default function ImgSlider({
   imgInfo,
   onChangeIdx,
   navIdx,
   userInfo,
 }: PropsState) {
-  const [startX, setStartX] = useState(0);
-  const [translateX, setTranslateX] = useState(0);
-  const [isDragging, setIsDragging] = useState(false);
-
-  const [imgWidth, setImgWidth] = useState(0);
-
-  const containerRef = useRef<HTMLDivElement | null>(null);
-  const imgRef = useRef<HTMLImageElement | null>(null);
-
-  const getClientX = (e: React.MouseEvent | React.TouchEvent) => {
-    return "touches" in e ? e.touches[0].clientX : e.clientX;
-  };
-
-  const getEndClientX = (e: React.MouseEvent | React.TouchEvent) => {
-    return "changedTouches" in e ? e.changedTouches[0].clientX : e.clientX;
-  };
-
-  useEffect(() => {
-    if (imgRef.current) {
-      setImgWidth(imgRef.current.offsetWidth);
-    }
-  }, [imgRef.current?.offsetWidth]);
-
-  const handleStart = (e: React.MouseEvent | React.TouchEvent) => {
-    if (e.type === "mousedown") {
-      e.preventDefault();
-    }
-    const clientX = getClientX(e);
-
-    setStartX(clientX);
-    setIsDragging(true);
-    if (containerRef.current) {
-      containerRef.current.style.transition = "none";
-    }
-  };
-
-  const handleMove = (e: React.MouseEvent | React.TouchEvent) => {
-    if (!isDragging) return;
-    const clientX = getClientX(e);
-    const offsetX = clientX - startX;
-    if (containerRef.current) {
-      containerRef.current.style.transform = `translateX(${translateX + offsetX}px)`;
-    }
-  };
-
-  const handleEnd = (e: React.MouseEvent | React.TouchEvent) => {
-    if (!containerRef.current || !isDragging) return;
-
-    const clientX = getEndClientX(e);
-    const offsetX = clientX - startX;
-    const direction = offsetX > 0 ? -1 : 1;
-    const imgLength = imgInfo.length - 1;
-
-    let nextIndex = navIdx + direction;
-    if (nextIndex > imgLength) {
-      nextIndex = 0;
-    } else if (nextIndex < 0) {
-      nextIndex = imgLength;
-    }
-
-    const newTranslateX = -nextIndex * imgWidth;
-
-    onChangeIdx(nextIndex);
-    setTranslateX(newTranslateX);
-    setIsDragging(false);
-
-    containerRef.current.style.transition = "transform 0.5s ease";
-    containerRef.current.style.transform = `translateX(${newTranslateX}px)`;
-
-    setStartX(0);
-  };
+  const { boxRef, handler } = useImageSlider({
+    totalCnt: imgInfo.length,
+    currentIdx: navIdx,
+    imgWidth: IMG_WIDTH,
+    threshold: THRESHOLD,
+    onChangeIdx,
+  });
 
   return (
-    <div
-      className={styles.imgContainer}
-      onMouseDown={handleStart}
-      onMouseMove={handleMove}
-      onMouseUp={handleEnd}
-      onMouseLeave={handleEnd}
-      onTouchStart={handleStart}
-      onTouchMove={handleMove}
-      onTouchEnd={handleEnd}
-    >
-      <div ref={containerRef} className={styles.imgBox}>
-        {imgInfo.map((item, index) => (
+    <div className={styles.imgContainer} {...handler}>
+      <div ref={boxRef} className={styles.imgBox}>
+        {imgInfo.map((item) => (
           <Image
             width={370}
             height={320}
             key={item.title}
-            ref={index === 0 ? imgRef : null}
             src={item.imgSrc}
             alt={item.title}
           />
